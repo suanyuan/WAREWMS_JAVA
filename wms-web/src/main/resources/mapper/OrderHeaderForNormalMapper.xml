@@ -1939,28 +1939,6 @@
         select allocationdetailsid from act_allocation_details where orderno = #{0} and status = '60'
 	</select>
 
-
-    <!--查询所有已完成订单的年份-->
-    <select id="selectALLOrderYear"  resultType="java.lang.String" parameterType="Object">
-      select DISTINCT YEAR(edittime) year from doc_order_header where route !='ZT' and sostatus = '99'
-        <!--<if test="edittime != null and edittime != ''">-->
-            <!--edittime like '%${_parameter}%'-->
-        <!--</if>-->
-	</select>
-
-    <!--通过时间 模糊查询当天的 发运单数-->
-    <select id="selectOrderByTime"  resultType="java.lang.String" parameterType="Object">
-        select  count(1)  from doc_order_header where route !='ZT' and sostatus = '99'
-        <if test="edittime != null and edittime != ''">
-          and edittime like '%${edittime}%'
-        </if>
-        <if test="carrierLicenseId != null and carrierLicenseId != ''">
-            and carrierid = #{carrierLicenseId}
-        </if>
-    </select>
-
-
-
     <select id="queryPackageList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

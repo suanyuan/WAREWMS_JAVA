@@ -77,20 +77,15 @@ public class ImportPaDataService {
 
                 PdaDocPaDetailForm pdaDocPaDetailForm = importDataList.get(0);
                 PdaDocPaHeaderVO pdaDocPaHeaderVO = docPaHeaderService.queryByPano(pdaDocPaDetailForm.getPano());
-                if (pdaDocPaHeaderVO == null || pdaDocPaHeaderVO.getPastatus() == null) {
-                    return Json.error("查无此上架单数据，" + pdaDocPaDetailForm.getPano());
-                }
                 if (!pdaDocPaHeaderVO.getPastatus().equals("00")) {
 
                     json.setSuccess(false);
                     json.setMsg("上架单只有在订单创建状态下，才可进行PC端上架操作！");
                     return json;
                 }
-            } else {
-                return Json.error("导入的Excel数据为空");
             }
 
-            //判断库位是否存在
+            //更新上架件数
             json = validateLocation(importDataList);
             if (!json.isSuccess()) return json;
 

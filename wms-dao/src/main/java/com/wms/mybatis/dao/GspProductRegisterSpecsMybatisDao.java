@@ -1,7 +1,6 @@
 package com.wms.mybatis.dao;
 
 
-import com.wms.entity.GspProductRegisterSpecs;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
@@ -13,8 +12,6 @@ import java.util.List;
  * <b>功能：</b>GspProductRegisterSpecsDao<br>
  */
 public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
-
-    List<GspProductRegisterSpecs> selectProductRegisterRelation();
 
     public String getIdSequence(Map<String, Object> map);
 
@@ -31,11 +28,6 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
 
 
     public <T> T selectByProductCode(Object id);
-    public <T> T selectByProductCodeAndProductRegister(@Param("productCode") String productCode, @Param("productRegisterId") String productRegisterId);
-
-
-
-
 
     public <T> List<T> queryProductSUPByList(MybatisCriteria criteria);//总查询不分页，一般导出时使用
     public int queryProductSUPByCount(MybatisCriteria criteria);

@@ -320,15 +320,6 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 	ON t1.product_register_id = t2.product_register_id where t1.product_code = #{productCode} and t1.is_use = 1
 </select>
 
-    <!-- 根据productCode和注册证id 查询 产品 -->
-    <select id="selectByProductCodeAndProductRegister" resultMap="BaseResultMap" parameterType="Object">
-        select t1.*,t2.product_register_no,t2.product_name_main
-        from gsp_product_register_specs t1 left join gsp_product_register t2
-        ON t1.product_register_id = t2.product_register_id
-        where t1.product_code = #{productCode} and t1.product_register_id = #{productRegisterId}
-         and t1.is_use = 1
-    </select>
-
     <!-- 根据id查询 产品注册证规格关联产品注册证 -->
     <select id="selectById" resultMap="BaseResultMap" parameterType="Object">
 	select t1.*,t2.product_register_no,t2.product_name_main,t2.enterprise_id
@@ -377,7 +368,8 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
         t6.codename_c cold_hain_mark,alternate_sku5 alternat_name5,
             reservedfield08 sterilization_markers,reservedfield10 maintenance_cycle
         from bas_sku t1
-
+        LEFT JOIN (select * from gsp_product_register_specs where is_use ='1') t2 on t1.sku  = t2.product_code
+        LEFT JOIN gsp_product_register t3 ON t2.product_register_id = t3.product_register_id
         LEFT JOIN bas_package t4 on t4.packid = t1.packid
         LEFT JOIN (select * from bas_codes where codeid = 'UOM') t5 on t1.defaultreceivinguom = t5.code
         LEFT JOIN (select * from bas_codes where codeid = 'LL_TYP') t6 on t1.reservedfield07 = t6.code
@@ -548,13 +540,6 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
         left join gsp_product_register t2
         ON t1.product_register_id = t2.product_register_id
         where t1.product_register_id = #{condition.productRegisterId}
-    </select>
-
-    <!-- 查询库存数 -->
-    <select id="selectProductRegisterRelation" resultMap="BaseResultMap" parameterType="Object">
-        select  DISTINCT t2.product_register_id,t2.product_register_no,t1.product_code,t1.specs_id
-        from gsp_product_register_specs t1, gsp_product_register t2
-        where t1.product_register_id = t2.product_register_id   and t1.medical_device_mark='1';
     </select>
 
 

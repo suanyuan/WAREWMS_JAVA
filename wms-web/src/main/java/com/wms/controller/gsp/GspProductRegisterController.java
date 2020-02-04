@@ -1,21 +1,26 @@
 package com.wms.controller.gsp;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.GspEnterpriseInfo;
 import com.wms.entity.GspProductRegister;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.GspProductRegisterQuery;
 import com.wms.query.GspProductRegisterSpecsQuery;
 import com.wms.service.GspEnterpriseInfoService;
 import com.wms.service.GspOperateDetailService;
-import com.wms.utils.DateUtil;
+import com.wms.service.GspProductRegisterService;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.annotation.Login;
 import com.wms.utils.editor.CustomDateEditor;
 import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.GspProductRegisterSpecsVO;
+import com.wms.vo.GspProductRegisterVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.GspProductRegisterForm;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +29,11 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.GspProductRegisterService;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.annotation.Login;
-import com.wms.vo.Json;
-import com.wms.vo.GspProductRegisterVO;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.GspProductRegisterForm;
-import com.wms.query.GspProductRegisterQuery;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("gspProductRegisterController")
@@ -78,7 +77,7 @@ public class GspProductRegisterController {
 	@RequestMapping(params = "showDatagridSearch")
 	@ResponseBody
 	public EasyuiDatagrid<GspProductRegisterVO> showDatagridSearch(EasyuiDatagridPager pager, GspProductRegisterQuery query) {
-//		query.setIsUse(Constant.IS_USE_YES);
+		query.setIsUse(Constant.IS_USE_YES);
 		query.setCheckerId("all");
 		return gspProductRegisterService.getPagedDatagrid(pager, query);
 	}

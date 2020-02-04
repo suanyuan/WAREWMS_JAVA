@@ -272,8 +272,7 @@ where 1=1
         #{userdefine2, mode=IN, jdbcType=VARCHAR},#{userdefine3, mode=IN, jdbcType=VARCHAR},
         #{userdefine4, mode=IN, jdbcType=VARCHAR},#{userdefine5, mode=IN, jdbcType=VARCHAR},
         #{packid, mode=IN, jdbcType=VARCHAR},#{userid, mode=IN, jdbcType=VARCHAR},
-        #{paqty, mode=IN, jdbcType=DECIMAL},#{lotnum, mode=IN, jdbcType=VARCHAR},
-        #{warehouseid, mode=IN, jdbcType=VARCHAR},
+        #{paqty, mode=IN, jdbcType=DECIMAL},#{warehouseid, mode=IN, jdbcType=VARCHAR},
         #{language, mode=IN, jdbcType=VARCHAR},#{returncode, mode=OUT, jdbcType=VARCHAR})}
     </update>
 

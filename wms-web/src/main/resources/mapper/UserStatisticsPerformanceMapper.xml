@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.UserStatisticsPerformanceMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.UserStatisticsPerformance" >
+	<result column="id" property="id"/>
+	<result column="user_id" property="userId"/>
+	<result column="perf_date" property="perfDate"/>
+	<result column="perf_pick" property="perfPick"/>
+	<result column="perf_recheck" property="perfRecheck"/>
+	<result column="perf_pa" property="perfPa"/>
+	<result column="perf_qc" property="perfQc"/>
+	<result column="perf_order" property="perfOrder"/>
+	<result column="userdefine1" property="userdefine1"/>
+	<result column="userdefine2" property="userdefine2"/>
+	<result column="userdefine3" property="userdefine3"/>
+	<result column="userdefine4" property="userdefine4"/>
+	<result column="userdefine5" property="userdefine5"/>
+</resultMap>
+       
+<!-- user_statistics_performance table all fields -->
+<sql id="Base_Column_List" >
+	 id,user_id,perf_date,perf_pick,perf_recheck,perf_pa,perf_qc,perf_order,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.perfDate != null and condition.perfDate != ''" >
+	    and perf_date =  #{condition.perfDate}
+	</if>
+	<if test="condition.perfPick != null and condition.perfPick != ''" >
+	    and perf_pick =  #{condition.perfPick}
+	</if>
+	<if test="condition.perfRecheck != null and condition.perfRecheck != ''" >
+	    and perf_recheck =  #{condition.perfRecheck}
+	</if>
+	<if test="condition.perfPa != null and condition.perfPa != ''" >
+	    and perf_pa =  #{condition.perfPa}
+	</if>
+	<if test="condition.perfQc != null and condition.perfQc != ''" >
+	    and perf_qc =  #{condition.perfQc}
+	</if>
+	<if test="condition.perfOrder != null and condition.perfOrder != ''" >
+	    and perf_order =  #{condition.perfOrder}
+	</if>
+	<if test="condition.userdefine1 != null and condition.userdefine1 != ''" >
+	    and userdefine1 =  #{condition.userdefine1}
+	</if>
+	<if test="condition.userdefine2 != null and condition.userdefine2 != ''" >
+	    and userdefine2 =  #{condition.userdefine2}
+	</if>
+	<if test="condition.userdefine3 != null and condition.userdefine3 != ''" >
+	    and userdefine3 =  #{condition.userdefine3}
+	</if>
+	<if test="condition.userdefine4 != null and condition.userdefine4 != ''" >
+	    and userdefine4 =  #{condition.userdefine4}
+	</if>
+	<if test="condition.userdefine5 != null and condition.userdefine5 != ''" >
+	    and userdefine5 =  #{condition.userdefine5}
+	</if>
+	<!--附加时间查询-->
+	<if test="condition.addtimeBegin != null and condition.addtimeBegin != ''" >
+		and perf_date  &gt;= #{condition.addtimeBegin}
+	</if>
+	<if test=" condition.addtimeEnd != null and condition.addtimeEnd != ''" >
+		and perf_date &lt;= #{condition.addtimeEnd}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into user_statistics_performance(id,user_id,perf_date,perf_pick,perf_recheck,perf_pa,perf_qc,perf_order,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5)
+ values(#{id},#{userId},#{perfDate},#{perfPick},#{perfRecheck},#{perfPa},#{perfQc},#{perfOrder},#{userdefine1},#{userdefine2},#{userdefine3},#{userdefine4},#{userdefine5})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update user_statistics_performance set user_id=#{userId},perf_date=#{perfDate},perf_pick=#{perfPick},perf_recheck=#{perfRecheck},perf_pa=#{perfPa},perf_qc=#{perfQc},perf_order=#{perfOrder},userdefine1=#{userdefine1},userdefine2=#{userdefine2},userdefine3=#{userdefine3},userdefine4=#{userdefine4},userdefine5=#{userdefine5} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update user_statistics_performance set 
+	<trim  suffixOverrides="," >
+	<if test="perfDate != null  ">
+		perf_date=#{perfDate},
+	</if>
+	<if test="perfPick != null  ">
+		perf_pick=#{perfPick},
+	</if>
+	<if test="perfRecheck != null  ">
+		perf_recheck=#{perfRecheck},
+	</if>
+	<if test="perfPa != null  ">
+		perf_pa=#{perfPa},
+	</if>
+	<if test="perfQc != null  ">
+		perf_qc=#{perfQc},
+	</if>
+	<if test="perfOrder != null  ">
+		perf_order=#{perfOrder},
+	</if>
+	<if test="userdefine1 != null  ">
+		userdefine1=#{userdefine1},
+	</if>
+	<if test="userdefine2 != null  ">
+		userdefine2=#{userdefine2},
+	</if>
+	<if test="userdefine3 != null  ">
+		userdefine3=#{userdefine3},
+	</if>
+	<if test="userdefine4 != null  ">
+		userdefine4=#{userdefine4},
+	</if>
+	<if test="userdefine5 != null  ">
+		userdefine5=#{userdefine5},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from user_statistics_performance where id = #{id}
+</delete>
+ 
+<!-- 根据id查询 绩效统计 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from user_statistics_performance where id = #{id}
+</select>
+
+<!-- 绩效统计 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from user_statistics_performance 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询绩效统计列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from user_statistics_performance 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+</mapper>   

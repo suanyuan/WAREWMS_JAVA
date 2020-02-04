@@ -337,25 +337,25 @@ var commit = function(){
 			url = sy.bp()+'/gspProductRegisterSpecsController.do?edit';
 			addOrEdit(url,infoObj);
 		}else{
-			// $.ajax({
-			// 	url : '/gspProductRegisterSpecsController.do?getInfoByProductCode',
-			// 	data : {productCode: infoObj["productCode"] },
-			// 	type : 'POST',
-			// 	dataType : 'JSON',
-			// 	async  :true,
-			// 	success : function(result){
-			// 		//alert(result+"====="+result.obj.isUse);
-			// 			//alert(111111);
-			// 			$.messager.show({
-			// 				msg : '已有该产品信息并且有效 无法重复添加', title : '提示'
-			// 			});
-			// 	},
-			// 	error : function() {
-			// 		//alert(33333333);
+			$.ajax({
+				url : '/gspProductRegisterSpecsController.do?getInfoByProductCode',
+				data : {productCode: infoObj["productCode"] },
+				type : 'POST',
+				dataType : 'JSON',
+				async  :true,
+				success : function(result){
+					//alert(result+"====="+result.obj.isUse);
+						//alert(111111);
+						$.messager.show({
+							msg : '已有该产品信息并且有效 无法重复添加', title : '提示'
+						});
+				},
+				error : function() {
+					//alert(33333333);
 					url = sy.bp()+'/gspProductRegisterSpecsController.do?add';
 					addOrEdit(url,infoObj);
-			// 	}
-			// });
+				}
+			});
 
 		}
 

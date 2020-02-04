@@ -57,8 +57,6 @@ public class GspProductRegisterService extends BaseService {
 	private DataPublishService dataPublishService;
 	@Autowired
 	private FirstBusinessApplyMybatisDao firstBusinessApplyMybatisDao;
-	@Autowired
-	private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
 
 	/**
 	 * 查询分页数据
@@ -163,15 +161,11 @@ public class GspProductRegisterService extends BaseService {
 
 
 			if(gspProductRegisterForm.getOpType().equals("update")){
-				/////////新关系下没有换证逻辑存在了
-
 
 				//注册证下产品是否首营   没首营直接换证
 				// 	首营过则判断产品状态  首营审核中不能换证
 				// 	首营审核通过换证 报废产品新建一条产品关联新注册证 报废首营申请新建一条首营关联新产品  报废产品档案
 				//	首营新建（直接换证报废报废产品新建一条产品关联新注册证 删除原新建的首营和新建的GSP审核  新增一个新建首营关联新产品 新增一个新建gsp审核）
-
-				//有问题 拦截无效
 				List<FirstBusinessApply> firstBusinessApplyList = firstBusinessApplyMybatisDao.selectByProductRegisterId(gspProductRegisterForm.getProductRegisterId());
 				if(firstBusinessApplyList!=null && firstBusinessApplyList.size()>0){
 					for(FirstBusinessApply f:firstBusinessApplyList){
@@ -429,30 +423,17 @@ public class GspProductRegisterService extends BaseService {
 		if(gspProductRegister == null){
             return Json.error("查询不到对应的注册证");
         }
-//        if(gspProductRegister.getCheckerId()!=null && !"".equals(gspProductRegister.getCheckerId())){
-//			return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
-//		}
-
-
+        if(gspProductRegister.getCheckerId()!=null && !"".equals(gspProductRegister.getCheckerId())){
+            return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
+        }
 		try{
 			String[] arr = specId.split(",");
 			for(String str : arr){
 				System.out.println(str);
-
-				//失效产品 清空注册证id
 				GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 				gspProductRegisterSpecs.setSpecsId(str);
 				gspProductRegisterSpecs.setProductRegisterId("");
-				gspProductRegisterSpecs.setIsUse("0");
 				gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
-
-				//删除关联
-				productRegisterRelationMybatisDao.deleteByProductAndregister(specId,gspProductRegisterId);
-				//TODO 报废已下发产品首营
-
-
-
-
 			}
 			return Json.success("解除绑定成功");
 		}catch (Exception e){

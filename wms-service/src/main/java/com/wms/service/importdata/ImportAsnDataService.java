@@ -843,7 +843,6 @@ public class ImportAsnDataService {
                         basGtnLotattQuery.setLotatt02(asnDetails.getLotatt02());
                         basGtnLotattQuery.setLotatt04(asnDetails.getLotatt04());
                         basGtnLotattQuery.setLotatt05(asnDetails.getLotatt05());
-                        basGtnLotattQuery.setAddasnno(asnDetails.getAsnno());
                         basGtnLotattService.queryInsertGtnLotatt(basGtnLotattQuery);
                         //保存订单明细信息
                         docAsnDetailsMybatisDao.add(asnDetails);

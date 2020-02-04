@@ -60,8 +60,6 @@ public class ImportGspProductRegisterSpecsDataService {
 	@Autowired
 	private BasCodesService basCodesService;
 
-	@Autowired
-	private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
 
 	/**
 	 * 导入入库单
@@ -181,96 +179,55 @@ public class ImportGspProductRegisterSpecsDataService {
 
 			try {
 				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+				try{
+					if(gspProductRegister!=null){
+						importDataVO.setProductRegisterId(gspProductRegister.getProductRegisterId());
+					}else {
+						if("是".equals(dataArray.getMedicalDeviceMark())){
+							throw new Exception();
+						}
 
-				if(gspProductRegister!=null){
-					importDataVO.setProductRegisterId(gspProductRegister.getProductRegisterId());
-//						productRegisterRelationMybatisDao.
-
-				}else {
-					if("是".equals(dataArray.getMedicalDeviceMark())){
+					}
+				}catch (Exception e){
+					rowResult.append("[注册证编号]，该注册证编号不存在").append(" ");
+				}
+				if (StringUtils.isEmpty(dataArray.getProductRegisterId())) {
+					if("1".equals(dataArray.getMedicalDeviceMark())){
 						throw new Exception();
 					}
-
 				}
-
 			} catch (Exception e) {
-				rowResult.append("[注册证编号]，未输入或该注册证编号不存在").append(" ");
+				rowResult.append("[注册证编号]，未输入").append(" ");
 			}
 
 			try {
 				boolean flag1 = false;
 
-//				GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
-//				if(gspProductRegisterSpecs==null  ){
-//					importDataVO.setProductCode(dataArray.getProductCode());
-//				}else if("0".equals(gspProductRegisterSpecs.getIsUse())){
-//					importDataVO.setProductCode(dataArray.getProductCode());
-//				}else{
-//					throw new Exception();
-//				}
-				if (StringUtils.isEmpty(dataArray.getProductCode())) {
+				GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
+
+				if(gspProductRegisterSpecs==null  ){
+					importDataVO.setProductCode(dataArray.getProductCode());
+				}else if("0".equals(gspProductRegisterSpecs.getIsUse())){
+					importDataVO.setProductCode(dataArray.getProductCode());
+				}else{
 					throw new Exception();
 				}
-			} catch (Exception e) {
-				rowResult.append("[产品代码]，未输入").append(" ");
-			}
-
-			try {
-				boolean flag1 = false;
-
-				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
-
-
-				if(dataArray.getProductRegisterId()!=null&&dataArray.getProductRegisterId()!=""){
-				//有注册证
-					//excel内部判重
-					for(GspProductRegisterSpecsVO  a: importData){
-						if(dataArray.getProductCode().equals(a.getProductCode()) &&dataArray.getProductRegisterId().equals(a.getProductRegisterId()) ){
-							flag1 = true;
-						}
+				for(GspProductRegisterSpecsVO  a: importData){
+					if(dataArray.getProductCode().equals(a.getProductCode())){
+						flag1 = true;
 					}
-					//数据库判重
-					GspProductRegisterSpecs gspProductRegisterSpecs1 = gspProductRegisterSpecsMybatisDao.selectByProductCodeAndProductRegister(dataArray.getProductCode(),gspProductRegister.getProductRegisterId());
-					if(gspProductRegisterSpecs1==null){
-						importDataVO.setProductCode(dataArray.getProductCode());
-					}else if("0".equals(gspProductRegisterSpecs1.getIsUse())){
-						importDataVO.setProductCode(dataArray.getProductCode());
-					}else{
-						throw new Exception();
-					}
-				}else {
-				//无注册证   非医疗器械
-					//excel内部判重
-					for(GspProductRegisterSpecsVO  a: importData){
-						if(dataArray.getProductCode().equals(a.getProductCode())  ){
-							flag1 = true;
-						}
-					}
-					//数据库判重
-					GspProductRegisterSpecs gspProductRegisterSpecs2 = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
-					if(gspProductRegisterSpecs2==null){
-						importDataVO.setProductCode(dataArray.getProductCode());
-					}else if("0".equals(gspProductRegisterSpecs2.getIsUse())){
-						importDataVO.setProductCode(dataArray.getProductCode());
-					}else{
-						throw new Exception();
-					}
-
 				}
-
-
-
 				if(flag1){
 					throw new Exception();
 				}
 
-			} catch (Exception e) {
-				if(dataArray.getProductRegisterId()!=null &&dataArray.getProductRegisterId()!=""){
-					rowResult.append("[产品代码和注册证]，已有该注册证关联的产品，无法重复添加").append(" ");
-				}else{
-					rowResult.append("[产品代码]，已有该产品代码的产品，无法重复添加").append(" ");
+				if (StringUtils.isEmpty(dataArray.getProductCode())) {
+					throw new Exception();
 				}
+			} catch (Exception e) {
+				rowResult.append("[产品代码]，未输入或已有该产品信息并且有效 无法重复添加").append(" ");
 			}
+
 
 
 			try {
@@ -903,20 +860,6 @@ public class ImportGspProductRegisterSpecsDataService {
 				gspProductRegisterSpecs.setIsUse("1");
 				//保存订单主信息
 				gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
-
-				if(gspProductRegisterSpecs.getProductRegisterId()!=null && gspProductRegisterSpecs.getProductRegisterId()!=""){
-					ProductRegisterRelation relat = new ProductRegisterRelation();
-					relat.setId(RandomUtil.getUUID());
-					relat.setProductCode(gspProductRegisterSpecs.getProductCode());
-					relat.setSpecsId(gspProductRegisterSpecs.getSpecsId());
-					relat.setProductRegisterId(gspProductRegisterSpecs.getProductRegisterId());
-					relat.setActiveFlag("0");
-					relat.setProductRegisterNo(gspProductRegisterSpecs.getProductRegisterNo());
-					relat.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-					relat.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-					productRegisterRelationMybatisDao.add(relat);
-				}
-
 //				if(flag==true){
 //					resultMsg.delete(0, resultMsg.length());
 //					StringBuilder rowResult = new StringBuilder();
