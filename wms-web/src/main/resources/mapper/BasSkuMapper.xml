@@ -93,6 +93,9 @@
 
 	<result column="unit" property="unit"/>
 	<result column="qty1" property="qty1"/>
+	<result column="risk_assessment" property="riskAssessment"/>
+
+
 </resultMap>
 
 <resultMap id="SkuInfoMap" type="com.wms.entity.BasSku" >
@@ -1028,7 +1031,7 @@ where 1=1
 <!-- 查询商品档案分页列表 -->
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 
-	SELECT a.*,b.descr_c AS skuGroup6Name,e.DESCR_C clientName,c.descr,d.name productLineName,iv.codename_c,uom.codename_c unit
+	SELECT a.*,b.descr_c AS skuGroup6Name,e.DESCR_C clientName,c.descr,d.name productLineName,d.risk_assessment,iv.codename_c,uom.codename_c unit
 	from
 	(select t1.* from Bas_Sku t1
 	left join bas_customer t2 on t1.sku_group6 = t2.CUSTOMERID
@@ -1040,6 +1043,7 @@ where 1=1
 	left join product_line d on a.sku_group1 =  d.product_line_id
 	left join bas_codes iv on a.reservedfield04 = iv.code
 	left join (select * from bas_codes where codeid = 'UOM') uom on uom.code = a.defaultreceivinguom
+
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}
 	</if>

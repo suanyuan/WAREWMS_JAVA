@@ -18,6 +18,16 @@ public class ProductLineForm {
 	private String editDate;
 	private String isUse;
 
+	private String riskAssessment;
+
+	public String getRiskAssessment() {
+		return riskAssessment;
+	}
+
+	public void setRiskAssessment(String riskAssessment) {
+		this.riskAssessment = riskAssessment;
+	}
+
 	public int getSerialFlag() {
 		return serialFlag;
 	}

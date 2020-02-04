@@ -320,23 +320,8 @@ var commit = function(){
 		}
 	});
 };
-
-//请求完成后重置按钮
-var handleBtnAblity = function (object) {
-
-    $(object).linkbutton("enable");
-    $.messager.progress('close');
-};
-
 //验收作业提交
-var commitAcceptance = function(type, object){
-
-    $(object).linkbutton("disable");
-
-    $.messager.progress({
-        text: '<spring:message code="common.message.data.processing"/>', interval: 100
-    });
-
+var commitAcceptance = function(type){
 	var typeC=type; //是否合格
 	url = '<c:url value="/docQcDetailsController.do?submitDocQcList"/>';
 	var rows = ezuiDatagrid.datagrid('getChecked');
@@ -373,7 +358,6 @@ var commitAcceptance = function(type, object){
 
 	}
     if(!isCan){
-        handleBtnAblity(object);
 		$.messager.show({
 			msg : msg, title : '<spring:message code="common.message.prompt"/>'
 		});
@@ -381,7 +365,6 @@ var commitAcceptance = function(type, object){
 	}
 	//判断待处理需要弹窗 合格则是继续做下去
 	if(typeC=="DCL"){
-        $.messager.progress('close');
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '验收记录为待处理,是否继续操作!', function(confirm) {
 			if(confirm){
 				if(ezuiAcceptanceForm.form('validate')) {
@@ -394,15 +377,13 @@ var commitAcceptance = function(type, object){
 						data:"forms="+JSON.stringify(forms),
 						dataType: 'json',
 						error: function () {
-                            handleBtnAblity(object);
-                            $.messager.show({
-                                msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
-                            });
+
 						},
 						success: function (result) {
-                            handleBtnAblity(object);
 							try{
-                                msg=result.msg;
+
+									msg=result.msg;
+
 							}catch (e) {
 								$.messager.show({
 									msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
@@ -413,6 +394,7 @@ var commitAcceptance = function(type, object){
 								$.messager.show({
 									msg : msg, title : '<spring:message code="common.message.prompt"/>'
 								});
+								$.messager.progress('close');
 							}
 						}
 					});
@@ -421,26 +403,28 @@ var commitAcceptance = function(type, object){
 					$.messager.show({
 						msg : msg, title : '<spring:message code="common.message.prompt"/>'
 					});
-                    handleBtnAblity(object);
+					$.messager.progress('close');
+
 				}
 			}else{
-                $(object).linkbutton("enable");
 				return;
 			}
 		});
 
 	}else{
 		if(ezuiAcceptanceForm.form('validate')) {
+			$.messager.progress({
+				text: '<spring:message code="common.message.data.processing"/>', interval: 100
+			});
 
 			$.ajax({
 				url:url,
 				data:"forms="+JSON.stringify(forms),
 				dataType: 'json',
 				error: function () {
-                    handleBtnAblity(object);
+
 				},
 				success: function (result) {
-                    handleBtnAblity(object);
 					try{
 						msg=result.msg;
 
@@ -455,7 +439,7 @@ var commitAcceptance = function(type, object){
 						$.messager.show({
 							msg : msg, title : '<spring:message code="common.message.prompt"/>'
 						});
-                        handleBtnAblity(object);
+						$.messager.progress('close');
 					}
 				}
 			});
@@ -464,7 +448,7 @@ var commitAcceptance = function(type, object){
 			$.messager.show({
 				msg : msg, title : '<spring:message code="common.message.prompt"/>'
 			});
-            handleBtnAblity(object);
+			$.messager.progress('close');
 
 		}
 
@@ -480,14 +464,7 @@ function escEncode(strSendToServer){
 	return strSendToServer;
 }
 //验收作业提交 单条验收
-var commitAcceptanceS = function(type, object){
-
-    $(object).linkbutton("disable");
-
-    $.messager.progress({
-        text: '<spring:message code="common.message.data.processing"/>', interval: 100
-    });
-
+var commitAcceptanceS = function(type){
 	var typeC=type; //是否合格
 	url = '<c:url value="/docQcDetailsController.do?submitDocQcList"/>';
 	var rows = ezuiDatagrid.datagrid('getChecked');
@@ -523,7 +500,6 @@ var commitAcceptanceS = function(type, object){
 
 	}
 	if(!isCan){
-        handleBtnAblity(object);
 		$.messager.show({
 			msg : msg, title : '<spring:message code="common.message.prompt"/>'
 		});
@@ -531,7 +507,6 @@ var commitAcceptanceS = function(type, object){
 	}
 	//判断待处理需要弹窗 合格则是继续做下去
 	if(typeC=="DCL"){
-        $.messager.progress('close');
 		$.messager.confirm('<spring:message code="common.message.confirm"/>', '验收记录为待处理,是否继续操作!', function(confirm) {
 			if(confirm){
 				if(ezuiAcceptanceFormS.form('validate')) {
@@ -544,13 +519,9 @@ var commitAcceptanceS = function(type, object){
 						data:"forms="+JSON.stringify(forms),
 						dataType: 'json',
 						error: function () {
-                            handleBtnAblity(object);
-                            $.messager.show({
-                                msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
-                            });
+
 						},
 						success: function (result) {
-                            handleBtnAblity(object);
 							try{
 
 								msg=result.msg;
@@ -565,6 +536,7 @@ var commitAcceptanceS = function(type, object){
 								$.messager.show({
 									msg : msg, title : '<spring:message code="common.message.prompt"/>'
 								});
+								$.messager.progress('close');
 							}
 						}
 					});
@@ -573,30 +545,28 @@ var commitAcceptanceS = function(type, object){
 					$.messager.show({
 						msg : msg, title : '<spring:message code="common.message.prompt"/>'
 					});
-                    handleBtnAblity(object);
+					$.messager.progress('close');
 
 				}
 			}else{
-                $(object).linkbutton("enable");
 				return;
 			}
 		});
 
 	}else{
 		if(ezuiAcceptanceFormS.form('validate')) {
+			$.messager.progress({
+				text: '<spring:message code="common.message.data.processing"/>', interval: 100
+			});
 
 			$.ajax({
 				url:url,
 				data:"forms="+JSON.stringify(forms),
 				dataType: 'json',
 				error: function () {
-                    handleBtnAblity(object);
-                    $.messager.show({
-                        msg :'数据错误!', title : '<spring:message code="common.message.prompt"/>'
-                    });
+
 				},
 				success: function (result) {
-                    handleBtnAblity(object);
 					try{
 						msg=result.msg;
 
@@ -611,6 +581,7 @@ var commitAcceptanceS = function(type, object){
 						$.messager.show({
 							msg : msg, title : '<spring:message code="common.message.prompt"/>'
 						});
+						$.messager.progress('close');
 					}
 				}
 			});
@@ -619,7 +590,7 @@ var commitAcceptanceS = function(type, object){
 			$.messager.show({
 				msg : msg, title : '<spring:message code="common.message.prompt"/>'
 			});
-            handleBtnAblity(object);
+			$.messager.progress('close');
 
 		}
 
@@ -1175,8 +1146,8 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 		</form>
 	</div>
 	<div id='ezuiAcceptanceDialogBtn'>
-		<a onclick='commitAcceptance("HG", this);' class='easyui-linkbutton' href='javascript:void(0);'>合格</a>
-		<a onclick='commitAcceptance("DCL", this);' class='easyui-linkbutton' href='javascript:void(0);'>待处理</a>
+		<a onclick='commitAcceptance("HG");' class='easyui-linkbutton' href='javascript:void(0);'>合格</a>
+		<a onclick='commitAcceptance("DCL");' class='easyui-linkbutton' href='javascript:void(0);'>待处理</a>
 	</div>
 <%--验收作业点击弹窗 处理单条验收--%>
 	<div id='ezuiAcceptanceDialogS' style='padding: 10px;'>
@@ -1240,8 +1211,8 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 		</form>
 	</div>
 	<div id='ezuiAcceptanceDialogSBtn'>
-		<a onclick='commitAcceptanceS("HG", this);' class='easyui-linkbutton' href='javascript:void(0);'>合格</a>
-		<a onclick='commitAcceptanceS("DCL", this);' class='easyui-linkbutton' href='javascript:void(0);'>待处理</a>
+		<a onclick='commitAcceptanceS("HG");' class='easyui-linkbutton' href='javascript:void(0);'>合格</a>
+		<a onclick='commitAcceptanceS("DCL");' class='easyui-linkbutton' href='javascript:void(0);'>待处理</a>
 	</div>
 
 

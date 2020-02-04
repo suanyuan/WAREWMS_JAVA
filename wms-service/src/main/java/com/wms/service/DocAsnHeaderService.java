@@ -120,6 +120,7 @@ public class DocAsnHeaderService extends BaseService {
                         break;
                 }
             }
+
 			/*DocAsnDetailQuery query1 = new DocAsnDetailQuery();
 			query1.setAsnno(docAsnHeader.getAsnno());
 			query1.setAsnlineno(1);

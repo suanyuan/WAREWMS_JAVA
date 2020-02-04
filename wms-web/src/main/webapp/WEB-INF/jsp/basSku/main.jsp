@@ -92,6 +92,7 @@ $(function() {
             {field: 'skuGroup6Name',		title: '默认供应商',	width: 250 },
             // {field: 'supplierNum',		title: '产品供应商数量',	width: 250 },
             {field: 'supplierNames',		title: '所有产品供应商',	width: 250 },
+            {field: 'riskAssessment',		title: '风险评估',	width: 250 },
 
             {field: 'addtime',		title: '创建时间',	width: 100},
             {field: 'addwho',		title: '创建人',	width: 100},

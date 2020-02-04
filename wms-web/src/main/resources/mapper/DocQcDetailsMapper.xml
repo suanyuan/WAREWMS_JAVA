@@ -432,9 +432,8 @@ where 1=1
 <!-- 查询验收明细档列表 pano  合计 -->
 <select id="queryByListPanoSum" resultType="com.wms.entity.DocQcDetails"  parameterType="Object">
 
-	SELECT SUM(a.qcqtyExpected) as qcqtyExpected, SUM(a.qcqtyExpectedEach) as qcqtyExpectedEach, SUM(a.qcqtyCompleted) as qcqtyCompleted, SUM(a.qcqtyCompletedEach) as qcqtyCompletedEach FROM (
-		SELECT d.qcqty_expected-d.qcqty_completed as qcqtyExpected,(d.qcqty_expected-d.qcqty_completed)*p.qty1 as qcqtyExpectedEach,
-	           d.qcqty_completed as qcqtyCompleted,d.qcqty_completed*p.qty1 as qcqtyCompletedEach
+		SELECT sum(d.qcqty_expected-d.qcqty_completed) qcqtyExpected,sum((d.qcqty_expected-d.qcqty_completed)*p.qty1) qcqtyExpectedEach,
+	           sum(d.qcqty_completed) qcqtyCompleted,sum(d.qcqty_completed*p.qty1) qcqtyCompletedEach
 		FROM doc_qc_details  d
 		LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 		LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
@@ -449,7 +448,6 @@ where 1=1
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}
 		</if>
-	) as a
 	</select>
 <!-- 查询验收记录查询 -->
 <select id="queryByListSearch" resultMap="BaseResultMap"  parameterType="Object">

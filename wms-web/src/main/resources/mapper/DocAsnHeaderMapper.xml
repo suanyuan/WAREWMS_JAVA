@@ -144,6 +144,8 @@
 	<result column="warehouseid" property="warehouseid"/>
 	<result column="zonegroup" property="zonegroup"/>
 	<result column="reservedfield07" property="reservedfield07"/>
+	<result column="sup" property="sup"/>
+
 	<collection property="docAsnDetailSet" javaType="java.util.Set" ofType="com.wms.entity.DocAsnDetail">
 		<result column="addtime" property="addtime"/>
 		<result column="addwho" property="addwho"/>
@@ -1691,7 +1693,7 @@ insert into doc_asn_header
 
 <!-- 查询入库单管理列表 -->
 <select id="queryByPageList" resultMap="DocAsnHeaderMap"  parameterType="Object">
-	select t.*,sku.reservedfield07 from (
+	select t.*,sku.reservedfield07,customer.DESCR_C sup from (
 		select a.*, b.codename_c as asnstatusName, c.codename_c as asntypeName, d.codename_c as releasestatusName, (@rowNum :=@rowNum + 1) as row_num
 		from (select
 				<include refid="Base_Column_List"/>
@@ -1711,6 +1713,7 @@ insert into doc_asn_header
 	) as t
 	left join (select * from doc_asn_details where asnlineno=1) detail on t.asnno = detail.asnno
 	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid
+	LEFT JOIN bas_customer customer on t.supplierid = customer.CUSTOMERID
 	where 1 = 1
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}

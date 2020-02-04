@@ -375,7 +375,7 @@ public class DocAsnHeader implements Serializable {
 	private String zonegroup;
 
 	private String reservedfield07;
-	
+	private String  sup;
 	private Set<DocAsnDetail> docAsnDetailSet;
 
 
@@ -388,6 +388,15 @@ public class DocAsnHeader implements Serializable {
 
 	private String supplierIdRef;
 	private String customerIdRef;
+
+
+	public String getSup() {
+		return sup;
+	}
+
+	public void setSup(String sup) {
+		this.sup = sup;
+	}
 
 	public String getSupplierIdRef() {
 		return supplierIdRef;

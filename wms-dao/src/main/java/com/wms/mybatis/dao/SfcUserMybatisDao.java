@@ -1,15 +1,14 @@
 package com.wms.mybatis.dao;
 
 
-import java.util.List;
-
-import com.wms.mybatis.dao.BaseDao;
 import com.wms.mybatis.entity.SfcCustomer;
 import com.wms.mybatis.entity.SfcUser;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.mybatis.entity.SfcWarehouse;
 import com.wms.query.SfcCustomerQuery;
 import com.wms.query.SfcWarehouseQuery;
+
+import java.util.List;
 /**
  * 
  * <br>
@@ -18,6 +17,8 @@ import com.wms.query.SfcWarehouseQuery;
 public interface SfcUserMybatisDao extends BaseDao {
 
 	public SfcUser queryListById(SfcUserLogin sfcUserLogin);
+
+	public <T> T queryByName(Object name);
 
 	public SfcWarehouse queryWarehouseById(SfcWarehouseQuery sfcWarehouseQuery);
 

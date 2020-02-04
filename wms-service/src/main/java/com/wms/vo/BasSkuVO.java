@@ -86,7 +86,19 @@ public class BasSkuVO {
 	private java.lang.String skuGroup8;
 	private java.lang.String productLineName;
 
-    private Double qty1;
+	private String riskAssessment;//风险评估
+
+
+	private Double qty1;
+
+	public String getRiskAssessment() {
+		return riskAssessment;
+	}
+
+	public void setRiskAssessment(String riskAssessment) {
+		this.riskAssessment = riskAssessment;
+	}
+
 	public String getClientName() {
 		return clientName;
 	}

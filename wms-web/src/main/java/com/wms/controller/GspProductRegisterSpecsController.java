@@ -1,14 +1,17 @@
 package com.wms.controller;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.alibaba.fastjson.JSON;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.GspProductRegisterSpecsQuery;
+import com.wms.service.GspProductRegisterSpecsService;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.annotation.Login;
+import com.wms.vo.GspProductRegisterSpecsVO;
+import com.wms.vo.Json;
+import com.wms.vo.form.GspProductRegisterSpecsForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,17 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.service.GspProductRegisterSpecsService;
-import com.wms.utils.ResourceUtil;
-import com.wms.utils.annotation.Login;
-import com.wms.vo.Json;
-import com.wms.vo.GspProductRegisterSpecsVO;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.GspProductRegisterSpecsForm;
-import com.wms.query.GspProductRegisterSpecsQuery;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("gspProductRegisterSpecsController")
