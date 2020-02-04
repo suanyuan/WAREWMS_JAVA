@@ -375,7 +375,12 @@ where 1=1
 	from Sfc_User
 	where user_id=#{id,jdbcType=VARCHAR}
 </select>
-
+<!-- 根据name查询 用户登录 -->
+<select id="queryByName"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" />
+	from Sfc_User
+	where user_name=#{name ,jdbcType=VARCHAR}
+</select>
 <!-- 用户登录 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from Sfc_User 

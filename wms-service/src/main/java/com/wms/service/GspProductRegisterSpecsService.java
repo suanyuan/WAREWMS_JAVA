@@ -2,17 +2,23 @@ package com.wms.service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.wms.constant.Constant;
 import com.wms.entity.GspEnterpriseInfo;
-import com.wms.entity.GspProductRegister;
-import com.wms.entity.ProductRegisterRelation;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.*;
+import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
+import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
+import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.service.importdata.ImportAsnDataService;
 import com.wms.service.importdata.ImportGspProductRegisterSpecsDataService;
-import com.wms.utils.*;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
+import com.wms.utils.RandomUtil;
+import com.wms.utils.ResourceUtil;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.GspEnterpriseInfoVO;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -50,19 +56,12 @@ public class GspProductRegisterSpecsService extends BaseService {
 	private ImportGspProductRegisterSpecsDataService importGspProductRegisterSpecsDataService;
 	@Autowired
 	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
-	@Autowired
-	private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
-	@Autowired
-	private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
-
-
-
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Autowired
 	private BasCodesService basCodesService;
 
 	@Autowired
 	private DataPublishService dataPublishService;
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public EasyuiDatagrid<GspProductRegisterSpecsVO> getPagedDatagrid(EasyuiDatagridPager pager, GspProductRegisterSpecsQuery query) {
 
@@ -143,49 +142,16 @@ public class GspProductRegisterSpecsService extends BaseService {
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
 		BeanUtils.copyProperties(gspProductRegisterSpecsForm, gspProductRegisterSpecs);
 		gspProductRegisterSpecs.setSpecsId(RandomUtil.getUUID());
-		ProductRegisterRelation relation = new ProductRegisterRelation();
+		GspProductRegisterSpecs gspProductRegisterSpecs1 = gspProductRegisterSpecsMybatisDao.selectByProductCode(gspProductRegisterSpecs.getProductCode());
 
-		if(gspProductRegisterSpecsForm.getProductRegisterId()!=null&& gspProductRegisterSpecsForm.getProductRegisterId()!=""){
-			//新增的有注册证
-			//注册证和产品关系是否已存在
-			GspProductRegisterSpecs g1 = gspProductRegisterSpecsMybatisDao.selectByProductCodeAndProductRegister(gspProductRegisterSpecs.getProductCode(),gspProductRegisterSpecs.getProductRegisterId());
-			GspProductRegister gpr = gspProductRegisterMybatisDao.queryById(gspProductRegisterSpecs.getProductRegisterId());
-
-			if(g1!=null){
-				return  Json.error("该产品注册证关系已经存在！");
-			}
-
-			relation.setId(RandomUtil.getUUID());
-			relation.setSpecsId(gspProductRegisterSpecs.getSpecsId());
-			relation.setProductCode(gspProductRegisterSpecs.getProductCode());
-			relation.setProductRegisterId(gspProductRegisterSpecs.getProductRegisterId());
-			relation.setProductRegisterNo(gpr.getProductRegisterNo());
-			relation.setActiveFlag("0");
-			relation.setCreateId(SfcUserLoginUtil.getLoginUser().getId());
-			relation.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-
-		}else{
-			//没有传入注册证
-			if("0".equals(gspProductRegisterSpecs.getMedicalDeviceMark())){
-				GspProductRegisterSpecs g2 = gspProductRegisterSpecsMybatisDao.selectByProductCode(gspProductRegisterSpecs.getProductCode());
-				if(g2!=null){
-					if(g2 !=null  ){
-						return Json.error("产品已存在！");
-					}
-				}
-			}
+		if(gspProductRegisterSpecs1 !=null  ){
+			return Json.error("产品代码存在！");
 		}
-
-
+//		gspProductRegisterSpecs.getProductCode();
+		System.out.println(gspProductRegisterSpecs.getIsCertificate()+"==================gspProductRegisterSpecs.getIsCertificate()="+gspProductRegisterSpecs.getIsDoublec());
+//		gspProductRegisterSpecs.setEditDate(new Date());
 		gspProductRegisterSpecs.setProductName(gspProductRegisterSpecs.getProductNameMain());
 		gspProductRegisterSpecsMybatisDao.add(gspProductRegisterSpecs);
-
-
-		if(gspProductRegisterSpecsForm.getProductRegisterId()!=null){
-			productRegisterRelationMybatisDao.add(relation);
-		}
-
-
 		json.setSuccess(true);
 		json.setMsg("资料添加成功");
 		return json;
@@ -199,22 +165,20 @@ public class GspProductRegisterSpecsService extends BaseService {
 			return Json.error("查询不到对应的产品基础信息");
 		}
 
-
-
-		//判断如果产品注册证号变更需要触发换证
-//		if(StringUtils.isEmpty(productRegisterId)){
-//			if(gspProductRegisterSpecsForm.getProductRegisterId()!=null && oldSpecs.getProductRegisterId()!=null){
-//				if(!gspProductRegisterSpecsForm.getProductRegisterId().equals(oldSpecs.getProductRegisterId())){
-//					dataPublishService.cancelDataBySpecsId(oldSpecs);
-//				}
-//			}
-//		}else{
-//			if(productRegisterId!=null && oldSpecs.getProductRegisterId()!=null){
-//				if(!productRegisterId.equals(oldSpecs.getProductRegisterId())){
-//					dataPublishService.cancelDataBySpecsId(oldSpecs);
-//				}
-//			}
-//		}
+		//判断如果产品注册证号变更需要出发换证
+		if(StringUtils.isEmpty(productRegisterId)){
+			if(gspProductRegisterSpecsForm.getProductRegisterId()!=null && oldSpecs.getProductRegisterId()!=null){
+				if(!gspProductRegisterSpecsForm.getProductRegisterId().equals(oldSpecs.getProductRegisterId())){
+					dataPublishService.cancelDataBySpecsId(oldSpecs);
+				}
+			}
+		}else{
+			if(productRegisterId!=null && oldSpecs.getProductRegisterId()!=null){
+				if(!productRegisterId.equals(oldSpecs.getProductRegisterId())){
+					dataPublishService.cancelDataBySpecsId(oldSpecs);
+				}
+			}
+		}
 
 
 		GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
@@ -229,23 +193,7 @@ public class GspProductRegisterSpecsService extends BaseService {
 	}
 
 
-	public Json addrelation() throws Exception {
-		Json json = new Json();
-		List<GspProductRegisterSpecs> specsList =gspProductRegisterSpecsMybatisDao.selectProductRegisterRelation();
-		for(GspProductRegisterSpecs specs:specsList){
-			ProductRegisterRelation relation = new ProductRegisterRelation();
-			relation.setId(RandomUtil.getUUID());
-			relation.setActiveFlag("1");
-			relation.setProductRegisterId(specs.getProductRegisterId());
-			relation.setSpecsId(specs.getSpecsId());
-			relation.setProductRegisterNo(specs.getProductRegisterNo());
-			relation.setProductCode(specs.getProductCode());
-			productRegisterRelationMybatisDao.add(relation);
 
-		}
-
-		return json;
-	}
 	public void exportTemplate(HttpServletResponse response, String token) {
 		try(OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
 			File file = new File(ResourceUtil.getImportRootPath("productRegisterSpecs_template.xls"));

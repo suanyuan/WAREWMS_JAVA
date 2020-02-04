@@ -42,14 +42,9 @@
             nowrap: true,
             striped: true,
             queryParams:{
-                // isUse : '1',
+                isUse : '1',
                 type:'${type}',
                 enterpriseType:'${enterpriseType}'
-            },
-            rowStyler:function(index,row){
-                if(row.isUse == "0" ){
-                    return 'color:red;';
-                }
             },
             fit:true,
             collapsible:false,
@@ -105,7 +100,7 @@
         enterpriseSearchGrid.datagrid('load', {
             productRegisterNo : $('#productRegisterNo1').textbox('getValue'),
             productNameMain :$('#productNameMain1').textbox('getValue'),
-            // isUse:'1'
+            isUse:'1'
         });
     };
 

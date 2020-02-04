@@ -45,9 +45,9 @@ $(function() {
             }
         },
 		singleSelect:true,
-        // queryParams:{
-		//     isUse:"1"
-        // },
+        queryParams:{
+		    isUse:"1"
+        },
 		idField : 'productRegisterId',
 		columns : [[
 			{field: 'productRegisterId',		title: '主键',	width: 100 ,hidden:true},
@@ -226,7 +226,7 @@ $(function () {
         valueField:'id',
         textField:'value',
         onLoadSuccess:function (data) {
-            // $(this).combobox("setValue","1");
+            $(this).combobox("setValue","1");
         }
     });
 })

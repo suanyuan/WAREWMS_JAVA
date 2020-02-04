@@ -10,7 +10,6 @@ import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
-import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.*;
 import com.wms.result.FirstBusinessApplyResult;
 import com.wms.result.FirstBusinessProductApplyResult;
@@ -117,7 +116,6 @@ public class FirstBusinessApplyService extends BaseService {
 		Json json = new Json();
 		FirstBusinessApply firstBusinessApply = firstBusinessApplyMybatisDao.queryById(firstBusinessApplyForm.getApplyId());
 		BeanUtils.copyProperties(firstBusinessApplyForm, firstBusinessApply);
-		firstBusinessApply.setEditId(SfcUserLoginUtil.getLoginUser().getId());
 		firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 		json.setSuccess(true);
 		return json;
@@ -286,7 +284,7 @@ public class FirstBusinessApplyService extends BaseService {
 				n++;
 			}
 			if(!flag){
-				return 	Json.error("存在同一货主 供应商与产品注册证关系！  不能重复申请！");
+				return 	Json.error("存在同一货主 供应商与产品！  不能重复申请！");
 			}
 			//specsId   产品id
 			int np = 0;
@@ -430,7 +428,6 @@ public class FirstBusinessApplyService extends BaseService {
 			return Json.success("申请成功");
 		}catch (Exception e){
 			e.printStackTrace();
-			
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return Json.error("申请失败");
@@ -720,7 +717,6 @@ public class FirstBusinessApplyService extends BaseService {
                 FirstBusinessApply firstBusinessApply = new FirstBusinessApply();
                 firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_CHECKING);
                 firstBusinessApply.setApplyId(DelId);
-				firstBusinessApply.setEditId(SfcUserLoginUtil.getLoginUser().getId());
                 firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
 
                 //更新申请记录
@@ -777,9 +773,7 @@ public class FirstBusinessApplyService extends BaseService {
                 firstBusinessApply.setFirstState(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
                 firstBusinessApply.setApplyId(DelId);
                 firstBusinessApply.setIsUse(Constant.IS_USE_NO);
-				firstBusinessApply.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-
-				firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
+                firstBusinessApplyMybatisDao.updateBySelective(firstBusinessApply);
                 //更新申请记录
 //                firstReviewLogService.updateFirstReviewByNo(DelId, Constant.CODE_CATALOG_CHECKSTATE_FAIL);
 
@@ -788,10 +782,10 @@ public class FirstBusinessApplyService extends BaseService {
                 FirstBusinessApply newApply = firstBusinessApplyMybatisDao.queryById(DelId);
 
                 //获取产品最新的产品id
-//				GspProductRegisterSpecs  gprs =gspProductRegisterSpecsMybatisDao.selectNewBySpecsId(newApply.getSpecsId());
-//				if(gprs==null){
-//					return Json.error("产品已失效");
-//				}
+				GspProductRegisterSpecs  gprs =gspProductRegisterSpecsMybatisDao.selectNewBySpecsId(newApply.getSpecsId());
+				if(gprs==null){
+					return Json.error("产品已失效");
+				}
 				//获取供应商最新的供应商id
 				BasCustomer s =basCustomerMybatisDao.selectNewBySupplier(newApply.getSupplierId());
 				if(s==null){
@@ -810,7 +804,7 @@ public class FirstBusinessApplyService extends BaseService {
 //					}
 
 
-                        Json result11=   addApply(newApply.getClientId(), s.getCustomerid(), newApply.getSpecsId(), newApply.getProductline(),true,DelId);
+                        Json result11=   addApply(newApply.getClientId(), s.getCustomerid(), gprs.getSpecsId(), newApply.getProductline(),true,DelId);
                         if(!result11.isSuccess()){
                             content = content+"  单号"+DelId+" "+ result11.getMsg();
                             type =false;

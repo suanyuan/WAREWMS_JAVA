@@ -11,8 +11,6 @@ public class PdaDocPaDetailForm {
 
     private String palineno;
 
-    private String lotnum;
-
     private String linestatus;//暂定，没啥用
 
     private String asnno;

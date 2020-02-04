@@ -10,16 +10,12 @@ import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
 import com.wms.query.BasCodesQuery;
-import com.wms.query.BasCustomerQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.*;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasCodesVO;
-import com.wms.vo.BasCustomerVO;
-import com.wms.vo.InvLotAttVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.BasCodesForm;
-import com.wms.vo.form.BasCustomerForm;
 import com.wms.vo.form.InvLotAttForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,8 +63,7 @@ public class BasCodesService {
     private QcMeteringDeviceMybatisDao qcMeteringDeviceMybatisDao;
     @Autowired
     private BasSkuLeakMybatisDao basSkuLeakMybatisDao;
-    @Autowired
-    private  WaybillStatisticsService waybillStatisticsService;
+
     @Autowired
     private GspOperateDateTimeService gspOperateDateTimeService;
     @Autowired
@@ -855,11 +850,6 @@ public class BasCodesService {
         b.setShowSequence(num38);
         b.setUdf1(enterpriseIdList38Str);
         basCodesMybatisDao.updateBySelective(b);
-
-
-
-        //承运商运单统计数据更新
-        waybillStatisticsService.wsUpdate();
 
     }
 
