@@ -181,6 +181,8 @@ public class BasSku implements Serializable {
 
 	private BigDecimal qtyonhold;
 	private String productLineName;
+
+
 	private String orderbysql;
 
 	private String clientName;
@@ -190,7 +192,16 @@ public class BasSku implements Serializable {
 
 	private String unit;
 	private Double qty1;
+	private String riskAssessment;//风险评估
 
+
+	public String getRiskAssessment() {
+		return riskAssessment;
+	}
+
+	public void setRiskAssessment(String riskAssessment) {
+		this.riskAssessment = riskAssessment;
+	}
 
 	public String getAddtimeDc() {
 		return addtimeDc;

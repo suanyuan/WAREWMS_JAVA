@@ -49,7 +49,9 @@ $(function() {
 			{field: 'name',		title: '产品线名称',	width: 88 },
 			{field: 'descrC',		title: '货主',	width: 88 },
 			//{field: 'name',		title: '货主',	width: 88,hidden:true },
-			{field: 'expression',		title: '说明',	width: 88 },
+            {field: 'riskAssessment',		title: '风险评估',	width: 88 },
+
+            {field: 'expression',		title: '说明',	width: 88 },
 
 			{field: 'createId',		title: '创建人',	width: 88 },
 			{field: 'createDate',		title: '创建日期',	width: 88 },
@@ -83,7 +85,7 @@ var add = function(){
         modal : true,
         title : '<spring:message code="common.dialog.title"/>',
         href:url,
-		height:200,
+		height:250,
 		width:300,
         buttons : '#ezuiDialogBtn',
         onClose : function() {
@@ -107,7 +109,7 @@ var edit = function(){
             modal : true,
             title : '<spring:message code="common.dialog.title"/>',
             href:url+'&productLineId='+row.productLineId,
-            height:200,
+            height:250,
             width:300,
             buttons : '#ezuiDialogBtn',
             onClose : function() {

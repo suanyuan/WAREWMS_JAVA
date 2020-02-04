@@ -15,12 +15,25 @@ public class ProductLineQuery implements IQuery {
 	private String editDate;
 	private String isUse;
 
-    public ProductLineQuery(String productLineId) {
+	private String riskAssessment;
+
+
+
+	public ProductLineQuery(String productLineId) {
         this.productLineId = productLineId;
     }
 
     public ProductLineQuery() {
     }
+
+
+	public String getRiskAssessment() {
+		return riskAssessment;
+	}
+
+	public void setRiskAssessment(String riskAssessment) {
+		this.riskAssessment = riskAssessment;
+	}
 
 	public int getSerialFlag() {
 		return serialFlag;

@@ -93,9 +93,12 @@
             <th>出库记录序列号</th>
                 <td><input type='text'  name ='serialFlag'  id='serialFlag' value="${productLine.serialFlag}" class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																										                                    editable: false,
-																										                                    url:'<c:url value="/commonController.do?getYesOrNoCombobox"/>',
+									    																	                                    url:'<c:url value="/commonController.do?getYesOrNoCombobox"/>',
 																									                                 	    valueField: 'id',
 																										                                    textField: 'value',required:true"/></td>
+            </tr>
+            <th>风险评估</th>
+            <td><input type='text'  name ='riskAssessment'  id='riskAssessment' value="${productLine.riskAssessment}" class='easyui-textbox' size='16' data-options=''/></td>
             </tr>
         </table>
     </form>
