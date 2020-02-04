@@ -1,17 +1,14 @@
 package com.wms.controller;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import com.alibaba.fastjson.JSON;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.mybatis.entity.SfcUserLogin;
-import com.wms.query.GspProductRegisterSpecsQuery;
-import com.wms.service.GspProductRegisterSpecsService;
-import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
-import com.wms.utils.annotation.Login;
-import com.wms.vo.GspProductRegisterSpecsVO;
-import com.wms.vo.Json;
-import com.wms.vo.form.GspProductRegisterSpecsForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.service.GspProductRegisterSpecsService;
+import com.wms.utils.ResourceUtil;
+import com.wms.utils.annotation.Login;
+import com.wms.vo.Json;
+import com.wms.vo.GspProductRegisterSpecsVO;
+import com.wms.easyui.EasyuiCombobox;
+import com.wms.easyui.EasyuiDatagrid;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.vo.form.GspProductRegisterSpecsForm;
+import com.wms.query.GspProductRegisterSpecsQuery;
 
 @Controller
 @RequestMapping("gspProductRegisterSpecsController")
@@ -81,6 +81,23 @@ public class GspProductRegisterSpecsController {
 
 		GspProductRegisterSpecsForm gspProductRegisterSpecsForm = JSON.parseObject(gspProductRegisterSpecsFormStr,GspProductRegisterSpecsForm.class);
 		Json json = gspProductRegisterSpecsService.addGspProductRegisterSpecs(gspProductRegisterSpecsForm);
+		if(json == null){
+			json = new Json();
+			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+
+
+		}
+		return json;
+	}
+
+
+	@Login
+	@RequestMapping(params = "addrelation")
+	@ResponseBody
+	public Json addrelation() throws Exception {
+
+		Json json = gspProductRegisterSpecsService.addrelation();
+
 		if(json == null){
 			json = new Json();
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -158,6 +175,8 @@ public class GspProductRegisterSpecsController {
 	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
 		return gspProductRegisterSpecsService.importExcelData(mhsr);
 	}
+
+
 
 	//导出
 	@Login

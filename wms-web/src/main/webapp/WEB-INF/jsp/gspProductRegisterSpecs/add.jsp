@@ -501,14 +501,17 @@
     }
 
     $(function () {
-        $("#productRegisterNo").textbox({
-            icons:[{
-                iconCls:'icon-search',
-                handler: function(e){
-                    searchEnterprise();
-                }
-            }]
-        })
+        if(processType != 'edit'){
+            $("#productRegisterNo").textbox({
+                icons:[{
+                    iconCls:'icon-search',
+                    handler: function(e){
+                        searchEnterprise();
+                    }
+                }]
+            })
+        }
+
     })
 
 

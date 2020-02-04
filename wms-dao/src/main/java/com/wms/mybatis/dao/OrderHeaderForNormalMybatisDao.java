@@ -6,6 +6,7 @@ import com.wms.result.OrderStatusResult;
 import com.wms.result.ReceiptResult;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,13 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 	List<OrderHeaderForNormal> queryByAllocationDetailsId(String orderno);
 
 	List<OrderHeaderForNormal> queryByUnAllocationDetailsId(String orderno);
+
+	//查询所有已完成订单的年份
+	List<String> selectALLOrderYear(String edittime);
+	//通过时间 模糊查询当天的 发运单数
+	String selectOrderByTime(@Param("edittime")String edittime,@Param("carrierLicenseId")String carrierLicenseId);
+
+
 
 	List<OrderHeaderForNormal> queryPackageList(@Param("start") int start, @Param("pageSize") int pageSize);
 	
