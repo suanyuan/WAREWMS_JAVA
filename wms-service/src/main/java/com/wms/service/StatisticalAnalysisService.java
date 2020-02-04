@@ -38,18 +38,19 @@ public class StatisticalAnalysisService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows()/2);
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<RptSoAsnDailyLocation> rptSoAsnDailyLocationList = statisticalAnalysisMybatisDao.querySoAsnInvLocation(mybatisCriteria);
-		for (RptSoAsnDailyLocation s: rptSoAsnDailyLocationList) {
-			//计算数量
-			if(s.getQty1()!=null&&s.getSoqty()!=null){
-				s.setSoqtyeach(s.getQty1()*s.getSoqty());
-			}
-			if(s.getQty1()!=null&&s.getAsnqty()!=null){
-				s.setAsnqtyeach(s.getQty1()*s.getAsnqty());
-			}
-		}
+//		for (RptSoAsnDailyLocation s: rptSoAsnDailyLocationList) {
+//			//计算数量
+//			if(s.getQty1()!=null&&s.getSoqty()!=null){
+//				s.setSoqtyeach(s.getQty1()*s.getSoqty());
+//			}
+//			if(s.getQty1()!=null&&s.getAsnqty()!=null){
+//				s.setAsnqtyeach(s.getQty1()*s.getAsnqty());
+//			}
+//		}
 		long a=(long) statisticalAnalysisMybatisDao.queryAsnInvLocationCount(mybatisCriteria);
 		long b=(long) statisticalAnalysisMybatisDao.querySoInvLocationCount(mybatisCriteria);
-		datagrid.setTotal(a>b?a*2:b*2);
+//		datagrid.setTotal(a>b?a*2:b*2);
+		datagrid.setTotal(a+b);
 		datagrid.setRows(rptSoAsnDailyLocationList);
 		return datagrid;
 	}
@@ -71,18 +72,18 @@ public class StatisticalAnalysisService extends BaseService {
 			if (rptSoAsnDailyLocationList == null || rptSoAsnDailyLocationList.size() == 0) {
 				System.out.println("题库为空");
 			}else {
-				for (RptSoAsnDailyLocation s: rptSoAsnDailyLocationList) {
-				//计算数量
-				    if(s.getQty1()!=null&&s.getSoqty()!=null){
-				    	s.setSoqtyeach(s.getQty1()*s.getSoqty());
-					}
-				    if(s.getQty1()!=null&&s.getAsnqty()!=null){
-				    	s.setAsnqtyeach(s.getQty1()*s.getAsnqty());
-					}
-				}
+//				for (RptSoAsnDailyLocation s: rptSoAsnDailyLocationList) {
+//				//计算数量
+//				    if(s.getQty1()!=null&&s.getSoqty()!=null){
+//				    	s.setSoqtyeach(s.getQty1()*s.getSoqty());
+//					}
+//				    if(s.getQty1()!=null&&s.getAsnqty()!=null){
+//				    	s.setAsnqtyeach(s.getQty1()*s.getAsnqty());
+//					}
+//				}
 				//将list集合转化为excle
 				ExcelUtil.listToExcel(rptSoAsnDailyLocationList, fieldMap, sheetName, response);
-				System.out.println("导出成功~~~~");
+//				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
 			e.printStackTrace();

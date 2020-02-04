@@ -132,55 +132,55 @@
         </trim>
     </sql>
     <!-- 查询条件 入库信息 -->
-    <sql id="Example_Where_Clause2">
+    <sql id="Asn_Where_Clause">
         <trim  suffixOverrides="," >
             <if test="condition.lotatt14!= null and condition.lotatt14 != ''" >
-                and e.lotatt14 like concat('%', #{condition.lotatt14},'%')
+                and t_ila.lotatt14 like concat('%', #{condition.lotatt14},'%')
             </if>
             <if test="condition.enterpriseName != null and condition.enterpriseName != ''" >
-                and r.descr_c like concat('%', #{condition.enterpriseName},'%')
+                and t_cus.descr_c like concat('%', #{condition.enterpriseName},'%')
             </if>
             <if test="condition.lotatt03StartDate != null and condition.lotatt03StartDate != ''" >
-                and e.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
+                and t_ila.lotatt03 &gt;=  #{condition.lotatt03StartDate,jdbcType=VARCHAR}
             </if>
             <if test="condition.lotatt03EndDate != null and condition.lotatt03EndDate != ''" >
-                and e.lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
+                and t_ila.lotatt03 &lt;=  #{condition.lotatt03EndDate,jdbcType=VARCHAR}
             </if>
             <if test="condition.lotatt12 != null and condition.lotatt12 != ''" >
-                and e.lotatt12 like concat('%', #{condition.lotatt12},'%')
+                and t_ila.lotatt12 like concat('%', #{condition.lotatt12},'%')
             </if>
             <if test="condition.descrc != null and condition.descrc != ''" >
-                and s.`descr_c` like concat('%', #{condition.descrc},'%')
+                and t_sku.`descr_c` like concat('%', #{condition.descrc},'%')
             </if>
             <if test="condition.lotatt15 != null and condition.lotatt15 != ''" >
-                and e.lotatt15 like concat('%', #{condition.lotatt15},'%')
+                and t_ila.lotatt15 like concat('%', #{condition.lotatt15},'%')
             </if>
             <if test="condition.lotatt06 != null and condition.lotatt06 != ''" >
-                and e.lotatt06 like concat('%', #{condition.lotatt06},'%')
+                and t_ila.lotatt06 like concat('%', #{condition.lotatt06},'%')
             </if>
             <if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
-                and e.lotatt04 like concat('%', #{condition.lotatt04},'%')
+                and t_ila.lotatt04 like concat('%', #{condition.lotatt04},'%')
             </if>
             <if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
-                and e.lotatt05 like concat('%', #{condition.lotatt05},'%')
+                and t_ila.lotatt05 like concat('%', #{condition.lotatt05},'%')
             </if>
             <if test="condition.activeFlag != null and condition.activeFlag != ''" >
-                and r.active_flag =#{condition.activeFlag}
+                and t_cus.active_flag =#{condition.activeFlag}
             </if>
             <if test="condition.reservedfield09 != null and condition.reservedfield09 != ''" >
-                AND s.reservedfield09=#{condition.reservedfield09}
+                AND t_sku.reservedfield09=#{condition.reservedfield09}
             </if>
             <if test="condition.sku!= null and condition.sku != ''" >
-                and dd.sku like concat('%', #{condition.sku},'%')
+                and t_sku.sku like concat('%', #{condition.sku},'%')
             </if>
             <if test="condition.locationid!= null and condition.locationid != ''" >
-                and dd.userdefine1 like concat('%', #{condition.locationid},'%')
+                and t_qc_d.userdefine1 like concat('%', #{condition.locationid},'%')
             </if>
             <if test="condition.lotatt10!= null and condition.lotatt10 != ''" >
-                and e.`lotatt10` = #{condition.lotatt10}
+                and t_ila.`lotatt10` = #{condition.lotatt10}
             </if>
             <if test="condition.productLineName != null and condition.productLineName != ''" >
-                and l.product_line_id like concat('%', #{condition.productLineName},'%')
+                and t_pline.product_line_id like concat('%', #{condition.productLineName},'%')
             </if>
         </trim>
     </sql>
@@ -395,99 +395,104 @@
 <!-- *******************************入库信息********************************** -->
 <!-- 查询入库信息列表 -->
     <select id="querySearchEnterInvLocation"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
-       select aaaa.*,ccc.codename_c type from (
         SELECT
-        e.`lotatt14`,r.descr_c enterpriseName,r.active_flag activeFlag,
-        dd.qcqty_expected qty,dd.userdefine1 locationid,
-        p.`qty1`,
-        CONCAT(IFNULL(e.`lotatt04`,''),'/',IFNULL(e.`lotatt05`,'')) AS lotatt04,
-        CONCAT(IFNULL(DATE_FORMAT(e.`lotatt01`,'%Y-%m-%d'),''),'/',IFNULL(DATE_FORMAT(e.`lotatt02`,'%Y-%m-%d'),'')) lotatt01Andlotatt02,
-        DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') lotatt03,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
-        s.`descr_c` descrc,
-        bb.codename_c uom
-        from
-        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`
-        from `doc_asn_details` a
-        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
-        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
-        WHERE  b.asnstatus='99'
-        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`) aaa
-        left join `doc_qc_header` d on d.pano=aaa.`PANO`
-        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        where 1=1
-        <include refid="Example_Where_Clause2"/>
-        ORDER BY e.`lotatt03` DESC,e.lotatt14 desc
+            t_ila.lotatt14, t_cus.DESCR_C AS enterpriseName, t_cus.ACTIVE_FLAG AS activeFlag,
+            t_qc_d.qcqty_completed AS qty, t_qc_d.qcqty_completed*t_pack.qty1 AS qtyeach, t_qc_d.userdefine1 AS locationid,
+            CONCAT(IFNULL(t_ila.lotatt04,''),'/',IFNULL(t_ila.lotatt05,'')) AS lotatt04,
+            CONCAT(IFNULL(t_ila.lotatt01,''),'/',IFNULL(t_ila.lotatt02,'')) AS lotatt01Andlotatt02,
+            t_ila.lotatt03, t_ila.lotatt06, t_ila.lotatt10, t_ila.lotatt11, t_ila.lotatt12, t_ila.lotatt15,
+            t_sku.descr_c AS descrc, t_uom_code.codename_c AS uom, t_asn_code.codename_c AS type
+        FROM doc_asn_details t_asn_d
+        LEFT JOIN doc_asn_header t_asn_h
+                    ON t_asn_h.asnno = t_asn_d.asnno
+        LEFT JOIN bas_codes t_asn_code
+                    ON t_asn_code.code = t_asn_h.asntype
+        LEFT JOIN bas_customer t_cus
+                    ON t_cus.CUSTOMERID = t_asn_h.customerid
+        LEFT JOIN bas_sku t_sku
+                    ON t_sku.customerid = t_asn_d.customerid AND t_sku.sku = t_asn_d.sku
+        LEFT JOIN bas_codes t_uom_code
+                    ON t_uom_code.code = t_sku.defaultreceivinguom
+        LEFT JOIN bas_package t_pack
+                    ON t_pack.packid = t_sku.packid
+        LEFT JOIN doc_pa_details t_pa_d
+                    ON t_asn_d.asnno = t_pa_d.ASNNO AND t_asn_d.asnlineno = t_pa_d.ASNLINENO
+        LEFT JOIN doc_qc_header t_qc_h
+                    ON t_qc_h.pano = t_pa_d.PANO
+        LEFT JOIN doc_qc_details t_qc_d
+                    ON t_qc_d.qcno = t_qc_h.qcno AND t_qc_d.palineno = t_pa_d.PALINENO
+        LEFT JOIN inv_lot_att t_ila
+                    ON t_ila.lotnum = t_qc_d.lotnum
+        WHERE t_asn_h.asnstatus = '99' AND t_qc_d.linestatus = '40' AND t_asn_code.codeid = 'ASN_TYP' AND t_uom_code.codeid = 'uom'
+        <include refid="Asn_Where_Clause"/>
+        ORDER BY t_ila.lotatt03 DESC, t_ila.lotatt14 DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
-        </if>)  aaaa
-        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaaa.lotatt14
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') ccc ON ccc.code=bbb.`asntype`
-        ORDER BY aaaa.`lotatt03` DESC,aaaa.lotatt14 desc
+        </if>
     </select>
 <!-- 查询入库信息列表 -统计 -->
     <select id="querySearchEnterInvLocationSum"  resultType="com.wms.entity.SearchEnterInvLocation" parameterType="Object">
-        select aaaa.*,ccc.codename_c type from (
         SELECT
-        e.`lotatt14`,r.descr_c enterpriseName,r.active_flag activeFlag,
-        dd.qcqty_expected qty,dd.userdefine1 locationid,dd.sku,l.name productLineName,
-        p.`qty1`,
-        e.`lotatt04`,e.`lotatt05`,
-        DATE_FORMAT(e.`lotatt01`,'%Y-%m-%d') lotatt01,DATE_FORMAT(e.`lotatt02`,'%Y-%m-%d') lotatt02,
-        DATE_FORMAT(e.`lotatt03`,'%Y-%m-%d') lotatt03,e.`lotatt06`,e.`lotatt10`,e.`lotatt11`,e.`lotatt12`,e.`lotatt15`,
-        s.`descr_c` descrc,s.reservedfield06,
-        bb.codename_c uom
-        from
-        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`
-        from `doc_asn_details` a
-        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
-        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
-        WHERE  b.asnstatus='99'
-        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`) aaa
-        left join `doc_qc_header` d on d.pano=aaa.`PANO`
-        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
-        left join product_line l on l.product_line_id=s.sku_group1
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        where 1=1
-        <include refid="Example_Where_Clause2"/>
-        ORDER BY e.`lotatt03` DESC,e.lotatt14 desc
+            t_ila.lotatt14, t_cus.DESCR_C AS enterpriseName, t_cus.ACTIVE_FLAG AS activeFlag,
+            t_qc_d.qcqty_completed AS qty, t_qc_d.qcqty_completed*t_pack.qty1 AS qtyeach, t_qc_d.userdefine1 AS locationid,
+            t_asn_d.sku, t_pline.`name` AS productLineName,
+            t_ila.lotatt04, t_ila.lotatt05, t_ila.lotatt01, t_ila.lotatt02,
+            t_ila.lotatt03, t_ila.lotatt06, t_ila.lotatt10, t_ila.lotatt11, t_ila.lotatt12, t_ila.lotatt15,
+            t_sku.descr_c AS descrc, t_sku.reservedfield06, t_uom_code.codename_c AS uom, t_asn_code.codename_c AS type
+        FROM doc_asn_details t_asn_d
+        LEFT JOIN doc_asn_header t_asn_h
+                    ON t_asn_h.asnno = t_asn_d.asnno
+        LEFT JOIN bas_codes t_asn_code
+                    ON t_asn_code.code = t_asn_h.asntype
+        LEFT JOIN bas_customer t_cus
+                    ON t_cus.CUSTOMERID = t_asn_h.customerid
+        LEFT JOIN bas_sku t_sku
+                    ON t_sku.customerid = t_asn_d.customerid AND t_sku.sku = t_asn_d.sku
+        LEFT JOIN bas_codes t_uom_code
+                    ON t_uom_code.code = t_sku.defaultreceivinguom
+        LEFT JOIN product_line t_pline
+                    ON t_pline.product_line_id = t_sku.sku_group1
+        LEFT JOIN bas_package t_pack
+                    ON t_pack.packid = t_sku.packid
+        LEFT JOIN doc_pa_details t_pa_d
+                    ON t_asn_d.asnno = t_pa_d.ASNNO AND t_asn_d.asnlineno = t_pa_d.ASNLINENO
+        LEFT JOIN doc_qc_header t_qc_h
+                    ON t_qc_h.pano = t_pa_d.PANO
+        LEFT JOIN doc_qc_details t_qc_d
+                    ON t_qc_d.qcno = t_qc_h.qcno AND t_qc_d.palineno = t_pa_d.PALINENO
+        LEFT JOIN inv_lot_att t_ila
+                    ON t_ila.lotnum = t_qc_d.lotnum
+        WHERE t_asn_h.asnstatus = '99' AND t_pa_d.linestatus = '40' AND t_asn_code.codeid = 'ASN_TYP' AND t_uom_code.codeid = 'uom'
+        <include refid="Asn_Where_Clause"/>
+        ORDER BY t_ila.lotatt03 DESC, t_ila.lotatt14 DESC
         <if test="limitClause != null and limitClause != ''" >
             ${limitClause}
-        </if>)  aaaa
-        LEFT JOIN doc_asn_header bbb ON  bbb.`asnno`=aaaa.lotatt14
-        LEFT JOIN(SELECT * FROM  bas_codes   WHERE codeid='ASN_TYP') ccc ON ccc.code=bbb.`asntype`
-        ORDER BY aaaa.`lotatt03` DESC,aaaa.lotatt14 desc
+        </if>
     </select>
 <!-- 入库信息 列表总数-->
     <select id="querySearchEnterInvLocationCount" resultType="java.lang.Integer" parameterType="Object">
 
         SELECT
-        count(1)
-        from
-        (select cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`
-        from `doc_asn_details` a
-        left join `doc_asn_header`  b on a.`asnno` =b.`ASNNO`
-        left join `doc_pa_details` cc on b.`ASNNO` =cc.`ASNNO` and a.`ASNLINENO` =cc.`ASNLINENO`
-        WHERE  b.asnstatus='99'
-        GROUP BY cc.`PANO`,cc.`USERDEFINE3` ,cc.`USERDEFINE4`) aaa
-        left join `doc_qc_header` d on d.pano=aaa.`PANO`
-        left join `doc_qc_details` dd on dd.`qcno` =d.`qcno`  and dd.`userdefine3` =aaa.`USERDEFINE3` and dd.`userdefine4` =aaa.`userdefine4`
-        LEFT JOIN `inv_lot_att` e ON e.`lotnum`=dd.`lotnum`
-        LEFT JOIN `bas_sku` s   ON s.`sku`=e.`sku` AND s.`customerid`=e.`customerid`
-        left join product_line l on l.product_line_id=s.sku_group1
-        LEFT JOIN `bas_package` p ON s.`packid`=p.`packid`
-        LEFT JOIN `bas_customer` r ON s.`customerid`=r.`customerid`
-        LEFT JOIN(SELECT * FROM `bas_codes` WHERE codeid='uom')  bb ON s.defaultreceivinguom=bb.code
-        where 1=1
-        <include refid="Example_Where_Clause2"/>
+        COUNT(1)
+        FROM doc_asn_details t_asn_d
+        LEFT JOIN doc_asn_header t_asn_h
+                    ON t_asn_h.asnno = t_asn_d.asnno
+        LEFT JOIN bas_customer t_cus
+                    ON t_cus.CUSTOMERID = t_asn_h.customerid
+        LEFT JOIN bas_sku t_sku
+                    ON t_sku.customerid = t_asn_d.customerid AND t_sku.sku = t_asn_d.sku
+        LEFT JOIN product_line t_pline
+                    ON t_pline.product_line_id = t_sku.sku_group1
+        LEFT JOIN doc_pa_details t_pa_d
+                    ON t_asn_d.asnno = t_pa_d.ASNNO AND t_asn_d.asnlineno = t_pa_d.ASNLINENO
+        LEFT JOIN doc_qc_header t_qc_h
+                    ON t_qc_h.pano = t_pa_d.PANO
+        LEFT JOIN doc_qc_details t_qc_d
+                    ON t_qc_d.qcno = t_qc_h.qcno AND t_qc_d.palineno = t_pa_d.PALINENO
+        LEFT JOIN inv_lot_att t_ila
+                    ON t_ila.lotnum = t_qc_d.lotnum
+        WHERE t_asn_h.asnstatus = '99' AND t_pa_d.linestatus = '40'
+        <include refid="Asn_Where_Clause"/>
 
     </select>
 

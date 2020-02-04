@@ -472,6 +472,7 @@ public class DrugControlService extends BaseService {
 
 
 	/**************************************入库信息****************************************/
+	//药监核查-入库信息
 	public EasyuiDatagrid<SearchEnterInvLocation> showSearchEnterInvLocationDatagrid(EasyuiDatagridPager pager, SearchEnterInvLocation query) {
 		EasyuiDatagrid<SearchEnterInvLocation> datagrid = new EasyuiDatagrid<SearchEnterInvLocation>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
@@ -479,12 +480,6 @@ public class DrugControlService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocation(mybatisCriteria);
-		for (SearchEnterInvLocation searchEnterInvLocation : searchEnterInvLocationList) {
-			//计算数量
-			if(searchEnterInvLocation.getQty()!=null&&searchEnterInvLocation.getQty1()!=null) {
-				searchEnterInvLocation.setQtyeach(searchEnterInvLocation.getQty() * searchEnterInvLocation.getQty1());
-			}
-		}
 		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchEnterInvLocationCount(mybatisCriteria));
 		datagrid.setRows(searchEnterInvLocationList);
 		return datagrid;
@@ -497,12 +492,6 @@ public class DrugControlService extends BaseService {
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationSum(mybatisCriteria);
-		for (SearchEnterInvLocation searchEnterInvLocation : searchEnterInvLocationList) {
-			//计算数量
-			if(searchEnterInvLocation.getQty()!=null&&searchEnterInvLocation.getQty1()!=null) {
-				searchEnterInvLocation.setQtyeach(searchEnterInvLocation.getQty() * searchEnterInvLocation.getQty1());
-			}
-		}
 		datagrid.setTotal((long) searchBasCustomerMybatisDao.querySearchEnterInvLocationCount(mybatisCriteria));
 		datagrid.setRows(searchEnterInvLocationList);
 		return datagrid;
@@ -527,9 +516,7 @@ public class DrugControlService extends BaseService {
 			// excel要导出的数据
 			List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocation(mybatisCriteria);
 			// 导出
-			if (searchEnterInvLocationList == null || searchEnterInvLocationList.size() == 0) {
-				System.out.println("题库为空");
-			}else {
+			if (searchEnterInvLocationList != null && searchEnterInvLocationList.size() != 0) {
 				for (SearchEnterInvLocation s: searchEnterInvLocationList) {
 //					//时间格式转换
 //					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -547,9 +534,9 @@ public class DrugControlService extends BaseService {
 //					}
 //
 					//库存数量
-					if(s.getQty()!=null&&s.getQty1()!=null) {
-						s.setQtyeach(s.getQty() * s.getQty1());
-					}
+//					if(s.getQty()!=null&&s.getQty1()!=null) {
+//						s.setQtyeach(s.getQty() * s.getQty1());
+//					}
 					//质量状态
 					if (s.getLotatt10() != null) {
 						List<EasyuiCombobox> comboboxList = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
@@ -563,7 +550,6 @@ public class DrugControlService extends BaseService {
 				}
 				//将list集合转化为excle
 				ExcelUtil.listToExcel(searchEnterInvLocationList, fieldMap, sheetName,-1,response,fileName);
-				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
 			e.printStackTrace();
@@ -588,9 +574,7 @@ public class DrugControlService extends BaseService {
 			// excel要导出的数据
 			List<SearchEnterInvLocation> searchEnterInvLocationList = searchBasCustomerMybatisDao.querySearchEnterInvLocationSum(mybatisCriteria);
 			// 导出
-			if (searchEnterInvLocationList == null || searchEnterInvLocationList.size() == 0) {
-				System.out.println("题库为空");
-			}else {
+			if (searchEnterInvLocationList != null && searchEnterInvLocationList.size() != 0) {
 				for (SearchEnterInvLocation s: searchEnterInvLocationList) {
 //					//时间格式转换
 //					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -608,9 +592,9 @@ public class DrugControlService extends BaseService {
 //					}
 //
 					//库存数量
-					if(s.getQty()!=null&&s.getQty1()!=null) {
-						s.setQtyeach(s.getQty() * s.getQty1());
-					}
+//					if(s.getQty()!=null&&s.getQty1()!=null) {
+//						s.setQtyeach(s.getQty() * s.getQty1());
+//					}
 					//质量状态
 					if (s.getLotatt10() != null) {
 						List<EasyuiCombobox> comboboxList = basCodesService.getBy(Constant.CODE_CATALOG_QCSTATE);
@@ -624,7 +608,6 @@ public class DrugControlService extends BaseService {
 				}
 				//将list集合转化为excle
 				ExcelUtil.listToExcel(searchEnterInvLocationList, fieldMap, sheetName,-1,response,fileName);
-				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) {
 			e.printStackTrace();
