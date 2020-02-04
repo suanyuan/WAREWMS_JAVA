@@ -3,6 +3,7 @@ package com.wms.controller;
 import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.UserStatisticsPerformance;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.UserStatisticsPerformanceQuery;
 import com.wms.service.UserStatisticsPerformanceService;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +43,7 @@ public class UserStatisticsPerformanceController {
 	@Login
 	@RequestMapping(params = "showDatagrid")
 	@ResponseBody
-	public EasyuiDatagrid<UserStatisticsPerformanceVO> showDatagrid(EasyuiDatagridPager pager, UserStatisticsPerformanceQuery query) {
+	public EasyuiDatagrid<UserStatisticsPerformanceVO> showDatagrid(EasyuiDatagridPager pager, UserStatisticsPerformanceQuery query) throws ParseException {
 		return userStatisticsPerformanceService.getPagedDatagrid(pager, query);
 	}
 	/**
@@ -49,8 +51,8 @@ public class UserStatisticsPerformanceController {
 	 */
 	@Login
 	@RequestMapping(params = "exportDocPaDataToExcel")
-	public void exportDocPaDataToExcel(HttpServletResponse response, String token, String userId) throws Exception {
-		userStatisticsPerformanceService.exportDocPaDataToExcel(response, token, userId);
+	public void exportDocPaDataToExcel(HttpServletResponse response, String token, UserStatisticsPerformance usp) throws Exception {
+		userStatisticsPerformanceService.exportDocPaDataToExcel(response, token, usp);
 	}
 	@Login
 	@RequestMapping(params = "add")

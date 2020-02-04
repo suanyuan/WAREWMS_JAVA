@@ -1,7 +1,5 @@
 package com.wms.mybatis.dao;
 
-import java.util.List;
-
 /**
  * 
  * <br>
@@ -10,5 +8,4 @@ import java.util.List;
 public interface UserStatisticsPerformanceMybatisDao extends BaseDao {
 
 
-    public <T> List<T> queryByLists(MybatisCriteria criteria);
 }

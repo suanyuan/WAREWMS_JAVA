@@ -1,13 +1,14 @@
 package com.wms.vo;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class UserStatisticsPerformanceVO {
 
 	private long id;
 	private String userId;
-	private java.sql.Date perfDate;
+	@JsonSerialize(using = JsonDatetimeSerializer.class)
+	private String perfDate;
 	private long perfPick;
 	private long perfRecheck;
 	private long perfPa;
@@ -18,6 +19,15 @@ public class UserStatisticsPerformanceVO {
 	private String userdefine3;
 	private String userdefine4;
 	private String userdefine5;
+
+
+	public String getPerfDate() {
+		return perfDate;
+	}
+
+	public void setPerfDate(String perfDate) {
+		this.perfDate = perfDate;
+	}
 
 	public long getId() {
 		return id;
@@ -35,14 +45,7 @@ public class UserStatisticsPerformanceVO {
 		this.userId = userId;
 	}
 
-	@JsonSerialize(using = JsonDatetimeSerializer.class)
-	public java.sql.Date getPerfDate() {
-		return perfDate;
-	}
 
-	public void setPerfDate(java.sql.Date perfDate) {
-		this.perfDate = perfDate;
-	}
 
 	public long getPerfPick() {
 		return perfPick;
