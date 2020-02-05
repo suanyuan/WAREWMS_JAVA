@@ -41,15 +41,16 @@ public class DocPaDetailsService extends BaseService {
 
 	@Autowired
 	private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
-
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
-
+	@Autowired
+    private BasLocationService basLocationService;
 	@Autowired
 	private CommonService commonService;
-
 	@Autowired
 	private GspVerifyService gspVerifyService;
+	@Autowired
+    private ProductLineMybatisDao productLineMybatisDao;
 
 	public EasyuiDatagrid<DocPaDetailsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaDetailsQuery query) {
         EasyuiDatagrid<DocPaDetailsVO> datagrid = new EasyuiDatagrid<>();
@@ -98,30 +99,15 @@ public class DocPaDetailsService extends BaseService {
 		return json;
 	}
 
-//	public List<EasyuiCombobox> getDocPaDetailsCombobox() {
-//		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-//		EasyuiCombobox combobox = null;
-//		List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.findAll();
-//		if(docPaDetailsList != null && docPaDetailsList.size() > 0){
-//			for(DocPaDetails docPaDetails : docPaDetailsList){
-//				combobox = new EasyuiCombobox();
-//				combobox.setId(String.valueOf(docPaDetails.getId()));
-//				combobox.setValue(docPaDetails.getDocPaDetailsName());
-//				comboboxList.add(combobox);
-//			}
-//		}
-//		return comboboxList;
-//	}
-
     //获取上架任务单里的最大行号
-    public int queryMaxLineNo(String pano){
+    int queryMaxLineNo(String pano){
         return docPaDetailsMybatisDao.queryMaxLineNo(pano);
     }
 
 
     /**
-     * TODO 获取上架详情
-     * @param query ~
+     * 获取上架详情
+     * query 内容不会变更，但是其中commonVO会根据产品线来做变更
      * @return 明细
      */
     public Json queryDocPaDetail(PdaDocPaDetailQuery query) {
@@ -130,31 +116,21 @@ public class DocPaDetailsService extends BaseService {
         PdaDocPaDetailVO docPaDetailVO = new PdaDocPaDetailVO();
 
         /*
-        11111111，处理BasSku获取问题
-        并且返回准确的批号、序列号匹配条件
+        1，处理扫码提交内容，返回准确的批号或者序列号匹配条件
          */
         ScanResultForm scanResultForm = new ScanResultForm();
         //customerid, GTIN, lotatt04, lotatt05, otherCode
         BeanUtils.copyProperties(query, scanResultForm);
-        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
+        CommonVO commonVO = commonService.adjustScanResult(scanResultForm);
 
-        if (!commonVO.isSuccess()) {
-
-            resultJson.setSuccess(false);
-            resultJson.setMsg(commonVO.getMessage());
-            return resultJson;
-        }
-
-        //SKU获取成功，设置准确的批属
-        BasSku basSku = commonVO.getBasSku();
+        if (commonVO.isSuccess()) query.setSku(commonVO.getBasSku().getSku());
         query.setLotatt04(commonVO.getBatchNum());
-        query.setLotatt05(commonVO.getSerialNum());
-        query.setSku(basSku.getSku());
+        query.setLotatt05(commonVO.isSerialManagement() ? "" : commonVO.getSerialNum());
 
         /*
-        22222222，判断获取上架扫码数据是否齐全
+        2，判断获取上架扫码数据是否齐全
          */
-        Json scanJson = commonService.judgePaScanResult(query, commonVO);
+        Json scanJson = commonService.matchPaDetail(query, commonVO);
         if (!scanJson.isSuccess()) {
 
             resultJson.setSuccess(false);
@@ -163,11 +139,10 @@ public class DocPaDetailsService extends BaseService {
         }
 
         /*
-        33333333，获取上架明细数据
-        如果记录序列号的serial_flag为1，则在下方需要清除查询条件-序列号
+        3，获取上架明细数据,并处理basSku
          */
         List<DocPaDetails> docPaDetailsList = (List<DocPaDetails>) scanJson.getObj();//注解"unchecked"
-        DocPaDetails docPaDetails = docPaDetailsList.get(0);//2222中已经做了为空判断
+        DocPaDetails docPaDetails = docPaDetailsList.get(0);//2中已经做了为空判断
 
         if (docPaDetails.getInvLotAtt() == null) {
 
@@ -176,11 +151,19 @@ public class DocPaDetailsService extends BaseService {
             return resultJson;
         }
 
+        Json skuJson = commonService.fixBasSku(docPaDetails.getCustomerid(), docPaDetails.getSku());
+        if (!skuJson.isSuccess()) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg(skuJson.getMsg());
+            return resultJson;
+        }
+        BasSku basSku = (BasSku) skuJson.getObj();
         BeanUtils.copyProperties(docPaDetails, docPaDetailVO);
         docPaDetailVO.setBasSku(basSku);
 
         /*
-        44444444444，查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）
+        4，查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）推荐库位
         新增一个逻辑：此处还需要判断同批已上架的和目前扫描匹配的明细，是否日期数据匹配
          */
         DocPaDetailsQuery similarQuery = new DocPaDetailsQuery();
@@ -198,7 +181,17 @@ public class DocPaDetailsService extends BaseService {
         docPaDetailVO.setAlertflag(0);//默认不提醒
         if (similarDetailList.size() == 0) {
 
-            docPaDetailVO.setUserdefine1("");
+            ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+            ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+            //骨科的产品线推荐库位
+            if (productLine.getName().equals("Trauma")) {
+
+                BasLocation basLocation = basLocationService.getEmptyLocation(1);
+                docPaDetailVO.setUserdefine1(null == basLocation ? "" : basLocation.getLocationid());
+            } else {
+
+                docPaDetailVO.setUserdefine1("");
+            }
         }else {
 
             DocPaDetails similarDetail = similarDetailList.get(0);

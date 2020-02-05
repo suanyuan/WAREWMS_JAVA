@@ -1,11 +1,14 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiDatagridPager;
+import com.wms.entity.BasLocation;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.service.BasCodesService;
+import com.wms.service.BasLocationService;
 import com.wms.service.DocPaDetailsService;
 import com.wms.service.DocPaHeaderService;
 import com.wms.vo.Json;
@@ -37,6 +40,9 @@ public class PdaPutawayController {
 
     @Autowired
     private BasCodesService basCodesService;
+
+    @Autowired
+    private BasLocationService basLocationService;
 
     /**
      * 获取未上架任务列表
@@ -193,6 +199,35 @@ public class PdaPutawayController {
         List<PdaDocPaDetailVO> detailVOList = docPaDetailsService.queryDocPaList(pano);
         resultMap.put(Constant.DATA, detailVOList);
         resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        return resultMap;
+    }
+
+    /**
+     * 切换上架推荐库位
+     */
+    @RequestMapping(params = "switchLoc", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> switchLoc(int paegNum, String locationid, String version) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        Json json = basCodesService.verifyRequestValidation(version);
+        if (!json.isSuccess()) {
+            return (Map<String, Object>) json.getObj();
+        }
+
+        //修改库位状态
+        basLocationService.releaseOccupiedLocation(locationid);
+
+        //获取下一个推荐库位
+        BasLocation basLocation = basLocationService.getEmptyLocation(paegNum);
+        if (null == basLocation) {
+
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无更多推荐库位"));
+        } else {
+
+            resultMap.put(Constant.DATA, basLocation);
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
+        }
         return resultMap;
     }
 }

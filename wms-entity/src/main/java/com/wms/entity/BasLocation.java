@@ -21,7 +21,17 @@ public class BasLocation implements Serializable {
 
 	@Transient
 	private int hashCode = Integer.MIN_VALUE;
-	
+
+	/**
+	 * 空库位可被推荐
+	 */
+	public final static String STATUS_OK = "OK";
+
+	/**
+	 * 库位已被推荐，不可重复推荐
+	 */
+	public final static String STATUS_NOT_OK = "NOK";
+
 	@Id
 	private String locationid;
 

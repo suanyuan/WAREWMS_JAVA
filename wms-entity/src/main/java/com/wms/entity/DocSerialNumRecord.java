@@ -23,6 +23,9 @@ public class DocSerialNumRecord  implements Serializable {
 
 	private String soreference;
 
+    /**
+     * 入库时为ASNNO，出库时为ORDERNO
+     */
 	private String orderNo;
 
 	private String batchNum;

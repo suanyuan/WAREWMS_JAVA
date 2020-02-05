@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.query.*;
@@ -38,6 +39,10 @@ public class CommonService extends BaseService{
     private DocPaDetailsMybatisDao docPaDetailsMybatisDao;
     @Autowired
     private DocQcDetailsMybatisDao docQcDetailsMybatisDao;
+    @Autowired
+    private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+    @Autowired
+    private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
     @Autowired
     private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
     @Autowired
@@ -145,30 +150,29 @@ public class CommonService extends BaseService{
         commonVO.setBatchNum(form.getLotatt04());
         commonVO.setSerialNum(form.getLotatt05());
         commonVO.setSerialManagement(false);
+        commonVO.setSuccess(false);
 
         /*
          * 情况1 扫描的是带序列号的GS1条码 / 单独的序列号条码
          * 此情况匹配上则直接返回匹配出的批号，或者 在返回时去除扫描的序列号内容
          */
-        BasSerialNum basSerialNum = null;
         if (StringUtil.isNotEmpty(form.getLotatt05()) ||
                 StringUtil.isNotEmpty(form.getOtherCode())) {
 
             List<BasSerialNum> basSerialNumList = basSerialNumMybatisDao.queryValidatedId(StringUtil.isNotEmpty(form.getOtherCode()) ? form.getOtherCode() : form.getLotatt05());
             if (basSerialNumList != null && basSerialNumList.size() > 0) {
 
-                basSerialNum = basSerialNumList.get(0);
-                //返回批号，为之后的业务逻辑
+                BasSerialNum basSerialNum = basSerialNumList.get(0);
                 commonVO.setBatchNum(basSerialNum.getBatchNum());
+                commonVO.setSerialNum(basSerialNum.getSerialNum());
                 //如果匹配到序列号，则视为此产品是入库序列号管理的产品线产品。
                 commonVO.setSerialManagement(true);
-                commonVO.setSuccess(false);
                 return commonVO;
             }
         }
 
         /*
-         * 情况2 扫描的是仅包含GTIN的GS1条码 / 自赋码（ZFM）
+         * 情况2 扫描的是仅包含GTIN的GS1条码 / 自赋码（ZFM）/ 产品代码
          * 去bas_gtn中匹配，匹配到之后直接返回BasSku，但在匹配任务明细时，
          * 如果匹配到多条，则提醒用户需要扫描带批号或者序列号的GS1条码，如果是一条那么直接返回任务明细
          */
@@ -177,48 +181,132 @@ public class CommonService extends BaseService{
                 form.getCustomerid(),
                 StringUtil.fixNull(form.getOtherCode()).contains(ScanResultForm.ALTERNATE_SKU_ID) ? form.getOtherCode() : "",//如果包含自赋码的规则字符串，则赋上自赋码
                 form.getLotatt04(),
-                basSerialNum != null ? "" : form.getLotatt05());//如果是序列号存在于序列号导入模块，则说明产品是批号入，出库记录序列号的.
-        BasSku basSku = basSkuMybatisDao.query4ScanInBasGtnLotatt(pdaBasSkuQuery);
-        if (null == basSku) basSku = basSkuMybatisDao.query4ScanInBasGtn(pdaBasSkuQuery);
+                form.getLotatt05());
+        //GTIN -> bas_gtn
+        BasSku basSku = basSkuMybatisDao.query4ScanInBasGtn(pdaBasSkuQuery);
 
-        //如果获取不到，可能属于适配情况3（基本上）
-        if (basSku == null) {
+        //自赋码 -> bas_sku
+        if (null == basSku) basSku = basSkuMybatisDao.query4ScanInBasSku(pdaBasSkuQuery);
+
+        //如果获取不到，可能属于扫描的产品代码
+        if (null == basSku) {
 
             BasSkuQuery basSkuQuery = new BasSkuQuery(form.getCustomerid(), form.getOtherCode());
             basSku = basSkuMybatisDao.queryById(basSkuQuery);
         }
 
-        //如果还没有，就说明扫码错误
-        if (basSku == null) {
+        if (null != basSku) {
 
-            commonVO.setSuccess(false);
-            commonVO.setMessage("查无此产品档案数据！");
-            return commonVO;
+            //获取到bassku就是成功返回的，其他情况就是在各明细表中进行匹配得到产品档案
+            commonVO.setSuccess(true);
+            commonVO.setBasSku(basSku);
+
+            //产品线(BasSku.skuGroup1) - 序列号管理flag
+            ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+            ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+            commonVO.setSerialManagement(productLine != null && productLine.getSerialFlag() == 1);
         }
-
-        commonVO.setBasSku(basSku);
-
-        //产品线(BasSku.skuGroup1) - 序列号管理flag
-        ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
-        ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-        if (productLine != null && productLine.getSerialFlag() == 1) {
-
-            commonVO.setSerialManagement(true);
-            commonVO.setSerialNum("");
-        }
-
-        commonVO.setSuccess(true);
 
         return commonVO;
     }
 
     /**
-     * 判断上架扫码数据是否正确
+     * 统一处理扫描获取产品档案时错误的提示
      */
-//    Json judgePaScan(PdaDocPaDetailQuery query) {
+    Json fixBasSku(String customerid, String sku) {
+
+        Map<String, Object> skuMap = new HashMap<>();
+        skuMap.put("customerid", customerid);
+        skuMap.put("sku", sku);
+        BasSku basSku = basSkuMybatisDao.queryById(skuMap);
+        if (null == basSku || null == basSku.getSku()) {
+            return Json.error("查无此产品档案数据");
+        } else if (basSku.getActiveFlag().equals("0")) {
+            return Json.error("此产品未激活，请与质量部进行沟通");
+        } else if (basSku.getFirstop().equals(Constant.CODE_CATALOG_FIRSTSTATE_USELESS)) {
+            return Json.error("此产品已报废，请与质量部进行沟通");
+        } else {
+
+            Json json = new Json();
+            json.setSuccess(true);
+            json.setObj(basSku);
+            return json;
+        }
+    }
+
+    /**
+     * 判断上架扫码数据是否正确，并且匹配上架任务明细
+     */
+    Json matchPaDetail(PdaDocPaDetailQuery query, CommonVO commonVO) {
+
+        Json json = new Json();
+
+        //1，获取对应的上架明细列表
+        List<DocPaDetails> docPaDetailsList = docPaDetailsMybatisDao.queryDocPaDetail(query);
+
+        //2，如果查询不到对应的上架明细，返回失败
+        if (docPaDetailsList.size() == 0) return Json.error("查无此产品的上架明细数据！");
+
+        /*
+         * 3，判断产品是否需要记录序列号
+         * 记录的前提条件：1，产品线中记录序列号为"是"；2，入库单类型为销退
+         */
+//        DocPaDetails firstDetails = docPaDetailsList.get(0);
+//        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(firstDetails.getAsnno());
+//        //条件2，销退
+//        if (docAsnHeader.getAsntype().equals(Constant.CODE_ASN_TYP_RT)) {
 //
+//            if (null == commonVO.getBasSku()) {
 //
-//    }
+//                //如果adjustScanResult未查出产品档案数据
+//                Map<String, Object> skuMap = new HashMap<>();
+//                skuMap.put("customerid", firstDetails.getCustomerid());
+//                skuMap.put("sku", firstDetails.getSku());
+//                BasSku basSku = basSkuMybatisDao.queryById(skuMap);
+//                //产品线(BasSku.skuGroup1) - 序列号管理flag
+//                ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+//                ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+//                commonVO.setSerialManagement(productLine != null && productLine.getSerialFlag() == 1);
+//            }
+//
+//            if (commonVO.isSerialManagement()) {
+//
+//                if (StringUtil.isEmpty(query.getLotatt05()) || StringUtil.isEmpty(query.getOtherCode())) return Json.error("销退入库请扫描带序列号的条码!");
+//
+//                //校验是否重复扫描同一序列号
+//                MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//                DocSerialNumRecord docSerialNumRecord = new DocSerialNumRecord(docAsnHeader.getAsnno(), StringUtil.isNotEmpty(query.getOtherCode()) ? query.getOtherCode() : query.getLotatt05());
+//                mybatisCriteria.setCondition(docSerialNumRecord);
+//                List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(mybatisCriteria);
+//                if (docSerialNumRecordList.size() > 0) return Json.error("此产品序列号已记录入库");
+//            }
+//        }
+
+        //4，如果有批号||序列号，直接跳过
+        if (StringUtil.isNotEmpty(query.getLotatt04()) || StringUtil.isNotEmpty(query.getLotatt05())) {
+
+            json.setObj(docPaDetailsList);
+            json.setSuccess(true);
+            json.setMsg("可继续操作");
+            return json;
+        }
+
+        for (DocPaDetails docPaDetails : docPaDetailsList) {
+
+            //5，如果SKU对应的明细中存在批号或者序列号，提示上架不允许扫描SKU进行
+            if (StringUtil.isNotEmpty(docPaDetails.getUserdefine3()) || StringUtil.isNotEmpty(docPaDetails.getUserdefine4())) {
+
+                json.setSuccess(false);
+                json.setMsg("请扫描产品GS1条码进行上架操作！");
+                return json;
+            }
+        }
+
+        json.setSuccess(true);
+        json.setMsg("可继续操作");
+        json.setObj(docPaDetailsList);
+        return json;
+    }
 
     /**
      * 判断获取的上架扫码数据是否齐全
@@ -226,7 +314,7 @@ public class CommonService extends BaseService{
      * @param query pano, sku
      * @return 主要判断如果是批号或者序列号维护的产品，出入库扫描不可扫描SKU
      */
-    public Json judgePaScanResult(PdaDocPaDetailQuery query, CommonVO commonVO) {
+    Json judgePaScanResult(PdaDocPaDetailQuery query, CommonVO commonVO) {
 
         Json json = new Json();
 

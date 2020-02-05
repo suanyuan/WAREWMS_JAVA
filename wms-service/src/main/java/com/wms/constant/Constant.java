@@ -50,6 +50,15 @@ public class Constant {
 
 
 
+    //入库单类型
+    public static final String CODE_ASN_TYP_DB = "DB";//调拨
+    public static final String CODE_ASN_TYP_DX = "DX";//定向
+    public static final String CODE_ASN_TYP_OT = "OT";//其他
+    public static final String CODE_ASN_TYP_PR = "PR";//采购
+    public static final String CODE_ASN_TYP_RT = "RT";//销退
+    public static final String CODE_ASN_TYP_TZ = "TZ";//调整
+    public static final String CODE_ASN_TYP_YY = "YY";//引用
+
 
     //  企业类型
     public static final String CODE_ENT_TYP_JY = "JY";//经营

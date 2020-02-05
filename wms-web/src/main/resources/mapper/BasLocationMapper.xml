@@ -591,7 +591,20 @@ where 1=1
 </select>
 
 <!-- 判断记录判断 -->
-<select id="basLocationCheck" statementType="CALLABLE" parameterType="java.util.Map">
+<select id="basLocationCheck" statementType="CALLABLE" parameterType="java.util.Map" resultType="java.lang.String">
 	   {call SPBAS_Check('','Delete','BAS_LOCATION',#{locationid,mode=IN,jdbcType=VARCHAR},'','','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
+
+	<select id="queryEmptyLocation" resultMap="BaseResultMap" parameterType="Object">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM bas_location
+		WHERE
+			locationid NOT IN (SELECT DISTINCT locationid FROM inv_lot_loc_id)
+			AND `status` = 'OK'
+		ORDER BY locationid ASC
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
 </mapper>   
