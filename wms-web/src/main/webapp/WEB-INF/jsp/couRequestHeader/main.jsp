@@ -381,6 +381,17 @@ $(function() {
             return date <= validateDate;
         }
     });
+
+	//骨科盘点 产品线
+    $("#ezuiDialogGuKe #productLineName").combobox({
+        // panelHeight: 'auto',
+        url:'/productLineController.do?getCombobox',
+        valueField:'id',
+        textField:'value',
+        onLoadSuccess:function () {
+            <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
+        }
+    })
 });
 //增加
 var add = function(){
@@ -815,7 +826,8 @@ var doxDialogSearch = function(){
 var doxDialogSearchGuKe = function(){
 	ezuiDetailsDatagridGuKe.datagrid('load', {
 		SoTimeStart:$("#SoTimeStart").datetimebox('getValue'),
-		SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue')
+		SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue'),
+        productLineName:$('#ezuiDialogGuKe #productLineName').combobox('getValue'),
 	});
 };
 //按钮盘点任务datagrid查询
