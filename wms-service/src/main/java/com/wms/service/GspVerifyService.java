@@ -414,7 +414,7 @@ public class GspVerifyService {
                         return Json.error("货主与供应商经营范围没有交集");
                     }
 
-                    if(catalog!=null){
+                    if(catalog.getClassifyId() !=null){
                         if(catalog.getClassifyId().equals("I")){
                             json = Json.success("一类不需要匹配经营范围");
                             json.setObj(allRegister);

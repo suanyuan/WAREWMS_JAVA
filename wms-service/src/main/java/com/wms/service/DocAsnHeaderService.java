@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("docAsnHeaderService")
@@ -78,6 +79,8 @@ public class DocAsnHeaderService extends BaseService {
     private SfcUserMybatisDao sfcUserMybatisDao;
     @Autowired
     private SfcRoleMybatisDao sfcRoleMybatisDao;
+    @Autowired
+    private InvLotAttMybatisDao invLotAttMybatisDao;
 
     public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
         EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -893,6 +896,7 @@ public class DocAsnHeaderService extends BaseService {
                 return json;
             }
 
+
             MybatisCriteria orderDetailsCriteria = new MybatisCriteria();
             OrderDetailsForNormalQuery orderDetailQuery = new OrderDetailsForNormalQuery();
             orderDetailQuery.setOrderno(orderno);
@@ -904,18 +908,43 @@ public class DocAsnHeaderService extends BaseService {
                 json.setMsg("查无引用的出库单明细数据");
                 return json;
             }
-
+            /*获取新的订单号*/
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            docAsnHeaderMybatisDao.getIdSequence(map);
+            String resultCode = map.get("resultCode").toString();
+            String resultNo = map.get("resultNo").toString();
+            /*当前日期*/
+            Date t = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             //生成预入库头档
             DocAsnHeaderForm asnHeaderForm = new DocAsnHeaderForm();
+            asnHeaderForm.setAsnno(resultNo);//订单号
+            asnHeaderForm.setAsncreationtime(df.parse(df.format(t)));
             asnHeaderForm.setCustomerid(customerId);
             asnHeaderForm.setAsnreference1(docOrderHeader.getSoreference1());
-//        asnHeaderForm.setAsnreference2(docOrderHeader.getSoreference2()); 采购单号需用户手填
-            asnHeaderForm.setExpectedarrivetime1(new Date());
+            asnHeaderForm.setExpectedarrivetime1(df.parse(df.format(t)));
+            asnHeaderForm.setAsnreference3(docOrderHeader.getSoreference3());
             asnHeaderForm.setAsnstatus("00");
+            asnHeaderForm.setUserdefine2(docOrderHeader.getUserdefine2());
             asnHeaderForm.setAsntype("PR");
+            asnHeaderForm.setAsnreference2(docOrderHeader.getSoreference2());
+            asnHeaderForm.setAddtime(df.parse(df.format(t)));
             asnHeaderForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-            asnHeaderForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            asnHeaderForm.setNotes(docOrderHeader.getNotes());
+            asnHeaderForm.setCustomerid(customerId);
+            asnHeaderForm.setCreatesource(docOrderHeader.getAddwho());
+            asnHeaderForm.setBytraceFlag("N");
             asnHeaderForm.setSupplierid(supplierId);
+            asnHeaderForm.setReserveFlag("1");
+            asnHeaderForm.setReceiveid(0);
+            asnHeaderForm.setEdisendflag("0");
+            asnHeaderForm.setAsnPrintFlag("N");
+            asnHeaderForm.setReturnPrintFlag("N");
+            asnHeaderForm.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+            asnHeaderForm.setReleasestatus("Y");
+            asnHeaderForm.setSerialnocatch("Y");
+            asnHeaderForm.setArchiveflag("N");
             json = addDocAsnHeader(asnHeaderForm);
             if (!json.isSuccess()) {
                 return json;
@@ -926,54 +955,71 @@ public class DocAsnHeaderService extends BaseService {
             int asnlineno = 1;
             for (OrderDetailsForNormal docOrderDetail : docOrderDetailList) {
 
+                MybatisCriteria mybatisCriteria = new MybatisCriteria();
+                InvLotAtt query = new InvLotAtt();
+                query.setCustomerid(customerId);
+                query.setSku(docOrderDetail.getSku());
+                query.setLotatt04(docOrderDetail.getLotatt04());
+                query.setLotatt05(docOrderDetail.getLotatt05());
+                query.setLotatt10("HG");
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+                List<InvLotAtt> viewInvLocationSum=invLotAttMybatisDao.queryByList(mybatisCriteria);
+
+
                 DocAsnDetailForm asnDetailForm = new DocAsnDetailForm();
-                asnDetailForm.setAsnno(asnno);
+                asnDetailForm.setAsnno(resultNo);
                 asnDetailForm.setAsnlineno(asnlineno);
                 asnDetailForm.setCustomerid(customerId);
                 asnDetailForm.setLinestatus("00");
                 asnDetailForm.setSku(docOrderDetail.getSku());
                 asnDetailForm.setSkudescrc(docOrderDetail.getSkuName());
-
+                asnDetailForm.setLinestatus("00");
                 asnDetailForm.setExpectedqty(new BigDecimal(docOrderDetail.getQtyordered()));
                 asnDetailForm.setExpectedqtyEach(new BigDecimal(docOrderDetail.getQtyorderedEach()));
                 //收货数量
                 asnDetailForm.setReceivedqty(BigDecimal.ZERO);//收货件数
                 asnDetailForm.setReceivedqtyEach(BigDecimal.ZERO);
-
                 asnDetailForm.setRejectedqty(BigDecimal.ZERO); //拒收件数
                 asnDetailForm.setRejectedqtyEach(BigDecimal.ZERO);
-                asnDetailForm.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
-
                 asnDetailForm.setReceivinglocation(docOrderDetail.getLocation());  //库位
                 asnDetailForm.setUom(docOrderDetail.getUom());//件
                 asnDetailForm.setPackid(docOrderDetail.getPackid());//包装
-
-                asnDetailForm.setTotalcubic(new BigDecimal(docOrderDetail.getCubic()));//总体积
-                asnDetailForm.setTotalgrossweight(new BigDecimal(docOrderDetail.getGrossweight()));//总重量
-                asnDetailForm.setTotalnetweight(new BigDecimal(docOrderDetail.getNetweight()));//总净重
-                asnDetailForm.setTotalprice(new BigDecimal(docOrderDetail.getPrice())); //总价
-                asnDetailForm.setReserveFlag("1");
                 asnDetailForm.setHoldrejectcode("OK");//冻结代码
                 asnDetailForm.setHoldrejectreason("正常");
-
+                asnDetailForm.setProductstatus("00");
+                asnDetailForm.setProductstatusDescr("正常");
+                asnDetailForm.setTotalcubic(BigDecimal.ZERO);
+                asnDetailForm.setTotalgrossweight(BigDecimal.ZERO);
+                asnDetailForm.setTotalnetweight(BigDecimal.ZERO);
+                asnDetailForm.setTotalprice(BigDecimal.ZERO);
+/*                asnDetailForm.setTotalcubic(new BigDecimal(docOrderDetail.getCubic()));//总体积
+                asnDetailForm.setTotalgrossweight(new BigDecimal(docOrderDetail.getGrossweight()));//总重量
+                asnDetailForm.setTotalnetweight(new BigDecimal(docOrderDetail.getNetweight()));//总净重
+                asnDetailForm.setTotalprice(new BigDecimal(docOrderDetail.getPrice())); //总价*/
                 asnDetailForm.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-                asnDetailForm.setAddtime(new Date());
+                asnDetailForm.setAddtime(df.parse(df.format(t)));
+                asnDetailForm.setCreatesource(docOrderDetail.getAddwho());
+                asnDetailForm.setPalletizeqtyEach(BigDecimal.ZERO);
+                asnDetailForm.setPrereceivedqtyEach(BigDecimal.ZERO);//预收数量
+                asnDetailForm.setReserveFlag("1");
+                asnDetailForm.setNotes(docOrderDetail.getNotes());
+                asnDetailForm.setOperator(docOrderDetail.getAddwho());
 
-                asnDetailForm.setLotatt01(docOrderDetail.getLotatt01());
-                asnDetailForm.setLotatt02(docOrderDetail.getLotatt02());
-                asnDetailForm.setLotatt03(docOrderDetail.getLotatt03());
-                asnDetailForm.setLotatt04(docOrderDetail.getLotatt04());
-                asnDetailForm.setLotatt05(docOrderDetail.getLotatt05());
-                asnDetailForm.setLotatt06(docOrderDetail.getLotatt06());
-                asnDetailForm.setLotatt07(docOrderDetail.getLotatt07());
-                asnDetailForm.setLotatt08(docOrderDetail.getLotatt08());
+                asnDetailForm.setLotatt01(viewInvLocationSum.get(0).getLotatt01());
+                asnDetailForm.setLotatt02(viewInvLocationSum.get(0).getLotatt02());
+                asnDetailForm.setLotatt03(df.format(t));
+                asnDetailForm.setLotatt04(viewInvLocationSum.get(0).getLotatt04());
+                asnDetailForm.setLotatt05(viewInvLocationSum.get(0).getLotatt05());
+                asnDetailForm.setLotatt06(viewInvLocationSum.get(0).getLotatt06());
+                asnDetailForm.setLotatt07(viewInvLocationSum.get(0).getLotatt07());
+                asnDetailForm.setLotatt08(supplierId);
                 asnDetailForm.setLotatt09("ZC");
                 asnDetailForm.setLotatt10("DJ");
-                asnDetailForm.setLotatt11(docOrderDetail.getLotatt11());
-                asnDetailForm.setLotatt12(docOrderDetail.getLotatt12());
-                asnDetailForm.setLotatt13(docOrderDetail.getLotatt13());
+                asnDetailForm.setLotatt11(viewInvLocationSum.get(0).getLotatt11());
+                asnDetailForm.setLotatt12(viewInvLocationSum.get(0).getLotatt12());
+                asnDetailForm.setLotatt13(viewInvLocationSum.get(0).getLotatt13());
                 asnDetailForm.setLotatt14(asnno);
-                asnDetailForm.setLotatt15(docOrderDetail.getLotatt15());
+                asnDetailForm.setLotatt15(viewInvLocationSum.get(0).getLotatt15());
                 json = docAsnDetailService.addDocAsnDetail(asnDetailForm);//这里面还有逻辑
                 if (!json.isSuccess()) {
                     throw new Exception(json.getMsg());
