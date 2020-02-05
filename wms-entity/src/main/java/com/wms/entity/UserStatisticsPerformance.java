@@ -1,13 +1,17 @@
 package com.wms.entity;
 
 
+import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.io.Serializable;
 
 public class UserStatisticsPerformance implements Serializable {
 
   private long id;
   private String userId;
-  private java.sql.Date perfDate;
+  @JsonSerialize(using = JsonDatetimeSerializer.class)
+  private String perfDate;
   private long perfPick;
   private long perfRecheck;
   private long perfPa;
@@ -19,6 +23,13 @@ public class UserStatisticsPerformance implements Serializable {
   private String userdefine4;
   private String userdefine5;
 
+  public String getPerfDate() {
+    return perfDate;
+  }
+
+  public void setPerfDate(String perfDate) {
+    this.perfDate = perfDate;
+  }
 
   public long getId() {
     return id;
@@ -38,13 +49,6 @@ public class UserStatisticsPerformance implements Serializable {
   }
 
 
-  public java.sql.Date getPerfDate() {
-    return perfDate;
-  }
-
-  public void setPerfDate(java.sql.Date perfDate) {
-    this.perfDate = perfDate;
-  }
 
 
   public long getPerfPick() {

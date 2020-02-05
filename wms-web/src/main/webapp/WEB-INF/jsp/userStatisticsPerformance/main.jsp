@@ -66,47 +66,35 @@ $(function() {
 		}
 	}).dialog('close');
 });
-//导出上架任务明细
-var doExport = function() {
+/* 导出start */
+var doExport = function(){
+	if(navigator.cookieEnabled){
+		$('#ezuiBtn_export').linkbutton('disable');
+		var token = new Date().getTime();
+		var param = new HashMap();
+		param.put("token", token);
+		param.put("userId", $('#userId').val());
+		param.put("addtimeBegin", $('#addtimeBegin').datebox("getValue"));
+		param.put("addtimeEnd", $('#addtimeEnd').datebox("getValue"));
 
-    var rows = $('#ezuiDatagrid').datagrid('getChecked');
-    if (rows.length > 0) {
-        var userId = rows[0].userId;
-        doExportPaTask(userId);
-    } else {
-        $.messager.show({
-            msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
-        });
-    }
-}
-//开始导出上架任务清单
-var doExportPaTask = function(userId){
-
-    if (navigator.cookieEnabled) {
-        var token = new Date().getTime();
-        var param = new HashMap();
-        param.put("token", token);
-        param.put("userId",userId);
-
-        //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp() + "/userStatisticsPerformanceController.do?exportDocPaDataToExcel", param);
-        downloadCheckTimer = window.setTimeout(function () {
-            $('#' + formId).remove();
-            // $('#ezuiBtn_export').linkbutton('enable');
-            $.messager.progress('close');
-            $.messager.show({
-                msg: "<spring:message code='common.message.export.success'/>",
-                title: "<spring:message code='common.message.prompt'/>"
-            });
-        }, 1000);
-    } else {
-        $.messager.show({
-            msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",
-            title: "<spring:message code='common.message.prompt'/>"
-        });
-    }
-
+		//--导出Excel
+		var formId = ajaxDownloadFile(sy.bp()+"/userStatisticsPerformanceController.do?exportDocPaDataToExcel", param);
+		downloadCheckTimer = window.setInterval(function () {
+			window.clearInterval(downloadCheckTimer);
+			$('#'+formId).remove();
+			$('#ezuiBtn_export').linkbutton('enable');
+			$.messager.progress('close');
+			$.messager.show({
+				msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+			});
+		}, 1000);
+	}else{
+		$.messager.show({
+			msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+		});
+	}
 };
+/* 导出end */
 var add = function(){
 	processType = 'add';
 	$('#userStatisticsPerformanceId').val(0);
@@ -237,7 +225,7 @@ var doSearch = function(){
 							<td>
 								<a onclick='doSearch();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-                                <a onclick='doExport();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>任务导出</a>
+                                <a onclick='doExport();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
                             </td>
 						</tr>
 					</table>

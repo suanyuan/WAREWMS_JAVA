@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,8 +36,10 @@ public class UserStatisticsPerformanceService extends BaseService {
 	private UserStatisticsPerformanceMybatisDao userStatisticsPerformanceDao;
 	@Autowired
 	private SfcUserMybatisDao sfcUserMybatisDao;
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	public EasyuiDatagrid<UserStatisticsPerformanceVO> getPagedDatagrid(EasyuiDatagridPager pager, UserStatisticsPerformanceQuery query) {
+
+	public EasyuiDatagrid<UserStatisticsPerformanceVO> getPagedDatagrid(EasyuiDatagridPager pager, UserStatisticsPerformanceQuery query) throws ParseException {
 		EasyuiDatagrid<UserStatisticsPerformanceVO> datagrid = new EasyuiDatagrid<UserStatisticsPerformanceVO>();
 		//先通过用户ID查询用户信息
 		SfcUser sfcUserByName = sfcUserMybatisDao.queryByName(query.getUserId());
@@ -55,6 +59,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 			SfcUser sfcUserById = sfcUserMybatisDao.queryById(userStatisticsPerformance.getUserId());
 			UserStatisticsPerformanceVO userStatisticsPerformanceVO = new UserStatisticsPerformanceVO();
 			userStatisticsPerformance.setUserId(sfcUserById.getUserName());
+			userStatisticsPerformance.setPerfDate(simpleDateFormat.format(simpleDateFormat.parse(userStatisticsPerformance.getPerfDate())));
 			BeanUtils.copyProperties(userStatisticsPerformance, userStatisticsPerformanceVO);
 			userStatisticsPerformanceVOList.add(userStatisticsPerformanceVO);
 		}
@@ -108,7 +113,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 	/**
 	 * 导出上架任务清单
 	 */
-	public void exportDocPaDataToExcel(HttpServletResponse response, String token, String userId) throws IOException {
+	public void exportDocPaDataToExcel(HttpServletResponse response, String token, UserStatisticsPerformance usp) throws IOException {
 		Cookie cookie = new Cookie("exportToken",token);
 		cookie.setMaxAge(60);
 		response.addCookie(cookie);
@@ -123,7 +128,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 
 			//先通过用户ID查询用户信息
 			UserStatisticsPerformance userStatisticsPerformance = new UserStatisticsPerformance();
-			SfcUser sfcUserByName = sfcUserMybatisDao.queryByName(userId);
+			SfcUser sfcUserByName = sfcUserMybatisDao.queryByName(usp.getUserId());
 			if(sfcUserByName != null){
 				userStatisticsPerformance.setUserId(sfcUserByName.getId());
 			}
@@ -135,7 +140,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 
 			for (UserStatisticsPerformance userStatisticsPerformances : userStatisticsPerformanceList) {
 				userStatisticsPerformanceVO = new UserStatisticsPerformanceVO();
-				userStatisticsPerformanceVO.setUserId(userId);
+				userStatisticsPerformanceVO.setUserId(userStatisticsPerformances.getUserId());
 				userStatisticsPerformanceVO.setPerfDate(userStatisticsPerformances.getPerfDate());
 				userStatisticsPerformanceVO.setPerfOrder(userStatisticsPerformances.getPerfOrder());
 				userStatisticsPerformanceVO.setPerfPa(userStatisticsPerformances.getPerfPa());
@@ -149,7 +154,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 				System.out.println("用户绩效内容为空");
 			}else {
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(exportVOs, fieldMap, sheetName,65535, response,userId);
+				ExcelUtil.listToExcel(exportVOs, fieldMap, sheetName,65535, response,usp.getUserId());
 			}
 		} catch (ExcelException e) {
 			e.printStackTrace();
