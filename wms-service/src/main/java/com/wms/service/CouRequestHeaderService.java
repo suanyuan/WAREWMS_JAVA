@@ -173,6 +173,7 @@ public class CouRequestHeaderService extends BaseService {
         logQuery.setStatus("99");//事务状态99=close
         logQuery.setTransactiontime(query.getSoTimeStart());//事务开始时间
         logQuery.setAddtime(query.getSoTimeEnd());         //事务结束时间
+        logQuery.setSkuGroup1(query.getProductLineName());  //产品线
         List<ActTransactionLog> transactionLogList =actTransactionLogMybatisDao.queryByListByTypeAndTime(logQuery);
         //根据事务查询出来的出库单号从分配表查询出所有分配明细
         List<ActAllocationDetails>  detailsList=new ArrayList<>();

@@ -2088,9 +2088,10 @@ function refAddDetailIn() {
                 if(result.success){
                     // $('#ezuiBtn_copyDetail').linkbutton('disable');
                     $('#ezuiDetailsDatagrid').datagrid('reload');
-                    closerefAdd();
+
                 }
-                showMsg(result.msg)
+                showMsg(result.msg);
+                refAddDialog.dialog('close');
             } catch (e) {
                 return;
             };

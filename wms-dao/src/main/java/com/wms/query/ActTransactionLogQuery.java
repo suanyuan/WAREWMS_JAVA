@@ -57,6 +57,16 @@ public class ActTransactionLogQuery implements IQuery {
 	private String userdefine5;
 	private String edisendflag;
 
+	private String skuGroup1;//产品线
+
+	public String getSkuGroup1() {
+		return skuGroup1;
+	}
+
+	public void setSkuGroup1(String skuGroup1) {
+		this.skuGroup1 = skuGroup1;
+	}
+
 	public String getTransactionid() {
 		return transactionid;
 	}

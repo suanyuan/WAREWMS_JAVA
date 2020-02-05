@@ -428,24 +428,28 @@ where 1=1
 	<select id="queryByListByTypeAndTime" resultMap="BaseResultMap"  parameterType="Object">
 		select
           docno
-		from act_transaction_log
+		from act_transaction_log t1
+		left join bas_sku t2 on t1.FMSKU = t2.sku
 		where 1=1
+		<if test="skuGroup1 != null and skuGroup1 != ''" >
+			and t2.sku_group1 =  #{skuGroup1}
+		</if>
 		<if test="transactiontype != null and transactiontype != ''" >
-			and transactiontype =  #{transactiontype}
+			and t1.transactiontype =  #{transactiontype}
 		</if>
 		<if test="doctype != null and doctype != ''" >
-			and doctype =  #{doctype}
+			and t1.doctype =  #{doctype}
 		</if>
 		<if test="status != null and status != ''" >
-			and status =  #{status}
+			and t1.status =  #{status}
 		</if>
 		<if test="transactiontime != null and transactiontime !=''" >
-			and transactiontime &gt;=  #{transactiontime}
+			and t1.transactiontime &gt;=  #{transactiontime}
 		</if>
 		<if test="addtime != null and addtime != '' " >
-			and transactiontime  &lt;= #{addtime}
+			and t1.transactiontime  &lt;= #{addtime}
 		</if>
-        group by docno
+        group by t1.docno
 
 
 
