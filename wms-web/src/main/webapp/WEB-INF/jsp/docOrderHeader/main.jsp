@@ -1274,26 +1274,47 @@
         /* 导出start */
         var doExport = function () {
             var rows = $('#ezuiDatagrid').datagrid('getSelections');
-            if (rows.length > 0) {
-                var orderno = "";
-                var outtype = $("#ezuiOutToExcel1Form #outtype").combobox('getValue');
-                for (var i = 0; i < rows.length; i++) {
-                    orderno += rows[i].orderno + ",";
-                }
+            var outtype = $("#ezuiOutToExcel1Form #outtype").combobox('getValue');
+
+            if(outtype == 1){
+                console.log("outtype");
+                console.log(outtype);
                 var token = new Date().getTime();
                 var param = new HashMap();
-                param.put("orderno", orderno);
-                param.put("outtype", outtype);
+                param.put("orderno",$('#orderno').val());
+                param.put("customerid",$('#customerid').val());
+                param.put("soreference1",$('#soreference1').val());
+                param.put("soreference2",$('#soreference2').val());
+                param.put("consigneeid",$('#consigneeid').val());
+                param.put("releasestatus",$('#releasestatus').combobox('getValue'));
+                param.put("sostatusTo",$('#sostatusTo').combobox('getValue'));
+                param.put("ordertime",$('#ordertime').datebox('getValue'));//时间查询
+                param.put("ordertimeTo",$('#ordertimeTo').datebox('getValue'));//入库单号时间查询
+                param.put("edittime",$('#edittime').datebox('getValue'));//入库单号时间查询
+                param.put("edittimeTo",$('#edittimeTo').combobox('getValue'));//质量状态
+                param.put("outtype",outtype);
                 param.put("token", token);
-                ajaxDownloadFile(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel1", param);
+                ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel1",param);
                 ezuiOutToExcelDataDialog.dialog('close');
-            } else {
-                $.messager.show({
-                    msg: '<spring:message code="common.message.selectRecord"/>',
-                    title: '<spring:message code="common.message.prompt"/>'
-                });
+            }else{
+                if(rows.length>0) {
+                    var orderno="";
+                    for (var i = 0; i < rows.length; i++) {
+                        orderno += rows[i].orderno+",";
+                    }
+                    var token = new Date().getTime();
+                    var param = new HashMap();
+                    param.put("orderno",orderno);
+                    param.put("outtype",outtype);
+                    param.put("token", token);
+                    ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel1",param);
+                    ezuiOutToExcelDataDialog.dialog('close');
+                }else{
+                    $.messager.show({
+                        msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'
+                    });
+                }
             }
-
         };
         /* 导出end */
 

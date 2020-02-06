@@ -1,6 +1,7 @@
 package com.wms.service;
 
 import com.wms.constant.Constant;
+import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.entity.order.OrderDetailsForNormal;
@@ -134,7 +135,7 @@ public class DocOrderExportService {
         return orderHeaderForNormalList;
     }
     //导出Excel格式所有信息
-    public void docOrderToExcel1(HttpServletResponse response, OrderHeaderForNormalQuery from) throws UnsupportedEncodingException, ExcelException {
+    public void docOrderToExcel1(HttpServletResponse response, EasyuiDatagridPager pager, OrderHeaderForNormalQuery from) throws UnsupportedEncodingException, ExcelException {
         Cookie cookie = new Cookie("exportToken",from.getToken());
         cookie.setMaxAge(60);
         response.addCookie(cookie);
@@ -150,20 +151,26 @@ public class DocOrderExportService {
             MybatisCriteria mybatisCriteria = new MybatisCriteria();
             //1 为打印头档，否则为明细
             if(from.getOuttype().equals("1")){
-                for (String a:s) {
-                    ohForNormal = orderHeaderForNormalMybatisDao.queryById(a);
-                    //发运方式 ZT BK LY 暂缓
+                MybatisCriteria mybatisCriteriaHeader = new MybatisCriteria();
+                mybatisCriteriaHeader.setCurrentPage(pager.getPage());
+                mybatisCriteriaHeader.setPageSize(pager.getRows());
+                mybatisCriteriaHeader.setCondition(BeanConvertUtil.bean2Map(from));
+                mybatisCriteriaHeader.setOrderByClause("orderno desc");
+                List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteriaHeader);
+                //发运方式 ZT BK LY 暂缓
+                for (OrderHeaderForNormal orderHeaderForNormal:orderHeaderForNormals){
                     Map<String, Object> param = new HashMap<>();
                     param.put("codeid", "EXP_TYP");
-                    param.put("code", ohForNormal.getRoute());
+                    param.put("code", orderHeaderForNormal.getRoute());
                     BasCodes bascodes = basCodesMybatisDao.queryById(param);
                     if(bascodes!=null){
-                        ohForNormal.setRoute(bascodes.getCodenameC());
+                        orderHeaderForNormal.setRoute(bascodes.getCodenameC());
                     }
-                    if(ohForNormal!=null){
-                        orderHeaderForNormalList.add(ohForNormal);
+                    if(orderHeaderForNormals!=null){
+                        orderHeaderForNormalList.add(orderHeaderForNormal);
                     }
                 }
+
             }else{
                 for (String a:s) {
                     from.setOrderno(a);
