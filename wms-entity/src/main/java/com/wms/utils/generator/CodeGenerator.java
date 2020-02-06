@@ -1,6 +1,8 @@
 package com.wms.utils.generator;
 
-import com.wms.entity.UserStatisticsPerformance;
+
+
+import com.wms.entity.BasSkuLeak;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,7 +38,7 @@ public class CodeGenerator {
 	private static final Boolean IS_NEED_COMBOBOX = true;
 	
 	public static void main(String[] args) {
-		CodeGenerator generator = new CodeGenerator(new UserStatisticsPerformance());
+		CodeGenerator generator = new CodeGenerator(new BasSkuLeak());
 		generator.genData();
 	}
 	
