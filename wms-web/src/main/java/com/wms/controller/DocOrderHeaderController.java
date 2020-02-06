@@ -478,8 +478,8 @@ public class DocOrderHeaderController {
     //导出Excel格式所有信息
     @Login
     @RequestMapping(params = "exportOrderNoToExcel1")
-    public void exportOrderDataToExcel1(HttpServletResponse response, OrderHeaderForNormalQuery from) throws UnsupportedEncodingException, ExcelException {
-        docOrderExportService.docOrderToExcel1(response, from);
+    public void exportOrderDataToExcel1(HttpServletResponse response, EasyuiDatagridPager pager,OrderHeaderForNormalQuery from) throws UnsupportedEncodingException, ExcelException {
+        docOrderExportService.docOrderToExcel1(response, pager, from);
     }
 
     //检查orderno是否存在

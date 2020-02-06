@@ -2071,6 +2071,9 @@ function refAdd() {
 }
 //引用新增
 function refAddDetailIn() {
+    $.messager.progress({
+        text : '<spring:message code="common.message.data.processing"/>', interval : 100
+    });
     var addRefFlag = $('#addRefFlag').combobox('getValue');
     var customeridff =  $("#ezuiDialog #customerid").textbox('getValue');//获取的货主代码
     var asnno1 =  $("#ezuiDialog #asnno1").textbox('getValue');
@@ -2083,18 +2086,27 @@ function refAddDetailIn() {
         type : 'POST',
         dataType : 'JSON',
         success : function(result){
+            $.messager.progress('close');
+            var msg='';
             try {
-                console.log(result);
+                // console.log(result);
                 if(result.success){
                     // $('#ezuiBtn_copyDetail').linkbutton('disable');
-                    $('#ezuiDetailsDatagrid').datagrid('reload');
-
+                    msg = result.msg;
+                    ezuiDetailsDatagrid.datagrid('reload');
+                    // $('#ezuiDetailsDatagrid').datagrid('reload');
+                    refAddDialog.dialog('close');
+                }else{
+                    msg = '<font color="red">' + result.msg + '</font>';
                 }
-                showMsg(result.msg);
-                refAddDialog.dialog('close');
             } catch (e) {
-                return;
-            };
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+            } finally {
+                $.messager.show({
+                    msg : msg, title : '<spring:message code="common.message.prompt"/>'
+                });
+                $.messager.progress('close');
+            }
         }
     });
 }
