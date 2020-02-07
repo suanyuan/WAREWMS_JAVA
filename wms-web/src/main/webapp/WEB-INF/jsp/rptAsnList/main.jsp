@@ -34,7 +34,25 @@ $(function() {
 		rownumbers:true,
 		singleSelect:true,
 		columns : [[
-			{field: 'documentNo',		title: '单据号',	width: 150 },
+			{field: 'customerid',		    title: '客户编码',	    width: 71 },
+			{field: 'asnno',		        title: '入库单编号',	    width: 131 },
+			{field: 'asntypeName',		    title: '入库类型',	    width: 71 },
+			{field: 'asnstatusName',		title: '入库状态',	    width: 71 },
+			{field: 'sup',		title: '供应商',	    width: 170	 },
+			{field: 'asnreference1',		title: '客户单号1',	    width: 131 },
+			{field: 'asnreference2',		title: '客户单号2',		width: 101 },
+			{field: 'userdefine2',		    title: '上架单号',	    width: 101 },
+			{field: 'coldTag',		        title: '冷链标记',	    width: 71 },
+			{field: 'edisendflag',			title: '回传标识',		width: 70,formatter:edisendflag },
+			{field: 'expectedarrivetime1',	title: '预期到货时间',	width: 101 ,formatter:dateFormat2},
+			{field: 'addtime',		        title: '创建时间',	    width: 137 },
+			{field: 'addwho',		        title: '创建人',	        width: 71 },
+			{field: 'edittime',		        title: '最后编辑时间',	width: 137 },
+			{field: 'editwho',		        title: '编辑人',	        width: 71 },
+			{field: 'releasestatusName',	title: '释放状态',	    width: 71 },
+			{field: 'warehouseid',		    title: '仓库编码',	    width: 71 },
+			{field: 'notes',		        title: '备注',	        width: 250 }
+/*			{field: 'documentNo',		title: '单据号',	width: 150 },
 			{field: 'asndate',		    title: '日期',	width: 100 },
 			{field: 'documentType',		title: '单据类型',	width: 100 },
 			{field: 'warehouse',		title: '仓库',	width: 150 },
@@ -51,7 +69,7 @@ $(function() {
 			{field: 'qty1',		        title: '换算率 ',	width: 70},
 			{field: 'purchaseOrderNumber',title: '采购订单号',	width: 130 },
 			{field: 'planPrice',		title: '计划价',	width: 200},
-			{field: 'notes',	        title: '备注',	width: 100},
+			{field: 'notes',	        title: '备注',	width: 100},*/
 
 
 		]],
@@ -77,48 +95,67 @@ $(function() {
 /* 查询 */
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
-		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
+		customerid : $('#customerid').val(),
+		asnno : $('#asnno').val(),
+		releasestatus : $('#releasestatus').combobox('getValue'),
+		asnstatus : $('#asnstatus').combobox('getValue'),
+		userdefinea : $('#userdefinea').combobox('getValue'),
+		asntype : $('#asntype').combobox('getValue'),
+		edisendflag :$("#toolbar #edisendflag").combobox('getValue'), //回传标识
+		asnreference1 : $('#asnreference1').val(),
+		asnreference2 : $('#asnreference2').val(),
+		asnreference3 : $('#asnreference3').val(),
+		expectedarrivetime1 : $('#expectedarrivetime1').datetimebox('getValue'),
+		expectedarrivetime2 : $('#expectedarrivetime2').datetimebox('getValue'),
+		addtime : $('#addtime').datetimebox('getValue'),
+		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
+		addwho : $('#addwho').val(),
+		editwho : $('#editwho').val(),
+		supplierid:$('#supplierId').val(),
+		notes:$('#notes').val(),
+		warehouseid:$('#warehouseId').combobox('getValue'),
+
+		productId:$('#productId').val(),
+		userdefine2:$('#pano').val()//上架单号
+/*		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
 		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
 		customerid : $('#customerid').val(),
 		lotatt12:$('#lotatt12').val(),
 		sku:$('#sku').val(),
 		lotatt04 : $('#lotatt04').val(),
 		lotatt05 : $('#lotatt05').val(),
-		documentNo : $('#documentNo').val(),
+		documentNo : $('#documentNo').val(),*/
 	});
 };
 
 /* 导出start */
 var doExport = function(){
-    if(navigator.cookieEnabled){
-        $('#ezuiBtn_export').linkbutton('disable');
+	console.log("aaa");
         var token = new Date().getTime();
         var param = new HashMap();
 		param.put("token", token);
-		param.put("lotatt03StartDate",$('#lotatt03StartDate').datebox('getValue'));
-		param.put("lotatt03EndDate",$('#lotatt03EndDate').datebox('getValue'));
 		param.put("customerid",$('#customerid').val());
-		param.put("lotatt12",$('#lotatt12').val());
-		param.put("sku",$('#sku').val());
-		param.put("lotatt04",$('#lotatt04').val());
-		param.put("lotatt05",$('#lotatt05').val());
-		param.put("documentNo",$('#documentNo').val());
+		param.put("asnno",$('#asnno').val());
+		param.put("asnreference1",$('#asnreference1').val());
+		param.put("asnreference2",$('#asnreference2').val());
+		param.put("addwho",$('#addwho').val());
+		param.put("editwho",$('#editwho').val());
+		param.put("supplierid",$('#supplierid').val());
+		param.put("notes",$('#notes').val());
+		param.put("productId",$('#productId').val());
+		param.put("asnstatus",$('#asnstatus').combobox('getValue'));
+		param.put("userdefinea",$('#userdefinea').combobox('getValue'));
+		param.put("asntype",$('#asntype').combobox('getValue'));
+		param.put("edisendflag",$('#edisendflag').combobox('getValue'));
+		param.put("expectedarrivetime1",$('#expectedarrivetime1').datebox('getValue'));
+		param.put("expectedarrivetime2",$('#expectedarrivetime2').datebox('getValue'));
+		param.put("addtime",$('#addtime').datebox('getValue'));
+		param.put("edisendtime5",$('#edisendtime5').datebox('getValue'));
         //--导出Excel
-        var formId = ajaxDownloadFile(sy.bp()+"/statisticalAnalysisController.do?exportAsnListDataToExcel", param);
-        downloadCheckTimer = window.setInterval(function () {
-            window.clearInterval(downloadCheckTimer);
-            $('#'+formId).remove();
-            $('#ezuiBtn_export').linkbutton('enable');
-            $.messager.progress('close');
-            $.messager.show({
-                msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
-            });
-        }, 1000);
-    }else{
-        $.messager.show({
-            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
-        });
-    }
+		ajaxDownloadFile(sy.bp()+ "/statisticalAnalysisController.do?exportAsnListDataToExcel",param);
+		$.messager.show({
+			msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+		});
 };
 /* 导出end */
 
@@ -134,27 +171,95 @@ var doExport = function(){
 			<div id='toolbar' class='datagrid-toolbar' style='padding: 5px;'>
 				<fieldset>
 					<legend><spring:message code='common.button.query'/></legend>
-					<table style="text-align: right">
-						<tr >
-							<th>单据号</th><td><input type='text' id='documentNo' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>供货单位</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>存货编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>存货名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>
+					<table>
+						<tr>
+							<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>入库单编号</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/docAsnHeaderController.do?getReleasestatusCombobox"/>',
+																																	valueField: 'id',
+																																textField: 'value'"/></td>
+							<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
 
 						</tr>
-						<tr >
-							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>
-							<th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>
-							<td colspan="2">
+						<tr>
+							<th>单据状态</th><td><input type='text' id='asnstatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																															editable: false,
+																															url:'<c:url value="/docAsnHeaderController.do?getAsnstatusCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/></td>
+							<th>至</th><td><input type='text' id='userdefinea' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																															editable: false,
+																															url:'<c:url value="/docAsnHeaderController.do?getAsnstatusCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/></td>
+							<th>入库类型</th><td><input type='text' id='asntype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																															editable: false,
+																															url:'<c:url value="/docAsnHeaderController.do?getAsnTypeCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/></td>
+							<th>回传标识</th>
+							<td>
+								<input type='text' id='edisendflag' name="edisendflag" class='easyui-combobox' size='16' data-options="panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: '1', value: '已回传'},
+																																{id: '0', value: '未回传'}
+																															]"/>
+							</td>
+
+						</tr>
+						<tr>
+							<th>客户订单号</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>参考编号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
+							<!--<th>参考编号3</th><td><input type='text' id='asnreference3' class='easyui-textbox' size='16' data-options=''/></td>-->
+							<th>供应商</th><td><input type="text" id="supplierId"/></td>
+							<%--仓库在js中设置--%>
+							<th style="text-align: right">仓库</th><td><input type="text" class='easyui-combobox' size='16' id="warehouseId"/></td>
+						</tr>
+						<tr>
+							<th>预计入库时间</th><td><input type='text' id='expectedarrivetime1' class='easyui-datetimebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='expectedarrivetime2' class='easyui-datetimebox' size='16' data-options=''/></td>
+							<th>备注</th><td><input type='text' id='notes' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品代码</th><td><input type="text" class='easyui-textbox' size='16' id="productId"/></td>
+						</tr>
+						<tr>
+							<th>创建时间</th><td><input type='text' id='addtime' class='easyui-datetimebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='edisendtime5' class='easyui-datetimebox' size='16' data-options=''/></td>
+							<th>创建人</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
+							<th colspan="2">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
+							</th>
 
-							</td>
 						</tr>
 					</table>
+<%--					<table style="text-align: right">--%>
+<%--						<tr >--%>
+<%--							<th>单据号</th><td><input type='text' id='documentNo' class='easyui-textbox' size='16' data-options=''/></td>--%>
+<%--							<th>供货单位</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>--%>
+<%--							<th>存货编码</th><td><input type='text' id='sku' class='easyui-textbox' size='16' data-options=''/></td>--%>
+<%--							<th>存货名称</th><td><input type='text' id='lotatt12' class='easyui-textbox' size='16' data-options=''/></td>--%>
+
+<%--						</tr>--%>
+<%--						<tr >--%>
+<%--							<th>入库日期(开始)</th><td><input type='text' id='lotatt03StartDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
+<%--							<th>入库日期(结束)</th><td><input type='text' id='lotatt03EndDate' class='easyui-datebox' size='16' data-options=''/></td>--%>
+<%--							<th>批号</th><td><input type='text' id='lotatt04' class='easyui-textbox' size='16' data-options=''/></td>--%>
+<%--							<th>序列号</th><td><input type='text' id='lotatt05' class='easyui-textbox' size='16' data-options=''/></td>--%>
+<%--							<td colspan="2">--%>
+<%--								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>--%>
+<%--								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>--%>
+<%--								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>--%>
+
+<%--							</td>--%>
+<%--						</tr>--%>
+<%--					</table>--%>
 				</fieldset>
 				<div>
 					<%--<a onclick='add();' id='ezuiBtn_add' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'><spring:message code='common.button.add'/></a>

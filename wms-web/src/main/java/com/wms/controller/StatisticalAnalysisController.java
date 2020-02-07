@@ -2,13 +2,20 @@ package com.wms.controller;
 
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.entity.*;
+import com.wms.entity.RptOrderPackingcartonByOrderNo;
+import com.wms.entity.RptSalesSo;
+import com.wms.entity.RptSendReceiveAndSave;
+import com.wms.entity.RptSoAsnDailyLocation;
 import com.wms.mybatis.entity.SfcUserLogin;
+import com.wms.query.DocAsnHeaderQuery;
+import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.service.OrderHeaderForNormalService;
 import com.wms.service.StatisticalAnalysisService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
+import com.wms.vo.DocAsnHeaderVO;
 import com.wms.vo.Json;
+import com.wms.vo.OrderHeaderForNormalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,12 +79,12 @@ public class StatisticalAnalysisController {
 	@Login
 	@RequestMapping(params = "showDatagridRptAsnList")
 	@ResponseBody
-	public EasyuiDatagrid<RptAsnList> showDatagridRptAsnListLocation(EasyuiDatagridPager pager, RptAsnList query) {
+	public EasyuiDatagrid<DocAsnHeaderVO> showDatagridRptAsnListLocation(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		return statisticalAnalysisService.getPagedDatagridRptAsnList(pager, query);
 	}
 	@Login
 	@RequestMapping(params = "exportAsnListDataToExcel")
-	public void exportAsnListDataToExcel(HttpServletResponse response, RptAsnList form) throws Exception {
+	public void exportAsnListDataToExcel(HttpServletResponse response, DocAsnHeaderQuery form) throws Exception {
 		statisticalAnalysisService.exportAsnListDataToExcel(response, form);
 	}
 
@@ -118,12 +125,12 @@ public class StatisticalAnalysisController {
 	@Login
 	@RequestMapping(params = "showDatagridRptSalesSoList")
 	@ResponseBody
-	public EasyuiDatagrid<RptSalesSo> showDatagridRptSalesSoList(EasyuiDatagridPager pager, RptSalesSo query) {
+	public EasyuiDatagrid<OrderHeaderForNormalVO> showDatagridRptSalesSoList(EasyuiDatagridPager pager, OrderHeaderForNormalQuery query) {
 		return statisticalAnalysisService.getPagedDatagridRptSalesSoList(pager, query);
 	}
 	@Login
 	@RequestMapping(params = "exportSalesSoListDataToExcel")
-	public void exportSalesSoListDataToExcel(HttpServletResponse response, RptSalesSo form) throws Exception {
+	public void exportSalesSoListDataToExcel(HttpServletResponse response, OrderHeaderForNormalQuery form) throws Exception {
 		statisticalAnalysisService.exportSalesSoListDataToExcel(response, form);
 	}
 

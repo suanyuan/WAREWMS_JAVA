@@ -224,9 +224,9 @@ public class GspProductRegisterService extends BaseService {
 				dataPublishService.cancelPubilseDataByRegisterId(gspProductRegister.getProductRegisterId(),newGspProductRegister.getProductRegisterId());
 
 			}else{
-				if(gspProductRegister.getCheckerId()!=null && !StringUtils.isEmpty(gspProductRegister.getCheckerId())){
-					return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
-				}
+//				if(gspProductRegister.getCheckerId()!=null && !StringUtils.isEmpty(gspProductRegister.getCheckerId())){
+//					return Json.error("已经审核的产品注册证不能直接修改，需要进行换证并重新首营审核");
+//				}
                 BeanUtils.copyProperties(gspProductRegisterForm, gspProductRegister);
                 gspProductRegister.setApproveDate(DateUtil.parse(gspProductRegisterForm.getApproveDate(),"yyyy-MM-dd"));
                 gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
