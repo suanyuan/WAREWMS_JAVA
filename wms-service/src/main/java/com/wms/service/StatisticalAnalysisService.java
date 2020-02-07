@@ -6,20 +6,23 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
-import com.wms.mybatis.dao.MybatisCriteria;
-import com.wms.mybatis.dao.StatisticalAnalysisMybatisDao;
+import com.wms.entity.order.OrderHeaderForNormal;
+import com.wms.mybatis.dao.*;
+import com.wms.query.DocAsnHeaderQuery;
+import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ExcelUtil;
-import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
+import com.wms.vo.DocAsnHeaderVO;
+import com.wms.vo.OrderHeaderForNormalVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Service("statisticalAnalysisService")
 public class StatisticalAnalysisService extends BaseService {
@@ -28,7 +31,12 @@ public class StatisticalAnalysisService extends BaseService {
 	private StatisticalAnalysisMybatisDao statisticalAnalysisMybatisDao;
 	@Autowired
 	private BasCodesService basCodesService;
-
+	@Autowired
+	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+	@Autowired
+	private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
+	@Autowired
+	private BasCodesMybatisDao basCodesMybatisDao;
 
 	/**************************************出入库流水****************************************/
 	public EasyuiDatagrid<RptSoAsnDailyLocation> getPagedDatagridRptSoAsnDailyLocation(EasyuiDatagridPager pager, RptSoAsnDailyLocation query) {
@@ -124,51 +132,61 @@ public class StatisticalAnalysisService extends BaseService {
 
 
 	/**************************************入库单列表****************************************/
-	public EasyuiDatagrid<RptAsnList> getPagedDatagridRptAsnList(EasyuiDatagridPager pager, RptAsnList query) {
-		EasyuiDatagrid<RptAsnList> datagrid = new EasyuiDatagrid<RptAsnList>();
+	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagridRptAsnList(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
+		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
-		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-		List<RptAsnList> rptAsnList= statisticalAnalysisMybatisDao.queryAsnList(mybatisCriteria);
-		for (RptAsnList s: rptAsnList) {
-			//上海仓
-			s.setWarehouse("上海仓");
-			//计算数量
-			if(s.getQty1()!=null&&s.getAsnqty()!=null){
-				s.setAsnqtyeach(s.getQty1()*s.getAsnqty());
+		mybatisCriteria.setCondition(query);
+		mybatisCriteria.setOrderByClause("asnno desc");
+		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
+		DocAsnHeaderVO docAsnHeaderVO = null;
+		List<DocAsnHeaderVO> docAsnHeaderVOList = new ArrayList<DocAsnHeaderVO>();
+		for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
+			docAsnHeaderVO = new DocAsnHeaderVO();
+			BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
+			//判断冷链标记
+			if (docAsnHeader.getReservedfield07() != null) {
+				switch (docAsnHeader.getReservedfield07()) {
+					case "FLL":
+						docAsnHeaderVO.setColdTag("非冷链");
+						break;
+					case "LD":
+						docAsnHeaderVO.setColdTag("冷冻");
+						break;
+					case "LC":
+						docAsnHeaderVO.setColdTag("冷藏");
+						break;
+					default:
+						docAsnHeaderVO.setColdTag("非冷链");
+						break;
+				}
 			}
+			docAsnHeaderVOList.add(docAsnHeaderVO);
 		}
-		datagrid.setTotal((long) statisticalAnalysisMybatisDao.queryAsnListCount(mybatisCriteria));
-		datagrid.setRows(rptAsnList);
+		datagrid.setTotal((long) docAsnHeaderMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(docAsnHeaderVOList);
 		return datagrid;
 	}
-	public void exportAsnListDataToExcel(HttpServletResponse response, RptAsnList form) throws IOException {
+	public void exportAsnListDataToExcel(HttpServletResponse response, DocAsnHeaderQuery form) throws IOException {
 		Cookie cookie = new Cookie("exportToken",form.getToken());
 		cookie.setMaxAge(60);
 		response.addCookie(cookie);
 		response.setContentType(ContentTypeEnum.csv.getContentType());
 		try {
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setOrderByClause("asnno desc");
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
 			// excel表格的表头，map
 			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBankAsnList();
 			// excel的sheetName
 			String sheetName = "入库单列表";
 			// excel要导出的数据
-			List<RptAsnList> rptAsnList = statisticalAnalysisMybatisDao.queryAsnList(mybatisCriteria);
+			List<DocAsnHeader> rptAsnList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
 			// 导出
 			if (rptAsnList== null || rptAsnList.size() == 0) {
 				System.out.println("题库为空");
 			}else {
-				for (RptAsnList s: rptAsnList) {
-					//上海仓
-					s.setWarehouse("上海仓");
-					//计算数量
-					if(s.getQty1()!=null&&s.getAsnqty()!=null){
-						s.setAsnqtyeach(s.getQty1()*s.getAsnqty());
-					}
-				}
 				//将list集合转化为excle
 				ExcelUtil.listToExcel(rptAsnList, fieldMap, sheetName, response);
 				System.out.println("导出成功~~~~");
@@ -184,25 +202,25 @@ public class StatisticalAnalysisService extends BaseService {
 	 */
 	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBankAsnList() {
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
-		superClassMap.put("documentNo", "单据号");
-		superClassMap.put("asndate", "日期");
-		superClassMap.put("documentType", "单据类型");
-		superClassMap.put("warehouse", "仓库");
-		superClassMap.put("customerid", "供货单位");
-		superClassMap.put("sku", "存货编码");
-		superClassMap.put("lotatt12", "存货名称");
-		superClassMap.put("descrc", "规格型号");
-		superClassMap.put("reservedfield02", "产品描述");
-		superClassMap.put("asnqty", "入库件数");
-		superClassMap.put("asnqtyeach", "入库数量");
+		superClassMap.put("customerid", "客户编码");
+		superClassMap.put("asnno", "入库单编号");
+		superClassMap.put("asntypeName", "入库类型");
+		superClassMap.put("asnstatusName", "入库状态");
+		superClassMap.put("sup", "供应商");
+		superClassMap.put("asnreference1", "客户单号1");
+		superClassMap.put("asnreference2", "客户单号2");
+		superClassMap.put("userdefine2", "上架单号");
+		superClassMap.put("coldTag", "冷链标记");
+		superClassMap.put("edisendflag", "回传标识");
+		superClassMap.put("expectedarrivetime1", "预期到货时间");
 //		superClassMap.put("soqtyeach", "出库数量");
 //		superClassMap.put("soqty", "出库件数");
-		superClassMap.put("uom", "主计量单位");
-		superClassMap.put("lotatt04", "批号");
-		superClassMap.put("lotatt05", "序列号");
-		superClassMap.put("qty1", "换算率");
-		superClassMap.put("purchaseOrderNumber", "采购订单号");
-		superClassMap.put("planPrice", "计划价");
+		superClassMap.put("addtime", "创建时间");
+		superClassMap.put("addwho", "创建人");
+		superClassMap.put("edittime", "最后编辑时间");
+		superClassMap.put("editwho", "编辑人");
+		superClassMap.put("releasestatusName", "释放状态");
+		superClassMap.put("warehouseid", "仓库编码");
 		superClassMap.put("notes", "备注");
 		return superClassMap;
 	}
@@ -279,55 +297,62 @@ public class StatisticalAnalysisService extends BaseService {
 
 
 	/**************************************销售出库单列表****************************************/
-	public EasyuiDatagrid<RptSalesSo> getPagedDatagridRptSalesSoList(EasyuiDatagridPager pager, RptSalesSo query) {
-		EasyuiDatagrid<RptSalesSo> datagrid = new EasyuiDatagrid<RptSalesSo>();
+	public EasyuiDatagrid<OrderHeaderForNormalVO> getPagedDatagridRptSalesSoList(EasyuiDatagridPager pager, OrderHeaderForNormalQuery query) {
+		EasyuiDatagrid<OrderHeaderForNormalVO> datagrid = new EasyuiDatagrid<>();
+
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
-		List<RptSalesSo> rptRptSalesSoList= statisticalAnalysisMybatisDao.querySalesSoList(mybatisCriteria);
-		for (RptSalesSo s: rptRptSalesSoList) {
-             //计算数量
-			if(s.getQty1()!=null&&s.getQty()!=null) {
-				s.setQtyeach(s.getQty1() * s.getQty());
-			}
-			//仓库编码
-			s.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-			s.setWarehouse(SfcUserLoginUtil.getLoginUser().getWarehouse().getWarehouseName());
+		mybatisCriteria.setOrderByClause("orderno desc");
+		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
+		OrderHeaderForNormalVO orderHeaderForNormalVO;
+		List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<>();
+		for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
+			orderHeaderForNormalVO = new OrderHeaderForNormalVO();
+			BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
+			orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
 		}
-		datagrid.setTotal((long) statisticalAnalysisMybatisDao.querySalesSoListCount(mybatisCriteria));
-		datagrid.setRows(rptRptSalesSoList);
+		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
+		datagrid.setRows(orderHeaderForNormalVOList);
 		return datagrid;
 	}
-	public void exportSalesSoListDataToExcel(HttpServletResponse response, RptSalesSo form) throws IOException {
+	public void exportSalesSoListDataToExcel(HttpServletResponse response, OrderHeaderForNormalQuery form) throws IOException {
 		Cookie cookie = new Cookie("exportToken",form.getToken());
 		cookie.setMaxAge(60);
 		response.addCookie(cookie);
 		response.setContentType(ContentTypeEnum.csv.getContentType());
 		try {
+
+			List<OrderHeaderForNormal> orderHeaderForNormalList = new ArrayList<OrderHeaderForNormal>();
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setOrderByClause("orderno desc");
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
 			// excel表格的表头，map
 			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBankRptSalesSoList();
 			// excel的sheetName
 			String sheetName = "销售出库单列表";
 			// excel要导出的数据
-			List<RptSalesSo> rptRptSalesSoList = statisticalAnalysisMybatisDao.querySalesSoList(mybatisCriteria);
+			List<OrderHeaderForNormal> rptRptSalesSoList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
 			// 导出
 			if (rptRptSalesSoList== null || rptRptSalesSoList.size() == 0) {
 				System.out.println("题库为空");
 			}else {
-				for (RptSalesSo s: rptRptSalesSoList) {
-					//计算数量
-					if(s.getQty1()!=null&&s.getQty()!=null) {
-						s.setQtyeach(s.getQty1() * s.getQty());
+				//发运方式 ZT BK LY 暂缓
+				for (OrderHeaderForNormal orderHeaderForNormal:rptRptSalesSoList){
+					Map<String, Object> param = new HashMap<>();
+					param.put("codeid", "EXP_TYP");
+					param.put("code", orderHeaderForNormal.getRoute());
+					BasCodes bascodes = basCodesMybatisDao.queryById(param);
+					if(bascodes!=null){
+						orderHeaderForNormal.setRoute(bascodes.getCodenameC());
 					}
-					//仓库编码
-					s.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-					s.setWarehouse(SfcUserLoginUtil.getLoginUser().getWarehouse().getWarehouseName());
+					if(rptRptSalesSoList!=null){
+						orderHeaderForNormalList.add(orderHeaderForNormal);
+					}
 				}
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(rptRptSalesSoList, fieldMap, sheetName, response);
+				ExcelUtil.listToExcel(orderHeaderForNormalList, fieldMap, sheetName, response);
 				System.out.println("导出成功~~~~");
 			}
 		} catch (ExcelException e) 	{
@@ -341,27 +366,25 @@ public class StatisticalAnalysisService extends BaseService {
 	 */
 	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBankRptSalesSoList() {
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
-		superClassMap.put("serialNumber", "序号");
-		superClassMap.put("choose", "选择");
-		superClassMap.put("warehouseid", "仓库编码");
-		superClassMap.put("sourceOrder", "来源订单号");
-		superClassMap.put("soOrderNum", "发货单号码");
-		superClassMap.put("soOrderNo", "出库单号");
-		superClassMap.put("soDate", "出库日期");
-		superClassMap.put("soType", "出库类别");
-		superClassMap.put("warehouse", "仓库");
-		superClassMap.put("customerid", "客户名称");
-		superClassMap.put("sku", "存货编码");
-		superClassMap.put("lotatt12", "存货名称");
-		superClassMap.put("descrc", "规格型号");
-		superClassMap.put("qtyeach", "数量");
-		superClassMap.put("qty", "件数");
-		superClassMap.put("uom", "主计量单位");
-		superClassMap.put("lotatt04", "批号");
-		superClassMap.put("lotatt02", "失效日期");
-		superClassMap.put("addwho", "制单人");
-		superClassMap.put("reviewWho", "审核人");
-		superClassMap.put("trackingNumber", "快递单号码");
+		superClassMap.put("customerid", "客户编码");
+		superClassMap.put("orderno", "SO编号");
+		superClassMap.put("orderTypeName", "订单类型");
+		superClassMap.put("orderStatusName", "订单状态");
+		superClassMap.put("soreference1", "客户单号");
+		superClassMap.put("soreference2", "定向入库单号");
+		superClassMap.put("cAddress4", "快递单号");
+		superClassMap.put("notes", "备注");
+		superClassMap.put("edisendflag", "回传标识");
+		superClassMap.put("consigneeid", "公司抬头");
+		superClassMap.put("cAddress1", "收货地址");
+		superClassMap.put("cTel1", "联系方式");
+		superClassMap.put("addtime", "创建时间");
+		superClassMap.put("addwho", "创建人");
+		superClassMap.put("edittime", "编辑时间");
+		superClassMap.put("editwho", "编辑人");
+		superClassMap.put("courierComplaint", "快递投诉内容");
+		superClassMap.put("udfprintflag2", "拣货单打印次数");
+		superClassMap.put("udfprintflag3", "随货单打印次数");
 
 		return superClassMap;
 	}

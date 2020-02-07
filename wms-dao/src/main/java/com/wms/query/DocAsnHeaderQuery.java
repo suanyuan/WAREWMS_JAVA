@@ -1,11 +1,8 @@
 package com.wms.query;
 
-import java.util.Set;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import com.wms.mybatis.entity.SfcCustomer;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+
+import java.util.Set;
 
 public class DocAsnHeaderQuery implements IQuery {
 
@@ -149,6 +146,16 @@ public class DocAsnHeaderQuery implements IQuery {
 	private java.lang.String warehouseid;
 	private java.lang.String zonegroup;
 	private Set<SfcCustomer> customerSet;
+
+	private String token;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public java.lang.String getAsnstatusCheck() {
 		return asnstatusCheck;
