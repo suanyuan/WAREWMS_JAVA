@@ -426,10 +426,18 @@ where 1=1
         a.*
         from doc_mt_details a
         left join inv_lot_att b on a.lotnum = b.lotnum
-        where a.mtno = #{mtno} and a.locationid = #{locationid} and a.linestatus = '00'
-        and a.sku = #{sku} and a.customerid = #{customerid}
-        and IFNULL(b.lotatt04,'') = IFNULL(rtrim(#{lotatt04}),'')
-        and IFNULL(b.lotatt05,'') = IFNULL(rtrim(#{lotatt05}),'')
+        where a.mtno = #{mtno} and a.linestatus = '00'
+          and a.locationid = #{locationid}
+		  and a.customerid = #{customerid}
+		<if test="sku != null and sku != ''">
+			and a.sku = #{sku}
+		</if>
+		<if test="lotatt04 != null and lotatt04 != ''">
+			and b.lotatt04 = rtrim(#{lotatt04})
+		</if>
+		<if test="lotatt05 != null and lotatt05 != ''">
+			and b.lotatt05 = rtrim(#{lotatt05})
+		</if>
     </select>
 
     <update id="updateDetailQty" parameterType="java.util.Map">

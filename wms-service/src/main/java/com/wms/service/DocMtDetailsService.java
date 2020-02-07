@@ -185,25 +185,16 @@ public class DocMtDetailsService extends BaseService {
         ScanResultForm scanResultForm = new ScanResultForm();
         //customerid, GTIN, lotatt04, lotatt05, otherCode
         BeanUtils.copyProperties(query, scanResultForm);
-        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
+        CommonVO commonVO = commonService.adjustScanResult(scanResultForm);
 
-        if (!commonVO.isSuccess()) {
-
-            resultJson.setSuccess(false);
-            resultJson.setMsg(commonVO.getMessage());
-            return resultJson;
-        }
-
-        BasSku basSku = commonVO.getBasSku();
+        if (commonVO.isSuccess()) query.setSku(commonVO.getBasSku().getSku());
         query.setLotatt04(commonVO.getBatchNum());
-        query.setLotatt05(commonVO.getSerialNum());
-        query.setSku(basSku.getSku());
-        docMtDetailsVO.setBasSku(basSku);
+        query.setLotatt05(commonVO.isSerialManagement() ? "" : commonVO.getSerialNum());
 
         /*
         222，判断获取养护扫码数据是否齐全
          */
-        Json scanJson = commonService.judgeMtScanResult(query, commonVO);
+        Json scanJson = commonService.matchMtDetails(query);
         if (!scanJson.isSuccess()) {
 
             resultJson.setSuccess(false);
@@ -216,6 +207,17 @@ public class DocMtDetailsService extends BaseService {
          */
         DocMtDetails docMtDetails = (DocMtDetails) scanJson.getObj();
         BeanUtils.copyProperties(docMtDetails, docMtDetailsVO);
+
+        Json skuJson = commonService.fixBasSku(docMtDetails.getCustomerid(), docMtDetails.getSku());
+        if (!skuJson.isSuccess()) {
+
+            resultJson.setSuccess(false);
+            resultJson.setMsg(skuJson.getMsg());
+            return resultJson;
+        }
+        BasSku basSku = (BasSku) skuJson.getObj();
+        docMtDetailsVO.setBasSku(basSku);
+        query.setSku(basSku.getSku());
 
 	    /*
 	    444,批次属性
