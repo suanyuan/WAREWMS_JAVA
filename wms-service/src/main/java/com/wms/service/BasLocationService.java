@@ -372,7 +372,7 @@ public class BasLocationService extends BaseService {
      * 获取可推荐的空库位
      * 查询的固定size = 1
      */
-    public BasLocation getEmptyLocation(int pageNum) {
+    public BasLocation queryEmptyLocation(int pageNum) {
 
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pageNum);
@@ -383,7 +383,7 @@ public class BasLocationService extends BaseService {
         if (null != basLocation && StringUtil.isNotEmpty(basLocation.getLocationid())) {
 
             basLocation.setStatus(BasLocation.STATUS_NOT_OK);
-            basLocationMybatisDao.updateBySelective(basLocation);
+            basLocationMybatisDao.update(basLocation);
         }
         return basLocation;
     }
@@ -397,7 +397,7 @@ public class BasLocationService extends BaseService {
         if (null != basLocation) {
 
             basLocation.setStatus(BasLocation.STATUS_OK);
-            basLocationMybatisDao.updateBySelective(basLocation);
+            basLocationMybatisDao.update(basLocation);
         }
     }
 }

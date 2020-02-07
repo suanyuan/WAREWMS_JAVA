@@ -9,11 +9,9 @@ import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
-import com.wms.query.BasSerialNumQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.query.DocPaDetailsQuery;
 import com.wms.query.ProductLineQuery;
-import com.wms.query.pda.PdaBasSkuQuery;
 import com.wms.query.pda.PdaDocPaDetailQuery;
 import com.wms.result.PdaResult;
 import com.wms.utils.BeanConvertUtil;
@@ -24,15 +22,11 @@ import com.wms.vo.form.DocPaDetailsForm;
 import com.wms.vo.form.pda.ScanResultForm;
 import com.wms.vo.pda.CommonVO;
 import com.wms.vo.pda.PdaDocPaDetailVO;
-import com.wms.vo.pda.PdaDocPaHeaderVO;
-import org.apache.camel.language.Bean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("docPaDetailsService")
@@ -186,7 +180,7 @@ public class DocPaDetailsService extends BaseService {
             //骨科的产品线推荐库位
             if (productLine.getName().equals("Trauma")) {
 
-                BasLocation basLocation = basLocationService.getEmptyLocation(1);
+                BasLocation basLocation = basLocationService.queryEmptyLocation(1);
                 docPaDetailVO.setUserdefine1(null == basLocation ? "" : basLocation.getLocationid());
             } else {
 

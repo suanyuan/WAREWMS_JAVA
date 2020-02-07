@@ -1,7 +1,6 @@
 package com.wms.api;
 
 import com.wms.constant.Constant;
-import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.BasLocation;
 import com.wms.mybatis.entity.pda.PdaDocPaDetailForm;
 import com.wms.mybatis.entity.pda.PdaDocPaEndForm;
@@ -19,10 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.xml.transform.Result;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,7 +204,7 @@ public class PdaPutawayController {
      */
     @RequestMapping(params = "switchLoc", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> switchLoc(int paegNum, String locationid, String version) {
+    public Map<String, Object> switchLoc(int pageNum, String locationid, String version) {
 
         Map<String, Object> resultMap = new HashMap<>();
         Json json = basCodesService.verifyRequestValidation(version);
@@ -219,7 +216,7 @@ public class PdaPutawayController {
         basLocationService.releaseOccupiedLocation(locationid);
 
         //获取下一个推荐库位
-        BasLocation basLocation = basLocationService.getEmptyLocation(paegNum);
+        BasLocation basLocation = basLocationService.queryEmptyLocation(pageNum);
         if (null == basLocation) {
 
             resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无更多推荐库位"));

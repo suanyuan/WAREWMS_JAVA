@@ -141,32 +141,6 @@ public class DocQcDetailsService extends BaseService {
         return json;
     }
 
-    //TODO WARNING!! 此处不可用个，删除条件欠缺 应该qcno + qclineno
-//	public Json deleteDocQcDetails(String id) {
-//		Json json = new Json();
-//		DocQcDetails docQcDetails = docQcDetailsDao.queryById(id);
-//		if(docQcDetails != null){
-//			docQcDetailsDao.delete(docQcDetails);
-//		}
-//		json.setSuccess(true);
-//		return json;
-//	}
-
-//	public List<EasyuiCombobox> getDocQcDetailsCombobox() {
-//		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-//		EasyuiCombobox combobox = null;
-//		List<DocQcDetails> docQcDetailsList = docQcDetailsDao.findAll();
-//		if(docQcDetailsList != null && docQcDetailsList.size() > 0){
-//			for(DocQcDetails docQcDetails : docQcDetailsList){
-//				combobox = new EasyuiCombobox();
-//				combobox.setId(String.valueOf(docQcDetails.getId()));
-//				combobox.setValue(docQcDetails.getDocQcDetailsName());
-//				comboboxList.add(combobox);
-//			}
-//		}
-//		return comboboxList;
-//	}
-
     /**
      * 获取验收详情
      *

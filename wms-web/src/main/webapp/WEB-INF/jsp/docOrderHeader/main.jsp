@@ -945,7 +945,7 @@
             });
         };
 
-        /* 取消装箱按钮 */
+        /* 取消装箱按钮 Deprecated */
         var unPacking = function () {
             $.messager.confirm('提示', '此操作将会删除所有的装箱明细记录，是否继续?', function (r) {
                 if (r) {
@@ -2690,53 +2690,9 @@
                         <th>定向入库单号</th>
                         <td><input type='text' id='soreference2' class='easyui-textbox' size='16' data-options=''/></td>
                     </tr>
-                    <%--<tr>
-							<th>省</th>
-							<td>
-								<!--<input type='text' id='cProvince' class='easyui-textbox' size='16' data-options=''/>-->
-								<input id="cc1" class="easyui-combobox" name="cProvince"  editable="false" data-options="
-								valueField: 'name',
-								textField: 'name',
-								width:110,
-								url: 'gspReceivingAddressController.do?getArea&pid=0',
-								onSelect: function(rec){
-									$('#cc2').combobox('clear');
-									$('#cc3').combobox('clear');
-									var url= 'gspReceivingAddressController.do?getArea&pid='+rec.id;
-									$('#cc2').combobox('reload',url);
-							}">
-							</td>
-							<th>市</th>
-							<td>
-								<!--<input type='text' id='cCity' class='easyui-textbox' size='16' data-options=''/>-->
-								<input id="cc2" class="easyui-combobox" name="cCity" editable="false" data-options="
-								valueField: 'name',
-								textField: 'name',
-								width:110,
-								onSelect: function(rec){
-									$('#cc2').combobox('reload', url);
-									$('#cc3').combobox('clear');
-									var url = 'gspReceivingAddressController.do?getArea&pid='+rec.id;
-									$('#cc3').combobox('reload', url);
-								}">
-							</td>
-							<th>区</th>
-							<td>
-								<!--<input type='text' id='cCountry' class='easyui-textbox' size='16' data-options=''/>-->
-								<input id="cc3" class="easyui-combobox" name="district"  editable="false" data-options="
-								width:110,
-								valueField:'name',
-								textField:'name'">
-							</td>
-							<th>地址</th><td><input type='text' id='cAddress1' class='easyui-textbox' size='16' data-options=''/></td>
-						</tr>--%>
                     <tr>
                         <th>公司抬头</th>
                         <td><input type='text' id='consigneeid' class='easyui-textbox' size='16' data-options=''/></td>
-                        <%--
-							<th>收货电话</th><td><input type='text' id='cTel1' class='easyui-textbox' size='16' data-options=''/></td>
---%>
-                        <%--<th>运输公司</th><td><input type='text' id='carrierContact' class='easyui-textbox' size='16' data-options=''/></td>--%>
                         <th>快递单号</th>
                         <td><input type='text' id='cAddress4Q' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>产品线</th>
