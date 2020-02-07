@@ -155,6 +155,7 @@ public class DocPaDetailsService extends BaseService {
         BasSku basSku = (BasSku) skuJson.getObj();
         BeanUtils.copyProperties(docPaDetails, docPaDetailVO);
         docPaDetailVO.setBasSku(basSku);
+        query.setSku(basSku.getSku());
 
         /*
         4，查询最新一次上架提交的数据（同上架单号、客户代码、产品代码、批号）推荐库位

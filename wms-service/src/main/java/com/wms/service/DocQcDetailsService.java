@@ -153,31 +153,21 @@ public class DocQcDetailsService extends BaseService {
         PdaDocQcDetailVO pdaDocQcDetailVO = new PdaDocQcDetailVO();
 
         /*
-        111，处理BasSku获取问题
-        并且返回准确的批号、序列号匹配条件
+        111，处理BasSku获取问题,并且返回准确的批号、序列号匹配条件
          */
         ScanResultForm scanResultForm = new ScanResultForm();
         //customerid, GTIN, lotatt04, lotatt05, otherCode
         BeanUtils.copyProperties(query, scanResultForm);
-        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
+        CommonVO commonVO = commonService.adjustScanResult(scanResultForm);
 
-        if (!commonVO.isSuccess()) {
-
-            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, commonVO.getMessage()));
-            return map;
-        }
-
-        //获取BasSku，设置
-        BasSku basSku = commonVO.getBasSku();
+        if (commonVO.isSuccess()) query.setSku(commonVO.getBasSku().getSku());
         query.setLotatt04(commonVO.getBatchNum());
-        query.setLotatt05(commonVO.getSerialNum());
-        query.setSku(basSku.getSku());
-        pdaDocQcDetailVO.setBasSku(basSku);
+        query.setLotatt05(commonVO.isSerialManagement() ? "" : commonVO.getSerialNum());
 
         /*
-        222，判断获取上架扫码数据是否齐全
+        222，判断获取验收扫码数据是否齐全
          */
-        Json scanJson = commonService.judgeQcScanResult(query, commonVO);
+        Json scanJson = commonService.matchQcDetail(query);
         if (!scanJson.isSuccess()) {
 
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg()));
@@ -189,6 +179,17 @@ public class DocQcDetailsService extends BaseService {
          */
         DocQcDetails docQcDetails = (DocQcDetails) scanJson.getObj();
         BeanUtils.copyProperties(docQcDetails, pdaDocQcDetailVO);
+
+
+        Json skuJson = commonService.fixBasSku(docQcDetails.getCustomerid(), docQcDetails.getSku());
+        if (!skuJson.isSuccess()) {
+
+            map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, skuJson.getMsg()));
+            return map;
+        }
+        BasSku basSku = (BasSku) skuJson.getObj();
+        pdaDocQcDetailVO.setBasSku(basSku);
+        query.setSku(basSku.getSku());
 
         /*
         444，获取包装规格
