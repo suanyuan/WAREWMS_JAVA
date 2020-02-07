@@ -30,7 +30,9 @@ public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
 
 	List<OrderHeaderForNormal> queryPackageList(@Param("start") int start, @Param("pageSize") int pageSize);
-	
+
+	List<OrderHeaderForNormal> queryPkList(@Param("start") int start, @Param("pageSize") int pageSize);
+
 	OrderHeaderForNormal queryByPickingList(OrderHeaderForNormalQuery query);
 
 	List<ReceiptResult> queryByReceiptList(OrderHeaderForNormalQuery query);

@@ -1960,6 +1960,15 @@
     </select>
 
 
+    <!--需要拣货的出库单-->
+    <select id="queryPkList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doc_order_header
+        where sostatus = '40' or sostatus = '50'
+        order by addtime desc
+        limit #{start}, #{pageSize}
+    </select>
 
     <select id="queryPackageList" resultMap="BaseResultMap">
         select

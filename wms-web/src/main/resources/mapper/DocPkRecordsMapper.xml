@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.mybatis.dao.DocPkRecordsMybatisDao" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.wms.entity.DocPkRecords" >
+	<result column="orderno" property="orderno"/>
+	<result column="pklineno" property="pklineno"/>
+	<result column="customerid" property="customerid"/>
+	<result column="sku" property="sku"/>
+	<result column="skudesce" property="skudesce"/>
+	<result column="pickedqty" property="pickedqty"/>
+	<result column="pickedqty_each" property="pickedqtyEach"/>
+	<result column="allocationdetailsid" property="allocationdetailsid"/>
+	<result column="locationid" property="locationid"/>
+	<result column="lotnum" property="lotnum"/>
+	<result column="addwho" property="addwho"/>
+	<result column="addtime" property="addtime"/>
+	<result column="editwho" property="editwho"/>
+	<result column="edittime" property="edittime"/>
+</resultMap>
+       
+<!-- doc_pk_records table all fields -->
+<sql id="Base_Column_List" >
+	 orderno,pklineno,customerid,sku,skudesce,pickedqty,pickedqty_each,allocationdetailsid,locationid,lotnum,addwho,addtime,editwho,edittime
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.orderno != null and condition.orderno != ''" >
+	    and orderno =  #{condition.orderno}
+	</if>
+	<if test="condition.pklineno != null and condition.pklineno != ''" >
+	    and pklineno =  #{condition.pklineno}
+	</if>
+	<if test="condition.customerid != null and condition.customerid != ''" >
+	    and customerid =  #{condition.customerid}
+	</if>
+	<if test="condition.sku != null and condition.sku != ''" >
+	    and sku =  #{condition.sku}
+	</if>
+	<if test="condition.skudesce != null and condition.skudesce != ''" >
+	    and skudesce =  #{condition.skudesce}
+	</if>
+	<if test="condition.pickedqty != null and condition.pickedqty != ''" >
+	    and pickedqty =  #{condition.pickedqty}
+	</if>
+	<if test="condition.pickedqtyEach != null and condition.pickedqtyEach != ''" >
+	    and pickedqty_each =  #{condition.pickedqtyEach}
+	</if>
+	<if test="condition.allocationdetailsid != null and condition.allocationdetailsid != ''" >
+	    and allocationdetailsid =  #{condition.allocationdetailsid}
+	</if>
+	<if test="condition.locationid != null and condition.locationid != ''" >
+	    and locationid =  #{condition.locationid}
+	</if>
+	<if test="condition.lotnum != null and condition.lotnum != ''" >
+	    and lotnum =  #{condition.lotnum}
+	</if>
+	<if test="condition.addwho != null and condition.addwho != ''" >
+	    and addwho =  #{condition.addwho}
+	</if>
+	<if test="condition.addtime != null and condition.addtime != ''" >
+	    and addtime =  #{condition.addtime}
+	</if>
+	<if test="condition.editwho != null and condition.editwho != ''" >
+	    and editwho =  #{condition.editwho}
+	</if>
+	<if test="condition.edittime != null and condition.edittime != ''" >
+	    and edittime =  #{condition.edittime}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+  insert into doc_pk_records(orderno,pklineno,customerid,sku,skudesce,pickedqty,pickedqty_each,allocationdetailsid,locationid,lotnum,addwho,addtime,editwho,edittime)
+ values(#{orderno},#{pklineno},#{customerid},#{sku},#{skudesce},#{pickedqty},#{pickedqtyEach},#{allocationdetailsid},#{locationid},#{lotnum},#{addwho},now(),#{editwho},#{edittime})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update doc_pk_records set pklineno=#{pklineno},customerid=#{customerid},sku=#{sku},skudesce=#{skudesce},pickedqty=#{pickedqty},pickedqty_each=#{pickedqtyEach},allocationdetailsid=#{allocationdetailsid},locationid=#{locationid},lotnum=#{lotnum},addwho=#{addwho},addtime=#{addtime},editwho=#{editwho},edittime=#{edittime} where orderno=#{orderno}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update doc_pk_records set 
+	<trim  suffixOverrides="," >
+	<if test="pklineno != null  ">
+		pklineno=#{pklineno},
+	</if>
+	<if test="customerid != null  ">
+		customerid=#{customerid},
+	</if>
+	<if test="sku != null  ">
+		sku=#{sku},
+	</if>
+	<if test="skudesce != null  ">
+		skudesce=#{skudesce},
+	</if>
+	<if test="pickedqty != null  ">
+		pickedqty=#{pickedqty},
+	</if>
+	<if test="pickedqtyEach != null  ">
+		pickedqty_each=#{pickedqtyEach},
+	</if>
+	<if test="allocationdetailsid != null  ">
+		allocationdetailsid=#{allocationdetailsid},
+	</if>
+	<if test="locationid != null  ">
+		locationid=#{locationid},
+	</if>
+	<if test="lotnum != null  ">
+		lotnum=#{lotnum},
+	</if>
+	<if test="addwho != null  ">
+		addwho=#{addwho},
+	</if>
+	<if test="addtime != null  ">
+		addtime=#{addtime},
+	</if>
+	<if test="editwho != null  ">
+		editwho=#{editwho},
+	</if>
+		edittime=now()
+
+	</trim> where orderno=#{orderno}
+</update>
+
+	<update id="updateDocPkRecords" parameterType="java.util.Map">
+        update doc_pk_records set
+        pickedqty = #{qty},
+        editwho = #{editwho},
+        edittime = now()
+        where orderno = #{orderno} and traceid = #{traceid} and sku = #{sku} and lotnum = #{lotnum} and allocationdetailsid = #{allocationdetailsid}
+    </update>
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from doc_pk_records where orderno = #{orderno}
+</delete>
+
+	<select id="getMaxPacklineno" resultType="int"  parameterType="Object">
+		select ifnull(max(packlineno),0) from doc_pk_records where orderno = #{orderno,jdbcType=VARCHAR}
+	</select>
+	<select id="queryAvailablePackedDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select *
+		from doc_pk_records
+		where orderno = #{orderno}  and sku = #{sku}
+		and lotnum = #{lotnum} and allocationdetailsid = #{allocationdetailsid}
+	</select>
+
+
+<!-- 根据id查询 拣货记录表 -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from doc_pk_records where orderno = #{orderno}
+</select>
+
+<!-- 拣货记录表 列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from doc_pk_records 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询拣货记录表列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from doc_pk_records 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

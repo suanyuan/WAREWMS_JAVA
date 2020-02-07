@@ -834,7 +834,7 @@ public class DocOrderPackingService extends BaseService {
 		pdaDocPackageVO.setBasSku(basSku);
 
         /*
-         222,判断获取的复核扫码数据是否齐全
+         222,判断获取的复核扫码数据是否齐全  qqq
          */
 		Json scanJson = commonService.judgePackageScanResult(query, commonVO);
 		if (!scanJson.isSuccess()) {
