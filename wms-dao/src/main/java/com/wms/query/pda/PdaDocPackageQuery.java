@@ -19,6 +19,8 @@ public class PdaDocPackageQuery extends PdaBasSkuQuery {
 
     private String editwho;
 
+    private String sku;
+
     /**
      * add by Gizmo 2019-10-22
      * 扫描的GS1条码，用于JSJY、BDL回传记录GS1条码

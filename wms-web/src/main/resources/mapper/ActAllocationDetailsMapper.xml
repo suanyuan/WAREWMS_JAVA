@@ -454,22 +454,25 @@ where 1=1
     <!--</select>-->
 
     <select id="queryForScan" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select
-        a.*
-        from act_allocation_details a, inv_lot_att b
-        where a.orderno = #{orderno, jdbcType=VARCHAR}
-        and a.customerid = #{customerid, jdbcType=VARCHAR}
-        and a.sku = #{sku, jdbcType=VARCHAR}
-        and a.lotnum = b.lotnum
-        <if test="lotatt04 != null and lotatt04 != ''">
-            and b.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
-        </if>
-        <if test="lotatt05 != null and lotatt05 != ''">
-            and b.lotatt05 = #{lotatt05, jdbcType=VARCHAR}
-        </if>
-        <if test="packflag != null and packflag != ''">
-            and a.packflag = #{packflag, jdbcType=VARCHAR}
-        </if>
+
+		SELECT
+			t_allocation.*
+		FROM act_allocation_details t_allocation
+		LEFT JOIN inv_lot_att t_ila ON t_ila.lotnum = t_allocation.lotnum
+		WHERE t_allocation.orderno = #{orderno, jdbcType=VARCHAR}
+	      AND t_allocation.customerid = #{customerid, jdbcType=VARCHAR}
+		<if test="sku != null and sku != ''">
+			AND t_allocation.sku = #{sku, jdbcType=VARCHAR}
+		</if>
+		<if test="packflag != null and packflag != ''">
+			AND t_allocation.packflag = #{packflag, jdbcType=VARCHAR}
+		</if>
+		<if test="lotatt04 != null and lotatt04 != ''">
+			AND t_ila.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
+		</if>
+		<if test="lotatt05 != null and lotatt05 != ''">
+			AND t_ila.lotatt05 = #{lotatt05, jdbcType=VARCHAR}
+		</if>
     </select>
 
     <update id="finishPacking" parameterType="java.util.Map">

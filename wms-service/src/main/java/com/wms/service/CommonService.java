@@ -221,10 +221,10 @@ public class CommonService extends BaseService{
         BasSku basSku = basSkuMybatisDao.queryById(skuMap);
         if (null == basSku || null == basSku.getSku()) {
             return Json.error("查无此产品档案数据");
-        } else if (basSku.getActiveFlag().equals("0")) {
-            return Json.error("此产品未激活，请与质量部进行沟通");
         } else if (basSku.getFirstop().equals(Constant.CODE_CATALOG_FIRSTSTATE_USELESS)) {
             return Json.error("此产品已报废，请与质量部进行沟通");
+        } else if (basSku.getActiveFlag().equals("0")) {
+            return Json.error("此产品未激活，请与质量部进行沟通");
         } else {
 
             Json json = new Json();
@@ -443,6 +443,60 @@ public class CommonService extends BaseService{
         json.setSuccess(true);
         json.setMsg("可继续操作");
         json.setObj(docQcDetails.get(0));
+        return json;
+    }
+
+    /**
+     * 判断获取的复核扫码数据是否齐全
+     * - 如果入库有批号 || 序列号，扫描了SKU需要提示扫描带批号 || 序列号的条码
+     * @param query ~
+     * @return 主要判断如果是批号或者序列号维护的产品，出入库扫描不可扫描SKU
+     */
+    Json matchPackageDetails(PdaDocPackageQuery query) {
+
+        Json json = new Json();
+
+        //1，查询分配明细
+        ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery();
+        actAllocationDetailsQuery.setOrderno(query.getOrderno());
+        actAllocationDetailsQuery.setCustomerid(query.getCustomerid());
+        actAllocationDetailsQuery.setSku(query.getSku());
+        actAllocationDetailsQuery.setLotatt04(query.getLotatt04());
+        actAllocationDetailsQuery.setLotatt05(query.getLotatt05());
+        actAllocationDetailsQuery.setPackflag("0");
+        List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryForScan(actAllocationDetailsQuery);
+        if (actAllocationDetailsList.size() == 0) {
+
+            json.setSuccess(false);
+            json.setMsg("查无此产品的分配明细数据");
+            return json;
+        }
+
+        //2，如果commonVo中有批号/序列号，将查询到的分配明细返回
+        if (StringUtil.isNotEmpty(query.getLotatt04()) || StringUtil.isNotEmpty(query.getLotatt05())) {
+
+            ActAllocationDetails actAllocationDetails = actAllocationDetailsList.get(0);
+            json.setObj(actAllocationDetails);
+            json.setSuccess(true);
+            json.setMsg("可继续操作");
+            return json;
+        }
+
+        //3,如果SKU对应的明细中存在批号或者序列号，提示复核不允许扫描SKU进行
+        for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
+
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetails.getLotnum());
+            if (StringUtil.isNotEmpty(invLotAtt.getLotatt04()) || StringUtil.isNotEmpty(invLotAtt.getLotatt05())) {
+
+                json.setSuccess(false);
+                json.setMsg("请扫描产品GS1条码进行复核操作！");
+                return json;
+            }
+        }
+
+        json.setSuccess(true);
+        json.setMsg("可继续操作");
+        json.setObj(actAllocationDetailsList.get(0));
         return json;
     }
 

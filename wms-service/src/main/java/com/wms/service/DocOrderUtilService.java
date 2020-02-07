@@ -4,6 +4,7 @@ import com.wms.entity.*;
 import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
+import com.wms.query.DocOrderPackingQuery;
 import com.wms.query.OrderHeaderForNormalQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -23,8 +24,8 @@ public class DocOrderUtilService {
     @Autowired
     private BasSerialNumService basSerialNumService;
 
-    @Autowired
-    private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
+//    @Autowired
+//    private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
     @Autowired
     private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
     @Autowired
@@ -38,8 +39,9 @@ public class DocOrderUtilService {
     @Autowired
     private InvLotMybatisDao invLotMybatisDao;
     @Autowired
+    private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
+    @Autowired
     private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
-
 
     /**
      * 如果是定向订单，检查发货凭证号关联的入库序列号是否已导入
@@ -248,18 +250,56 @@ public class DocOrderUtilService {
         return json;
     }
 
-    String getYesNo(String obj) {
-        if (obj == null || obj.equals("0")) {
-            return "否";
-        } else {
-            return "是";
+    /**
+     * 处理箱号返回的问题
+     * 区分 冷链 || 非冷链
+     * 非冷链或没有冷链标志的：只要不装箱结束，就一直是一箱
+     * 冷链（冷冻||冷藏）：不同批号的会生成一个新的箱号，相同批号则可装一箱
+     * @return 箱号
+     */
+    String fixCartonNum(ActAllocationDetails actAllocationDetails, BasSku basSku, InvLotAtt invLotAtt) {
+
+
+        DocOrderPackingCarton cartonQuery = new DocOrderPackingCarton();
+        DocOrderPackingCarton docOrderPackingCarton;
+
+        cartonQuery.setOrderno(actAllocationDetails.getOrderno());
+        cartonQuery.setCustomerid(actAllocationDetails.getCustomerid());
+
+        //冷链（冷冻 || 冷藏）
+        if (StringUtil.isNotEmpty(basSku.getReservedfield07()) && (basSku.getReservedfield07().equals("LD") || basSku.getReservedfield07().equals("LC"))) {
+
+            cartonQuery.setSku(actAllocationDetails.getSku());
+            cartonQuery.setLotatt04(invLotAtt.getLotatt04());
+            docOrderPackingCarton = docOrderPackingMybatisDao.queryGoodsPackage(cartonQuery);
+        }else { //非冷链
+
+            docOrderPackingCarton = docOrderPackingMybatisDao.queryGoodsPackage(cartonQuery);
+        }
+        if (docOrderPackingCarton == null) {
+
+            DocOrderPackingQuery packingQuery = new DocOrderPackingQuery();
+            packingQuery.setOrderNo(actAllocationDetails.getOrderno());
+            DocOrderPacking docOrderPacking = docOrderPackingMybatisDao.queryCartonNoById(packingQuery);
+            return String.format("%s#%03d", actAllocationDetails.getOrderno(), docOrderPacking.getCartonNo());
+        }else {
+
+            return docOrderPackingCarton.getTraceid();
         }
     }
 
-    static String doubleTrans(double d) {
-        if (Math.round(d) - d == 0) {
-            return String.valueOf((long) d);
-        }
-        return String.valueOf(d);
-    }
+//    String getYesNo(String obj) {
+//        if (obj == null || obj.equals("0")) {
+//            return "否";
+//        } else {
+//            return "是";
+//        }
+//    }
+//
+//    static String doubleTrans(double d) {
+//        if (Math.round(d) - d == 0) {
+//            return String.valueOf((long) d);
+//        }
+//        return String.valueOf(d);
+//    }
 }
