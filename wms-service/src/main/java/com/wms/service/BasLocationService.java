@@ -126,6 +126,11 @@ public class BasLocationService extends BaseService {
         map.put("locationid", locationid);
         map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
         BasLocation basLocation = basLocationMybatisDao.queryById(locationQuery);
+
+        int num = basLocationMybatisDao.queryInvLotLocIdByList(locationid);
+        if(num!=0){
+            return  Json.error("无法删除，该库位下有库存");
+        }
         if (basLocation != null) {
             //TODO 判断存储过程修改
             //basLocationMybatisDao.basLocationCheck(map);

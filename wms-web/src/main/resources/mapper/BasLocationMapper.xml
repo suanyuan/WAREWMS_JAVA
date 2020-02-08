@@ -595,6 +595,13 @@ where 1=1
 	   {call SPBAS_Check('','Delete','BAS_LOCATION',#{locationid,mode=IN,jdbcType=VARCHAR},'','','','','','CN',#{userid,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})}
 </select>
 
+
+	<!-- 查询库存数 -->
+	<select id="queryInvLotLocIdByList" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from  inv_lot_loc_id
+        where locationid = #{locationid}
+    </select>
+
 	<select id="queryEmptyLocation" resultMap="BaseResultMap" parameterType="Object">
 		SELECT
 		<include refid="Base_Column_List"/>

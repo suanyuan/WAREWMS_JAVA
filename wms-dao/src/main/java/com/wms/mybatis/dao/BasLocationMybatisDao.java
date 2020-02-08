@@ -34,4 +34,9 @@ public interface BasLocationMybatisDao extends BaseDao {
 	 * 获取可推荐的库位，分页size固定为1,并且分页属性必传
 	 */
 	BasLocation queryEmptyLocation(MybatisCriteria mybatisCriteria);
+
+
+	//查库存
+	int queryInvLotLocIdByList(String locationid);//
+
 }
