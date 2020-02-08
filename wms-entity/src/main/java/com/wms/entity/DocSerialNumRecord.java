@@ -50,6 +50,15 @@ public class DocSerialNumRecord  implements Serializable {
 
     private String addTimeSetting;
 
+    private Integer seq;
+
+    public Integer getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Integer seq) {
+        this.seq = seq;
+    }
 
     public DocSerialNumRecord() {
     }

@@ -1,19 +1,18 @@
 package com.wms.service.importdata;
 
-import com.wms.entity.BasGtn;
-import com.wms.entity.ImportGTNData;
+import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
+import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.BasPackageService;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.ExcelUtil;
+import com.wms.utils.SfcUserLoginUtil;
 import com.wms.utils.exception.ExcelException;
 import com.wms.vo.BasGtnVO;
-import com.wms.vo.GspProductRegisterSpecsVO;
 import com.wms.vo.Json;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,12 +20,11 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-@Service("ImportBasGtnDataService")
-public class ImportBasGtnDataService {
+@Service("ImportSerialNumDataService")
+public class ImportSerialNumDataService {
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
@@ -44,14 +42,20 @@ public class ImportBasGtnDataService {
 	private BasGtnMybatisDao basGtnMybatisDao;
 	@Autowired
 	private BasPackageService basPackageService;
+
+//	@Autowired
+//	private DocAsnHeaderMybatisDao docAsnHeaderMybatisDao;
+//
+	@Autowired
+	private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
 	/**
-	 * 导入GTIN码
+	 * 导入序列号记录
 	 * @param excelFile
 	 * @return
 	 * @throws IOException 
 	 * @throws UnsupportedEncodingException 
 	 */
-	public Json importExcelData(MultipartFile excelFile) {
+	public Json importExcelData(MultipartFile excelFile,String asnno) {
 		Json json = new Json();
 		boolean isSuccess = false;
 		StringBuilder resultMsg = new StringBuilder();
@@ -62,15 +66,15 @@ public class ImportBasGtnDataService {
             in = excelFile.getInputStream();
 
             //获取sheetName名字
-            String sheetName = "GTN码";
+            String sheetName = "序列号记录";
             //excel的表头与文字对应，获取excel表头
             LinkedHashMap<String, String> map = getLeadInFiledPublicQuestionBank();
             //获取组合excel表头数组，防止重复用的
             String[] uniqueFields =new String[] { "序号" };
             //获取需要导入的具体的表
-            Class asn = new ImportGTNData().getClass();
+            Class asn = new ImportSerialNumData().getClass();
             //excel转化成的list集合
-            List<ImportGTNData> GTNList = null;
+            List<ImportSerialNumData> GTNList = null;
             try {
                 //调用excle共用类，转化成list
 				GTNList = ExcelUtil.excelToList(in, sheetName, asn, map, uniqueFields);
@@ -78,7 +82,7 @@ public class ImportBasGtnDataService {
                 e.printStackTrace();
             }
             //保存实体集合
-            List<BasGtnVO> importDataList = this.listToBean(GTNList, resultMsg);
+            List<DocSerialNumRecord> importDataList = this.listToBean(GTNList, resultMsg);
             if (true) {
 //				this.validateCustomer(importDataList, resultMsg);// 验证客户是否存在
 //				if (resultMsg.length() == 0) {
@@ -88,7 +92,7 @@ public class ImportBasGtnDataService {
 //						if (resultMsg.length() == 0) {
 //							this.validateLocation(importDataList, resultMsg);// 验证库位是否存在
 							if (true) {
-								this.saveBasGtn(importDataList, resultMsg);// 转成订单资料存入资料库
+								this.save(importDataList, resultMsg,asnno);// 转成订单资料存入资料库
 								isSuccess = true;
 							}
 //						}
@@ -118,10 +122,10 @@ public class ImportBasGtnDataService {
 //
 //		return importData;
 //	}
-	private List<BasGtnVO> listToBean(List<ImportGTNData> GTNList, StringBuilder resultMsg) {
+	private List<DocSerialNumRecord> listToBean(List<ImportSerialNumData> GTNList, StringBuilder resultMsg) {
 		StringBuilder rowResult = new StringBuilder();
-		List<BasGtnVO> importData = new ArrayList<BasGtnVO>();
-		BasGtnVO importDataVO =  null;
+		List<DocSerialNumRecord> importData = new ArrayList<DocSerialNumRecord>();
+		DocSerialNumRecord importDataVO =  null;
 //		List<DocAsnDetailVO> importDetailsDataVOList = new ArrayList<DocAsnDetailVO>();
 //		DocAsnDetailVO importDetailsDataVO = null;
 		String quantityData = null;
@@ -133,12 +137,12 @@ public class ImportBasGtnDataService {
 		format.setLenient(false);
 		formatRQ.setLenient(false);
 
-		for (ImportGTNData dataArray : GTNList) {
-			importDataVO = new BasGtnVO();
+		for (ImportSerialNumData dataArray : GTNList) {
+			importDataVO = new DocSerialNumRecord();
 			int arrayIndex = 0;
 			try {
 				importDataVO.setSeq(Integer.parseInt(dataArray.getSeq()));
-
+				System.out.println();
 				if (Integer.parseInt(dataArray.getSeq()) <= 0) {
 					throw new Exception();
 				}
@@ -147,34 +151,31 @@ public class ImportBasGtnDataService {
 			}
 
 
-
-
+			dataArray.getSku();
+			dataArray.getBatchNum();
+			dataArray.getSerialNum();
 
 			try {
-				importDataVO.setSku(dataArray.getSku());
-				BasGtn basGtn = basGtnMybatisDao.queryById(dataArray.getSku());
+				importDataVO.setBatchNum(dataArray.getBatchNum());
 
-				if(basGtn!=null){
-					basGtnMybatisDao.delete(dataArray.getSku());
-				}
-
-				if (StringUtils.isEmpty(dataArray.getSku())) {
+				if (StringUtils.isEmpty(dataArray.getBatchNum())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[产品代码]，未输入").append(" ");
+				rowResult.append("[批号]，未输入").append(" ");
 			}
 
 			try {
-				importDataVO.setGtncode(dataArray.getGtnCode());
-				if (StringUtils.isEmpty(dataArray.getGtnCode())) {
+				importDataVO.setSerialNum(dataArray.getSerialNum());
+
+				if (StringUtils.isEmpty(dataArray.getSerialNum())) {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				rowResult.append("[GTN码]，未输入").append(" ");
+				rowResult.append("[序列号]，未输入").append(" ");
 			}
 
-
+//			DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
 
 
 
@@ -202,8 +203,9 @@ public class ImportBasGtnDataService {
 	    // excel的表头与文字对应
 	    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 	    map.put("序号", "seq");
-	    map.put("产品代码", "sku");
-	    map.put("GTN码", "gtnCode");
+//	    map.put("产品代码", "sku");
+	    map.put("批号(必填)", "batchNum");
+		map.put("序列号(必填)", "serialNum");
 
 	    return map;
 	}
@@ -270,15 +272,27 @@ public class ImportBasGtnDataService {
 	}*/
 
 
-	private void saveBasGtn(List<BasGtnVO> importDataList, StringBuilder resultMsg) {
-		BasGtn basGtn = null;
-		for(BasGtnVO importDataVO : importDataList){
-			basGtn = new BasGtn();
-			BeanUtils.copyProperties(importDataVO, basGtn);
-				//赋值
+	private void save(List<DocSerialNumRecord> importDataList, StringBuilder resultMsg,String asnno) {
+		DocSerialNumRecord docSerialNumRecord = null;
 
+
+		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
+		for(DocSerialNumRecord importDataVO : importDataList){
+			docSerialNumRecord = new DocSerialNumRecord();
+			BeanUtils.copyProperties(importDataVO, docSerialNumRecord);
+			//赋值
+			docSerialNumRecord.setCustomerid(docAsnHeader.getCustomerid());
+			docSerialNumRecord.setCartonNo(1);
+			docSerialNumRecord.setSoreference(docAsnHeader.getAsnreference1());
+			docSerialNumRecord.setOrderNo(asnno);
+			docSerialNumRecord.setBatchNum(importDataVO.getBatchNum());
+			docSerialNumRecord.setSerialNum(importDataVO.getSerialNum());
+//			docSerialNumRecord.setAddtime();
+			docSerialNumRecord.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+			docSerialNumRecord.setUserdefine1("IN");
 				//保存订单主信息
-			basGtnMybatisDao.add(basGtn);
+
+			docSerialNumRecordMybatisDao.add(docSerialNumRecord);
 
 				resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
 			}

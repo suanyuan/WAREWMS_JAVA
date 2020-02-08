@@ -171,7 +171,27 @@ public class DocAsnHeaderController {
 	public void exportTemplate(HttpServletResponse response, String token) throws Exception {
 		docAsnHeaderService.exportTemplate(response, token);
 	}
-	
+
+
+	//保存序列号销退	导入
+	@Login
+	@RequestMapping(params = "importSerialNumExcelData")
+	@ResponseBody
+	public Json importSerialNumExcelData( MultipartHttpServletRequest mhsr,String asnno) throws Exception {
+		System.out.println(asnno);
+		return docAsnHeaderService.importSerialNumExcelData(mhsr,asnno);
+	}
+	//保存序列号销退 导入模板下载
+	@Login
+	@RequestMapping(params = "exportSerialNumTemplate", method = RequestMethod.POST)
+	public void exportSerialNumTemplate(HttpServletResponse response, String token) throws Exception {
+		docAsnHeaderService.exportSerialNumTemplate(response, token);
+	}
+
+
+
+
+
 	@Login
 	@RequestMapping(params = "getBtn")
 	@ResponseBody

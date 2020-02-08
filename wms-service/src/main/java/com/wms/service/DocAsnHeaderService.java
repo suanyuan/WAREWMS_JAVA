@@ -18,6 +18,7 @@ import com.wms.query.OrderDetailsForNormalQuery;
 import com.wms.result.AsnDetailResult;
 import com.wms.result.PdaResult;
 import com.wms.service.importdata.ImportAsnDataService;
+import com.wms.service.importdata.ImportSerialNumDataService;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.SfcUserLoginUtil;
@@ -81,6 +82,11 @@ public class DocAsnHeaderService extends BaseService {
     private SfcRoleMybatisDao sfcRoleMybatisDao;
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
+
+
+
+    @Autowired
+    private ImportSerialNumDataService importSerialNumDataService;
 
     public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
         EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
@@ -494,6 +500,51 @@ public class DocAsnHeaderService extends BaseService {
 //			log.error(ExceptionUtil.getExceptionMessage(e));
         }
     }
+
+
+    public Json importSerialNumExcelData(MultipartHttpServletRequest mhsr,String asnno) throws UnsupportedEncodingException, IOException, ConfigurationException, BarcodeException, SAXException {
+        Json json = null;
+        MultipartFile excelFile = mhsr.getFile("uploadData");
+        if (excelFile != null && excelFile.getSize() > 0) {
+            json = importSerialNumDataService.importExcelData(excelFile,asnno);
+        }
+        return json;
+    }
+
+    public void exportSerialNumTemplate(HttpServletResponse response, String token) {
+        try (OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
+            File file = new File(ResourceUtil.getImportRootPath("docSerialNumRecord_template.xls"));
+            response.reset();
+            Cookie cookie = new Cookie("downloadToken", token);
+            cookie.setMaxAge(60);
+            response.addCookie(cookie);
+            response.setContentType(ContentTypeEnum.stream.getContentType());
+            response.addHeader("Content-Disposition", "attachment;filename=" + new String(file.getName().getBytes()));
+            response.addHeader("Content-Length", "" + file.length());
+
+            try (InputStream fis = new BufferedInputStream(new FileInputStream(file))) {
+                byte[] buffer = new byte[fis.available()];
+                fis.read(buffer);
+                System.out.println();
+                toClient.write(buffer);
+                toClient.flush();
+            } catch (IOException ex) {
+//				log.error(ExceptionUtil.getExceptionMessage(ex));
+            }
+        } catch (Exception e) {
+//			log.error(ExceptionUtil.getExceptionMessage(e));
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 //	public void exportPdf(HttpServletResponse response, String orderList) {
 //		StringBuilder sb = new StringBuilder();

@@ -27,6 +27,9 @@ var ezuiImportDataForm;
 var nomergeReceivingDialog;
 var nomergeReceivingForm;
 var productDialog_docAsnHeader;
+
+var ezuiImportSerialNumDataDialog;
+var ezuiImportSerialNumDataForm;
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -34,7 +37,10 @@ $(function() {
 	ezuiDetailsForm = $('#ezuiDetailsForm').form();
 	ezuiImportDataForm=$('#ezuiImportDataForm').form();
 	nomergeReceivingForm=$('#nomergeReceivingForm').form();
-	ezuiDatagrid = $('#ezuiDatagrid').datagrid({
+
+    ezuiImportSerialNumDataForm=$('#ezuiImportSerialNumDataForm').form();
+
+    ezuiDatagrid = $('#ezuiDatagrid').datagrid({
 		url : '<c:url value="/docAsnHeaderController.do?showDatagrid"/>',
 		method:'POST',
 		toolbar : '#toolbar',
@@ -409,6 +415,18 @@ $(function() {
 
 		}
 	}).dialog('close');
+
+
+    //导入ezuiImportSerialNumDataDialog
+    ezuiImportSerialNumDataDialog = $('#ezuiImportSerialNumDataDialog').dialog({
+        modal : true,
+        title : '导入',
+        buttons : '#ezuiImportSerialNumDataDialogBtn',
+        onClose : function() {
+            ezuiFormClear(ezuiImportSerialNumDataForm);
+        }
+    }).dialog('close');
+    /* 控件初始化end */
 
 	//导入
 	ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
@@ -2187,6 +2205,97 @@ function printResultList(){
 		}
 	}
 }
+//保存销退序列号
+function keepSerialNum(){
+    var row = ezuiDatagrid.datagrid('getSelected');
+// console.log(row.asnno);
+    if(row==""||row==null){
+        $.messager.show({
+            msg: "请选择一条入库单",
+            title: "<spring:message code='common.message.prompt'/>"
+        });
+        return;
+    }
+
+    ezuiImportSerialNumDataDialog.dialog('open');
+
+}
+
+
+/* 导入 保存销退序列号start */
+var commitImportSerialNumData = function(obj){
+    var row = ezuiDatagrid.datagrid('getSelected');
+// console.log(row.asnno);
+    if(row==""||row==null){
+        $.messager.show({
+            msg: "请选择一条入库单",
+            title: "<spring:message code='common.message.prompt'/>"
+        });
+        return;
+    }
+  ezuiImportSerialNumDataForm.form('submit', {
+        url :  "/docAsnHeaderController.do?importSerialNumExcelData&asnno="+row.asnno,
+        onSubmit : function(){
+            if(ezuiImportSerialNumDataForm.form('validate')){
+                $.messager.progress({
+                    text : '<spring:message code="common.message.data.processing"/>', interval : 100
+                });
+                return true;
+            }else{
+                return false;
+            }
+        },
+        success : function(data) {
+            var msg='';
+            try {
+                var result = $.parseJSON(data);
+                if(result.success){
+                    msg = result.msg.replace(/ /g, '\n');
+                    ezuiDatagrid.datagrid('reload');
+                }else{
+                    msg = result.msg.replace(/ /g, '\n');
+                }
+            } catch (e) {
+                msg = '<font color="red">' + JSON.stringify(data).split('description')[1].split('</u>')[0].split('<u>')[1] + '</font>';
+                msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+            } finally {
+                ezuiFormClear(ezuiImportSerialNumDataForm);
+                $('#importSerialNumResult').textbox('setValue',msg);
+                $.messager.progress('close');
+            }
+        }
+    });
+};
+
+/* 下载  保存销退序列号 导入模板 */
+var downloadSerialNumTemplate = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_downloadSerialNumTemplate').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+
+        var formId = ajaxDownloadFile(sy.bp()+"/docAsnHeaderController.do?exportSerialNumTemplate", param);
+        downloadCheckTimer = window.setInterval(function () {
+            var list = new cookieList('downloadToken');
+            if (list.items() == token){
+                window.clearInterval(downloadCheckTimer);
+                list.clear();
+                $('#'+formId).remove();
+                $('#ezuiBtn_downloadSerialNumTemplate').linkbutton('enable');
+                $.messager.show({
+                    msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+                });
+            };
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    };
+};
+/* 导入end */
+
 
 
 </script>
@@ -2281,6 +2390,7 @@ function printResultList(){
 					<a onclick='nomergeReceiving();' id='ezuiBtn_noreceiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>取消收货</a>
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>
                     <a onclick='closeCheck();' id='ezuiBtn_close' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>关闭订单</a>
+
 					<div style="float: right">
 						<a class='easyui-linkbutton' data-options='plain:true'>已选择</a><a id="nummm" class='easyui-linkbutton' data-options='plain:true'>0</a><a class='easyui-linkbutton' data-options='plain:true'>条</a>
 					</div>
@@ -2288,6 +2398,8 @@ function printResultList(){
 				<div>
 					<a onclick='printTaskList();' id='ezuiBtn_taskList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货任务清单</a>
                     <a onclick='printResultList();' id='ezuiBtn_resultList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货记录</a>
+					<a onclick='keepSerialNum();' id='ezuiBtn_keepSerialNum' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>保存销退序列号</a>
+
 				</div>
 			</div>
 			<table id='ezuiDatagrid'></table>
@@ -2333,6 +2445,30 @@ function printResultList(){
 	<div id='ezuiImportDataDialogBtn'>
 		<a onclick='commitImportData();' id='ezuiBtn_importDataCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
 		<a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+	</div>
+
+
+	<!-- 导入入库销退序列号start -->
+	<div id='ezuiImportSerialNumDataDialog' class='easyui-dialog' style='padding: 10px;'>
+		<form id='ezuiImportSerialNumDataForm' method='post' enctype='multipart/form-data'>
+			<table>
+				<tr>
+					<th>档案</th>
+					<td>
+						<input type="text" id="uploadSerialNumData" name="uploadData" class="easyui-filebox" size="36" data-options="buttonText:'选择',validType:['filenameExtension[\'xls\']']"/>
+						<a onclick='downloadSerialNumTemplate();' id='ezuiBtn_downloadSerialNumTemplate' class='easyui-linkbutton' href='javascript:void(0);'>下载档案模版</a>
+					</td>
+				</tr>
+				<tr>
+					<th>执行结果</th>
+					<td><input id='importSerialNumResult' class="easyui-textbox" size='100' style="height:150px" data-options="editable:false,multiline:true"/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id='ezuiImportSerialNumDataDialogBtn'>
+		<a onclick='commitImportSerialNumData();' id='ezuiBtn_importSerialNumDataCommit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+		<a onclick='ezuiDialogClose("#ezuiImportSerialNumDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 	</div>
 
 	<!--引用出库 -->
