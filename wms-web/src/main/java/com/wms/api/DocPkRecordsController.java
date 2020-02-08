@@ -1,4 +1,4 @@
-package com.wms.controller;
+package com.wms.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

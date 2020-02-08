@@ -7,6 +7,7 @@ import java.util.Map;
 import com.wms.entity.*;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
+import com.wms.query.ActAllocationDetailsQuery;
 import com.wms.query.BasSkuQuery;
 import com.wms.result.PdaResult;
 import com.wms.vo.OrderHeaderForNormalVO;
@@ -37,6 +38,12 @@ public class DocPkRecordsService extends BaseService {
 
 	@Autowired
 	private BasPackageMybatisDao basPackageMybatisDao;
+
+    @Autowired
+    private DocOrderPackingService docOrderPackingService;
+
+	@Autowired
+	private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
 
 	@Autowired
 	private BasSkuMybatisDao basSkuMybatisDao;
@@ -95,16 +102,27 @@ public class DocPkRecordsService extends BaseService {
 	public PdaResult singlePkCommit(DocPkRecordsForm form) {
 		int packQty = 1;//单次提交，件数为1
 
-//		Json statusJson = orderStatusCheck(form.getOrderno());
-//		if (!statusJson.isSuccess()) {
-//			return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
-//		}
-//		DocOrderPackingCarton packingCartonQuery = new DocOrderPackingCarton();
+		Json statusJson = docOrderPackingService.orderStatusCheck(form.getOrderno());
+		if (!statusJson.isSuccess()) {
+			return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
+		}
+
+		ActAllocationDetailsQuery allocationQuery = new ActAllocationDetailsQuery();
 		DocPkRecords docPkRecordsQuery = new DocPkRecords();
 		docPkRecordsQuery.setOrderno(form.getOrderno());
 		docPkRecordsQuery.setAllocationdetailsid(form.getAllocationdetailsid());
 
+		//分配明细
+		allocationQuery.setAllocationdetailsid(form.getAllocationdetailsid());
+		ActAllocationDetails matchDetails = actAllocationDetailsMybatisDao.queryById(allocationQuery);
 
+		//分配明细中装箱的件数
+		docPkRecordsQuery.setOrderno(form.getOrderno());
+		docPkRecordsQuery.setAllocationdetailsid(form.getAllocationdetailsid());
+		int packedNum = docPkRecordsMybatisDao.queryPackedNum(docPkRecordsQuery);
+		if (matchDetails.getQty() < (packQty + packedNum)) {
+			return new PdaResult(PdaResult.CODE_FAILURE, "当前提交数超出分配数");
+		}
 
 		//批次获取
 		InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(form.getLotnum());
@@ -113,9 +131,23 @@ public class DocPkRecordsService extends BaseService {
 		skuQuery.setCustomerid(form.getCustomerid());
 		skuQuery.setSku(invLotAtt.getSku());
 		BasSku sku = basSkuMybatisDao.queryById(skuQuery);
+		if(sku==null){
+            return new PdaResult(PdaResult.CODE_FAILURE, "查无此产品档案");
+        }
 		BasPackage p = basPackageMybatisDao.queryById(sku.getPackid());
+		if(p==null){
+            return new PdaResult(PdaResult.CODE_FAILURE, "查无此产品包装规格");
+        }
+
+
+
 		try {
 
+			//本次装箱件数+分配明细对应的已装箱件数 == 分配明细件数
+			if (matchDetails.getQty() == (packQty + packedNum)) {
+				allocationQuery.setEditwho(form.getEditwho());
+				actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
+			}
 //			DocPkRecords packingCartonInfo = docPkRecordsMybatisDao.queryPackingCartonInfo(form.getOrderno(), form.getTraceid());
 //			if (packingCartonInfo == null) {
 //
@@ -145,7 +177,7 @@ public class DocPkRecordsService extends BaseService {
 				docPkRecordsInsert.setPickedqty(packQty/p.getQty1().intValue());
 
 				docPkRecordsInsert.setPickedqtyEach(packQty);
-
+                docPkRecordsInsert.setLocationid(form.getLocationid());
 				docPkRecordsInsert.setLotnum(form.getLotnum());
 				docPkRecordsInsert.setAllocationdetailsid(form.getAllocationdetailsid());
 //				packingCartonInsert.setDescription(form.getDescription());

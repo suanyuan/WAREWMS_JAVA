@@ -26,4 +26,13 @@ public interface DocPkRecordsMybatisDao extends BaseDao {
      */
     int getMaxPacklineno(@Param("orderno") String orderno);
 
+
+    /**
+     * 获取分配明细中已装箱数
+     * @param docPkRecords ~
+     * @return ~
+     */
+    int queryPackedNum(DocPkRecords docPkRecords);
+
+
 }
