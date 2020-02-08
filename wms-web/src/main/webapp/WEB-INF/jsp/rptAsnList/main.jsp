@@ -114,7 +114,7 @@ var doSearch = function(){
 		supplierid:$('#supplierId').val(),
 		notes:$('#notes').val(),
 		warehouseid:$('#warehouseId').combobox('getValue'),
-
+		skuGroup1:$('#skugroup1').val(),
 		productId:$('#productId').val(),
 		userdefine2:$('#pano').val()//上架单号
 /*		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
@@ -231,12 +231,14 @@ var doExport = function(){
 							<th>至</th><td><input type='text' id='edisendtime5' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>创建人</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
+							<th>产品线</th><td><input type='text' id='skugroup1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th colspan="2">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
 							</th>
-
 						</tr>
 					</table>
 <%--					<table style="text-align: right">--%>

@@ -148,7 +148,15 @@ public class DocAsnHeaderQuery implements IQuery {
 	private Set<SfcCustomer> customerSet;
 
 	private String token;
+	private String skuGroup1;//产品线
 
+	public String getSkuGroup1() {
+		return skuGroup1;
+	}
+
+	public void setSkuGroup1(String skuGroup1) {
+		this.skuGroup1 = skuGroup1;
+	}
 	public String getToken() {
 		return token;
 	}
