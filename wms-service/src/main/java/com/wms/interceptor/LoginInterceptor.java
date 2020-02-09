@@ -61,7 +61,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                     SfcUserLogin dbUserLogin = sfcUserLoginMybatisDao.queryById(sfcUserLoginQuery);
                     if (dbUserLogin.getEnable().intValue() == 0 || !dbUserLogin.getSessionId().equals(session.getId())) {
                         if (dbUserLogin.getEnable().intValue() == 0) {
-                            request.setAttribute("msg", "帐号已被停止只使用！");
+                            request.setAttribute("msg", "帐号已被停止使用！");
                         } else {
                             request.setAttribute("msg", "帐号已在其他地方登入！");
                         }
@@ -115,7 +115,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             sb.append(RandomUtil.getUUID());
             logger.error(sb.toString());
             sb.setLength(0);
-            sb.append("执行類別：")
+            sb.append("执行类别：")
                     .append(handlerMethod.getBeanType().getName())
                     .append("，执行方法：")
                     .append(handlerMethod.getMethod().getName());

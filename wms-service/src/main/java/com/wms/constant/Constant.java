@@ -118,6 +118,21 @@ public class Constant {
     public static final String CODE_CATALOG_CHECKSTATE_PASS = "40"; //(已通过)
     public static final String CODE_CATALOG_CHECKSTATE_FAIL = "50"; //(未通过)
 
+    //出库单状态
+    public static final String CODE_SO_STS_CREATED = "00";//创建订单
+    public static final String CODE_SO_STS_PART_ALLOCATED = "30";//部分分配
+    public static final String CODE_SO_STS_ALLOCATED = "40";//分配完成
+    public static final String CODE_SO_STS_PART_PICKED = "50";//部分拣货
+    public static final String CODE_SO_STS_PICKED = "60";//完全拣货
+    public static final String CODE_SO_STS_PART_PACKED = "62";//部分复核
+    public static final String CODE_SO_STS_PACKED = "63";//完全复核
+    public static final String CODE_SO_STS_PART_SHIPPED = "70";//部分发运
+    public static final String CODE_SO_STS_SHIPPED = "80";//完全发运
+    public static final String CODE_SO_STS_CANCEL = "90";//订单取消
+    public static final String CODE_SO_STS_HOLD = "98";//等待释放
+    public static final String CODE_SO_STS_CLOSED = "99";//订单完成
+
+
     //jasper导出格式
     public static final String JASPER_CSV = "csv";
     public static final String JASPER_HTML = "html";

@@ -31,7 +31,7 @@ public interface InvLotAttMybatisDao extends BaseDao {
 	 */
 	List<InvLotAtt> queryAll();
 
-	InvLotAtt queryByLotnum(InvLotAttQuery query);
+//	InvLotAtt queryByLotnum(InvLotAttQuery query);
 
 
 	/**

@@ -1,7 +1,7 @@
 package com.wms.mybatis.dao;
 
-
 import com.wms.entity.DocPkRecords;
+import com.wms.query.DocPkRecordsQuery;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -11,28 +11,21 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface DocPkRecordsMybatisDao extends BaseDao {
 
-    DocPkRecords queryAvailablePackedDetail(DocPkRecords docPkRecords);
-
-
-
-    int updateDocPkRecords(DocPkRecords docPkRecords);
-
-
+    /**
+     * 获取拣货的记录
+     * 拣货记录和分配记录是一一对应的
+     */
+    DocPkRecords queryPickedRecord(DocPkRecordsQuery docPkRecords);
 
     /**
-     * 获取包装明细中最大的行号
-     * @param orderno ~
-     * @return ~
+     * 拣货完成之后更新分配明细
      */
-    int getMaxPacklineno(@Param("orderno") String orderno);
-
+    int updatePickedQty(DocPkRecords docPkRecords);
 
     /**
-     * 获取分配明细中已装箱数
-     * @param docPkRecords ~
-     * @return ~
+     * 获取拣货明细中最大的行号
      */
-    int queryPackedNum(DocPkRecords docPkRecords);
+    int getMaxPklineno(@Param("orderno") String orderno);
 
 
 }

@@ -1,29 +1,32 @@
 package com.wms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.query.ActAllocationDetailsQuery;
-import com.wms.query.BasSkuQuery;
+import com.wms.query.DocPkRecordsQuery;
+import com.wms.query.OrderHeaderForNormalQuery;
+import com.wms.query.pda.PdaDocPkQuery;
 import com.wms.result.PdaResult;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.BeanUtils;
+import com.wms.vo.Json;
 import com.wms.vo.OrderHeaderForNormalVO;
 import com.wms.vo.form.pda.PageForm;
-import org.springframework.beans.BeanUtils;
+import com.wms.vo.form.pda.ScanResultForm;
+import com.wms.vo.pda.CommonVO;
+import com.wms.vo.pda.PdaActAllocationDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wms.dao.DocPkRecordsDao;
-import com.wms.vo.DocPkRecordsVO;
-import com.wms.vo.Json;
-import com.wms.easyui.EasyuiCombobox;
-import com.wms.easyui.EasyuiDatagrid;
-import com.wms.easyui.EasyuiDatagridPager;
-import com.wms.vo.form.DocPkRecordsForm;
-import com.wms.query.DocPkRecordsQuery;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service("docPkRecordsService")
 public class DocPkRecordsService extends BaseService {
@@ -32,48 +35,20 @@ public class DocPkRecordsService extends BaseService {
 	private DocPkRecordsMybatisDao docPkRecordsMybatisDao;
 	@Autowired
 	private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
-
+	@Autowired
+	private CommonService commonService;
+	@Autowired
+	private BasPackageMybatisDao basPackageMybatisDao;
+	@Autowired
+	private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
 	@Autowired
 	private InvLotAttMybatisDao invLotAttMybatisDao;
 
-	@Autowired
-	private BasPackageMybatisDao basPackageMybatisDao;
-
-    @Autowired
-    private DocOrderPackingService docOrderPackingService;
-
-	@Autowired
-	private ActAllocationDetailsMybatisDao actAllocationDetailsMybatisDao;
-
-	@Autowired
-	private BasSkuMybatisDao basSkuMybatisDao;
-	public EasyuiDatagrid<DocPkRecordsVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPkRecordsQuery query) {
-		EasyuiDatagrid<DocPkRecordsVO> datagrid = new EasyuiDatagrid<DocPkRecordsVO>();
-
-		MybatisCriteria criteria = new MybatisCriteria();
-		criteria.setCondition(query);
-		criteria.setCurrentPage(pager.getPage());
-		criteria.setPageSize(pager.getRows());
-
-		List<DocPkRecords> docPkRecordsList = docPkRecordsMybatisDao.queryByList(criteria);
-		DocPkRecordsVO docPkRecordsVO = null;
-		List<DocPkRecordsVO> docPkRecordsVOList = new ArrayList<DocPkRecordsVO>();
-		for (DocPkRecords docPkRecords : docPkRecordsList) {
-			docPkRecordsVO = new DocPkRecordsVO();
-			BeanUtils.copyProperties(docPkRecords, docPkRecordsVO);
-			docPkRecordsVOList.add(docPkRecordsVO);
-		}
-		datagrid.setTotal((long)docPkRecordsMybatisDao.queryByCount(criteria));
-		datagrid.setRows(docPkRecordsVOList);
-		return datagrid;
-	}
-
-
 	public List<OrderHeaderForNormalVO> getUndoneList(PageForm form) {
+
 		List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryPackageList(form.getStart(), form.getPageSize());
 		OrderHeaderForNormalVO orderHeaderForNormalVO;
 		List<OrderHeaderForNormalVO> orderHeaderForNormalVOS = new ArrayList<>();
-		System.out.println();
 		for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormals) {
 
 			orderHeaderForNormalVO = new OrderHeaderForNormalVO();
@@ -84,180 +59,188 @@ public class DocPkRecordsService extends BaseService {
 		return orderHeaderForNormalVOS;
 	}
 
+	/**
+	 * 获取出库单中需要拣货的列表
+	 */
+	public List<PdaActAllocationDetailVO> pickingLocations(PageForm form, String orderno) {
 
+		List<PdaActAllocationDetailVO> voList = new ArrayList<>();
+		PdaActAllocationDetailVO detailsVO;
 
-	public Json selectDocPKRecord(DocPkRecordsQuery DocPkRecordsQuery) throws Exception {
-		Json json = new Json();
-		DocPkRecords docPkRecords = new DocPkRecords();
-//		BeanUtils.copyProperties(docPkRecordsForm, docPkRecords);
-		docPkRecordsMybatisDao.queryById(docPkRecords);
-		json.setSuccess(true);
-		return json;
+		ActAllocationDetailsQuery allocationDetailsQuery = new ActAllocationDetailsQuery();
+		allocationDetailsQuery.setOrderno(orderno);
+
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCurrentPage(form.getPageNum());
+		mybatisCriteria.setPageSize(form.getPageSize());
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(allocationDetailsQuery));
+		mybatisCriteria.setOrderByClause("printflag asc, location asc");
+
+		List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+		for (ActAllocationDetails details : actAllocationDetailsList) {
+
+			detailsVO = new PdaActAllocationDetailVO();
+			BeanUtils.copyProperties(details, detailsVO);
+
+			InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(details.getLotnum());
+			detailsVO.setInvLotAtt(invLotAtt);
+
+			DocPkRecordsQuery docPkRecordsQuery = new DocPkRecordsQuery(details.getOrderno(), details.getAllocationdetailsid());
+			DocPkRecords docPkRecords = docPkRecordsMybatisDao.queryPickedRecord(docPkRecordsQuery);
+			detailsVO.setDocPkRecords(docPkRecords);
+
+			voList.add(
+					JSONObject.parseObject(
+							JSON.toJSONString(detailsVO, SerializerFeature.DisableCircularReferenceDetect),
+							PdaActAllocationDetailVO.class
+					)
+			);
+		}
+		return voList;
+	}
+
+	/**
+	 * 当前模块出库单操作订单状态判断
+	 */
+	private Json orderStatusCheck(String orderNo) {
+		OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+		orderHeaderForNormalQuery.setOrderno(orderNo);
+		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+		return orderObjCheck(orderHeaderForNormal);
+	}
+
+	//Check Order Status
+	private Json orderObjCheck(OrderHeaderForNormal orderHeaderForNormal) {
+
+		if(orderHeaderForNormal != null){
+
+			if (orderHeaderForNormal.getReleasestatus().equals("H")) {
+				return Json.error("当前订单已冻结");
+			} else if (orderHeaderForNormal.getReleasestatus().equals("N")) {
+				return Json.error("当前订单未释放");
+			}
+
+			switch (orderHeaderForNormal.getSostatus()) {
+//				case Constant.CODE_SO_STS_PART_ALLOCATED:
+				case Constant.CODE_SO_STS_ALLOCATED:
+				case Constant.CODE_SO_STS_PART_PICKED:
+					return Json.success("000");
+				case Constant.CODE_SO_STS_PICKED:
+					return Json.error("当前订单已完成拣货操作！");
+				default:
+					return Json.error("当前状态订单不允许进行拣货操作！");
+			}
+		} else {
+
+			return Json.error("查无此出库单号！");
+		}
 	}
 
 
 	/**
-	 * 拣货提交
+	 * 拣货提交，单次提交一件
 	 */
-	public PdaResult singlePkCommit(DocPkRecordsForm form) {
-		int packQty = 1;//单次提交，件数为1
-
-		Json statusJson = docOrderPackingService.orderStatusCheck(form.getOrderno());
-		if (!statusJson.isSuccess()) {
-			return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
-		}
-
-		ActAllocationDetailsQuery allocationQuery = new ActAllocationDetailsQuery();
-		DocPkRecords docPkRecordsQuery = new DocPkRecords();
-		docPkRecordsQuery.setOrderno(form.getOrderno());
-		docPkRecordsQuery.setAllocationdetailsid(form.getAllocationdetailsid());
-
-		//分配明细
-		allocationQuery.setAllocationdetailsid(form.getAllocationdetailsid());
-		ActAllocationDetails matchDetails = actAllocationDetailsMybatisDao.queryById(allocationQuery);
-
-		//分配明细中装箱的件数
-		docPkRecordsQuery.setOrderno(form.getOrderno());
-		docPkRecordsQuery.setAllocationdetailsid(form.getAllocationdetailsid());
-		int packedNum = docPkRecordsMybatisDao.queryPackedNum(docPkRecordsQuery);
-		if (matchDetails.getQty() < (packQty + packedNum)) {
-			return new PdaResult(PdaResult.CODE_FAILURE, "当前提交数超出分配数");
-		}
-
-		//批次获取
-		InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(form.getLotnum());
-//		Map<String, Object> map = new Map<String, Object>();
-		BasSkuQuery skuQuery = new BasSkuQuery();
-		skuQuery.setCustomerid(form.getCustomerid());
-		skuQuery.setSku(invLotAtt.getSku());
-		BasSku sku = basSkuMybatisDao.queryById(skuQuery);
-		if(sku==null){
-            return new PdaResult(PdaResult.CODE_FAILURE, "查无此产品档案");
-        }
-		BasPackage p = basPackageMybatisDao.queryById(sku.getPackid());
-		if(p==null){
-            return new PdaResult(PdaResult.CODE_FAILURE, "查无此产品包装规格");
-        }
-
-
+	public PdaResult singlePkCommit(PdaDocPkQuery query) {
 
 		try {
 
-			//本次装箱件数+分配明细对应的已装箱件数 == 分配明细件数
-			if (matchDetails.getQty() == (packQty + packedNum)) {
-				allocationQuery.setEditwho(form.getEditwho());
-				actAllocationDetailsMybatisDao.finishPacking(allocationQuery);
-			}
-//			DocPkRecords packingCartonInfo = docPkRecordsMybatisDao.queryPackingCartonInfo(form.getOrderno(), form.getTraceid());
-//			if (packingCartonInfo == null) {
-//
-//				DocOrderPackingCartonInfo docOrderPackingCartonInfo = new DocOrderPackingCartonInfo();
-//				BeanUtils.copyProperties(form, docOrderPackingCartonInfo);
-//				docOrderPackingCartonInfo.setCartonno(Integer.valueOf(form.getTraceid().split("#")[1]));
-//				docOrderPackingCartonInfo.setAddwho(form.getEditwho());
-//				docOrderPackingMybatisDao.packingCartonInfoInsert(docOrderPackingCartonInfo);
-//			}
+			int pickQty = 1;//单次提交，件数为1
+			BasSku basSku;
+			DocPkRecords docPkRecords;
+			ActAllocationDetails actAllocationDetails;
 
-//			docPkRecordsQuery.setTraceid(form.getTraceid());
-			docPkRecordsQuery.setSku(form.getSku());
-			docPkRecordsQuery.setLotnum(form.getLotnum());
-			DocPkRecords docPkRecords = docPkRecordsMybatisDao.queryAvailablePackedDetail(docPkRecordsQuery);
-			if (docPkRecords == null) {
-
-				DocPkRecords docPkRecordsInsert = new DocPkRecords();
-				BeanUtils.copyProperties(invLotAtt, docPkRecordsInsert);
-				int maxlineno = docPkRecordsMybatisDao.getMaxPacklineno(form.getOrderno());
-				docPkRecordsInsert.setPklineno(maxlineno + 1);
-				docPkRecordsInsert.setOrderno(form.getOrderno());
-//				docPkRecordsInsert.setTraceid(form.getTraceid());
-//				docPkRecordsInsert.setCartonno(Integer.valueOf(form.getTraceid().split("#")[1]));
-				docPkRecordsInsert.setCustomerid(form.getCustomerid());
-				docPkRecordsInsert.setSku(form.getSku());
-				docPkRecordsInsert.setSkudesce(form.getSkudesce());
-				docPkRecordsInsert.setPickedqty(packQty/p.getQty1().intValue());
-
-				docPkRecordsInsert.setPickedqtyEach(packQty);
-                docPkRecordsInsert.setLocationid(form.getLocationid());
-				docPkRecordsInsert.setLotnum(form.getLotnum());
-				docPkRecordsInsert.setAllocationdetailsid(form.getAllocationdetailsid());
-//				packingCartonInsert.setDescription(form.getDescription());
-//				packingCartonInsert.setConclusion(form.getConclusion());
-				docPkRecordsInsert.setAddwho(form.getEditwho());
-				docPkRecordsInsert.setEditwho(form.getEditwho());
-				docPkRecordsMybatisDao.add(docPkRecordsInsert);
-			}else {
-
-
-				docPkRecords.setPickedqtyEach(docPkRecords.getPickedqty() + packQty);
-				docPkRecords.setPickedqty((docPkRecords.getPickedqty() + packQty)/p.getQty1().intValue());
-
-				docPkRecords.setEditwho(form.getEditwho());
-				docPkRecordsMybatisDao.updateDocPkRecords(docPkRecords);
-				//这边的packingCartonInfo的pickflag肯定是0，在上yigefangfa获取的时候已经作了处理
-//				packingCarton.setQty(packingCarton.getQty() + form.getQty());
-//				packingCarton.setEditwho(form.getEditwho());
-//				docOrderPackingMybatisDao.updatePackingCarton(packingCarton);
+			//订单状态校验
+			Json statusJson = orderStatusCheck(query.getOrderno());
+			if (!statusJson.isSuccess()) {
+				return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
 			}
 
-		}catch (Exception e) {
-			e.printStackTrace();
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//回滚事务
+		/*
+        1，处理BasSku获取问题，并且返回准确的批号、序列号匹配条件
+         */
+			ScanResultForm scanResultForm = new ScanResultForm();
+			//customerid, GTIN, lotatt04, lotatt05, otherCode
+			BeanUtils.copyProperties(query, scanResultForm);
+			CommonVO commonVO = commonService.adjustScanResult(scanResultForm);
 
-			return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "拣货失败(系统错误:" + e.getMessage() + ")");
-		}
-		return new PdaResult(PdaResult.CODE_SUCCESS, "拣货成功");
-	}
+			if (commonVO.isSuccess()) query.setSku(commonVO.getBasSku().getSku());
+			query.setLotatt04(commonVO.getBatchNum());
+			query.setLotatt05(commonVO.isSerialManagement() ? "" : commonVO.getSerialNum());
 
+		/*
+         2,判断获取的拣货扫码数据是否齐全，获取分配明细 + 产品档案
+         如果查询不到分配明细，要么就是扫错货了，要么就是拣货完成了
+         */
+			Json scanJson = commonService.matchPkDetails(query);
+			if (!scanJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg());
 
+			actAllocationDetails = (ActAllocationDetails) scanJson.getObj();
 
+			Json skuJson = commonService.fixBasSku(actAllocationDetails.getCustomerid(), actAllocationDetails.getSku());
+			if (!skuJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, skuJson.getMsg());
 
+			basSku = (BasSku) skuJson.getObj();
+			BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
+			if (null == basPackage) return new PdaResult(PdaResult.CODE_FAILURE, "查无此产品包装规格数据");
 
-	public Json addDocPkRecords(DocPkRecordsForm docPkRecordsForm) throws Exception {
-		Json json = new Json();
-		DocPkRecords docPkRecords = new DocPkRecords();
-		BeanUtils.copyProperties(docPkRecordsForm, docPkRecords);
-		docPkRecordsMybatisDao.add(docPkRecords);
-		json.setSuccess(true);
-		return json;
-	}
+		/*
+		 3,获取拣货记录明细（可能存在未创建的情况）
+		 */
+			DocPkRecordsQuery pkRecordsQuery = new DocPkRecordsQuery(actAllocationDetails.getOrderno(), actAllocationDetails.getAllocationdetailsid());
+			docPkRecords = docPkRecordsMybatisDao.queryPickedRecord(pkRecordsQuery);
+			if (null == docPkRecords) {
 
-	public Json editDocPkRecords(DocPkRecordsForm docPkRecordsForm) {
-		Json json = new Json();
-//		DocPkRecords docPkRecords = docPkRecordsMybatisDao.queryByList(docPkRecordsForm.getAllocationdetailsid());
-//		BeanUtils.copyProperties(docPkRecordsForm, docPkRecords);
-		docPkRecordsMybatisDao.updateBySelective(docPkRecordsForm);
-		json.setSuccess(true);
-		return json;
-	}
+				int maxPklineno = docPkRecordsMybatisDao.getMaxPklineno(actAllocationDetails.getOrderno());
+				docPkRecords = new DocPkRecords(actAllocationDetails, basSku, maxPklineno, basPackage, pickQty);
+				docPkRecords.setAddwho(query.getEditwho());
+				docPkRecordsMybatisDao.add(docPkRecords);
+			} else {
 
-	public Json deleteDocPkRecords(String id) {
-		Json json = new Json();
-		DocPkRecords docPkRecords = docPkRecordsMybatisDao.queryById(id);
-		if(docPkRecords != null){
-			docPkRecordsMybatisDao.delete(docPkRecords);
-		}
-		json.setSuccess(true);
-		return json;
-	}
-
-
-
-
-	public List<EasyuiCombobox> getDocPkRecordsCombobox() {
-		List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
-		EasyuiCombobox combobox = null;
-		MybatisCriteria criteria = new MybatisCriteria();
-
-		List<DocPkRecords> docPkRecordsList = docPkRecordsMybatisDao.queryByList(criteria);
-		if(docPkRecordsList != null && docPkRecordsList.size() > 0){
-			for(DocPkRecords docPkRecords : docPkRecordsList){
-				combobox = new EasyuiCombobox();
-				combobox.setId(String.valueOf(docPkRecords.getAllocationdetailsid()));
-				combobox.setValue(docPkRecords.getOrderno());
-				comboboxList.add(combobox);
+				docPkRecords.setPickedqty(docPkRecords.getPickedqty() + pickQty);
+				docPkRecords.setPickedqtyEach(docPkRecords.getPickedqtyEach() + pickQty * basPackage.getQty1().intValue());
+				docPkRecords.setEditwho(query.getEditwho());
+				docPkRecordsMybatisDao.updatePickedQty(docPkRecords);
 			}
+
+		/*
+		 4,判断当前分配明细是否拣货完成
+		 */
+			if (docPkRecords.getPickedqty() == actAllocationDetails.getQty()) {
+
+				//分配明细结束拣货
+				ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery();
+				actAllocationDetailsQuery.setEditwho(query.getEditwho());
+				actAllocationDetailsQuery.setAllocationdetailsid(actAllocationDetails.getAllocationdetailsid());
+				actAllocationDetailsMybatisDao.finishPicking(actAllocationDetailsQuery);
+			}
+		} catch (Exception e) {
+
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return new PdaResult(PdaResult.CODE_FAILURE, "系统错误，" + e.toString());
 		}
-		return comboboxList;
+		return new PdaResult(PdaResult.CODE_SUCCESS, "提交成功");
 	}
 
+	/**
+	 * 结束拣货
+	 */
+	public PdaResult endPicking(PdaDocPkQuery query) {
+
+		ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery();
+		actAllocationDetailsQuery.setOrderno(query.getOrderno());
+		actAllocationDetailsQuery.setPrintflag("0");
+		MybatisCriteria mybatisCriteria = new MybatisCriteria();
+		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(actAllocationDetailsQuery));
+
+		List<ActAllocationDetails> undoneList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+		if (undoneList.size() > 0) return new PdaResult(PdaResult.CODE_FAILURE, "拣货任务尚未完成，请查看拣货任务列表");
+
+		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query.getOrderno());
+		orderHeaderForNormal.setSostatus(Constant.CODE_SO_STS_PICKED);
+		orderHeaderForNormal.setEditwho(query.getEditwho());
+		orderHeaderForNormal.setEdittime(new Date());
+		orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
+
+		return new PdaResult(PdaResult.CODE_SUCCESS, "提交成功");
+	}
 }

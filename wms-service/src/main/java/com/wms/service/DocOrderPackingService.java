@@ -115,48 +115,28 @@ public class DocOrderPackingService extends BaseService {
 	}
 
 	private Json orderObjCheck(OrderHeaderForNormal orderHeaderForNormal) {
-        Json json = new Json();
+
         if(orderHeaderForNormal != null){
 
-            /*
-             * H - 订单冻结
-             * N - 订单未释放
-             * R - 订单任务下发
-             * Y - 订单释放
-             */
-            switch (orderHeaderForNormal.getReleasestatus()) {
-                case "H":
-                    json.setSuccess(false);
-                    json.setMsg("当前订单已冻结");
-                    return json;
-                case "N":
-                    json.setSuccess(false);
-                    json.setMsg("当前订单未释放");
-                    return json;
-                    default:
-                        break;
-            }
+            //H - 订单冻结 N - 订单未释放 R - 订单任务下发 Y - 订单释放
+            if (orderHeaderForNormal.getReleasestatus().equals("H")) {
+				return Json.error("当前订单已冻结");
+			} else if (orderHeaderForNormal.getReleasestatus().equals("N")) {
+            	return Json.error("当前订单未释放");
+			}
 
             switch (orderHeaderForNormal.getSostatus()) {
-                case "30":
-                case "40":
-                case "50":
-                    json.setSuccess(true);
-                    json.setMsg("000");
-                    return json;
-                case "60":
-                    json.setSuccess(false);
-                    json.setMsg("当前订单已完成装箱操作！");
-                    return json;
+                case Constant.CODE_SO_STS_PICKED:
+                case Constant.CODE_SO_STS_PART_PACKED:
+                    return Json.success("000");
+                case Constant.CODE_SO_STS_PACKED:
+                    return Json.error("当前订单已完成装箱操作！");
                 default:
-                    json.setSuccess(false);
-                    json.setMsg("当前状态订单不允许进行装箱操作！");
-                    return json;
+                    return Json.error("当前状态订单不允许进行装箱操作！");
             }
         } else {
-            json.setSuccess(false);
-            json.setMsg("查无此出库单号！");
-            return json;
+
+            return Json.error("查无此出库单号！");
         }
     }
 

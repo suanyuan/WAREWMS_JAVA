@@ -133,36 +133,10 @@ where 1=1
 	</trim> where orderno=#{orderno}
 </update>
 
-	<update id="updateDocPkRecords" parameterType="java.util.Map">
-        update doc_pk_records set
-        pickedqty = #{qty},
-        editwho = #{editwho},
-        edittime = now()
-        where orderno = #{orderno} and traceid = #{traceid} and sku = #{sku} and lotnum = #{lotnum} and allocationdetailsid = #{allocationdetailsid}
-    </update>
 <!-- 删除记录 -->
 <delete id="delete" parameterType="Object">
 	delete 	 from doc_pk_records where orderno = #{orderno}
 </delete>
-
-
-	<select id="queryPackedNum" parameterType="java.util.Map" resultType="integer">
-		select ifnull(sum(pickedqty_each), 0) from doc_pk_records
-        where orderno = #{orderno} and allocationdetailsid = #{allocationdetailsid}
---         select ifnull(sum(qty), 0) from doc_pk_records
---         where orderno = #{orderno} and allocationdetailsid = #{allocationdetailsid}
-    </select>
-
-	<select id="getMaxPacklineno" resultType="int"  parameterType="Object">
-		select ifnull(max(packlineno),0) from doc_pk_records where orderno = #{orderno,jdbcType=VARCHAR}
-	</select>
-	<select id="queryAvailablePackedDetail" parameterType="java.util.Map" resultMap="BaseResultMap">
-		select *
-		from doc_pk_records
-		where orderno = #{orderno}  and sku = #{sku}
-		and lotnum = #{lotnum} and allocationdetailsid = #{allocationdetailsid}
-	</select>
-
 
 <!-- 根据id查询 拣货记录表 -->
 <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
@@ -189,5 +163,25 @@ where 1=1
        ${limitClause}
     </if>
 </select>
+
+	<update id="updatePickedQty" parameterType="java.util.Map">
+        update doc_pk_records set
+        pickedqty = #{pickedqty},
+        pickedqty_each = #{pickedqtyEach},
+        editwho = #{editwho},
+        edittime = now()
+        where orderno = #{orderno} and allocationdetailsid = #{allocationdetailsid}
+    </update>
+
+	<select id="getMaxPklineno" resultType="int"  parameterType="Object">
+		select ifnull(max(pklineno),0) from doc_pk_records where orderno = #{orderno,jdbcType=VARCHAR}
+	</select>
+
+	<select id="queryPickedRecord" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from doc_pk_records
+		where orderno = #{orderno} and allocationdetailsid = #{allocationdetailsid}
+	</select>
   	
 </mapper>   

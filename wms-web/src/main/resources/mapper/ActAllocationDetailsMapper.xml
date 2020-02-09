@@ -467,6 +467,12 @@ where 1=1
 		<if test="packflag != null and packflag != ''">
 			AND t_allocation.packflag = #{packflag, jdbcType=VARCHAR}
 		</if>
+		<if test="location != null and location != ''">
+			AND t_allocation.location = #{location, jdbcType=VARCHAR}
+		</if>
+		<if test="printflag != null and printflag != ''">
+			AND t_allocation.printflag = #{printflag, jdbcType=VARCHAR}
+		</if>
 		<if test="lotatt04 != null and lotatt04 != ''">
 			AND t_ila.lotatt04 = #{lotatt04, jdbcType=VARCHAR}
 		</if>
@@ -474,6 +480,14 @@ where 1=1
 			AND t_ila.lotatt05 = #{lotatt05, jdbcType=VARCHAR}
 		</if>
     </select>
+
+	<update id="finishPicking" parameterType="java.util.Map">
+      update act_allocation_details set
+      printflag = '1',
+      edittime = now(),
+      editwho = #{editwho}
+       where allocationdetailsid = #{allocationdetailsid}
+    </update>
 
     <update id="finishPacking" parameterType="java.util.Map">
       update act_allocation_details set
@@ -492,12 +506,6 @@ where 1=1
         where a.orderno = #{orderno} and a.customerid = #{customerid} and a.sku = #{sku} and a.lotnum = #{lotnum}
         and a.packflag = 1
     </select>
-    <!--<select id="queryByorder" parameterType="java.util.Map" resultType="integer">-->
-        <!--select sum(qty_Each)-->
-        <!--from  act_allocation_details-->
-        <!--where orderno = #{orderno} and sku=#{sku}-->
-    <!--</select>-->
-
 
 	<!-- 根据出库单号查出分配的location,sku,customerid,lotnum 产品线为骨科的 -->
 	<select id="queryByLocByOrderNo" resultMap="BaseResultMap"  parameterType="Object">

@@ -1,5 +1,6 @@
 package com.wms.query;
 
+import com.wms.query.pda.PdaDocPkQuery;
 import lombok.Data;
 
 @Data
@@ -57,6 +58,9 @@ public class ActAllocationDetailsQuery implements IQuery {
 
     private String pickedwho;
 
+    /**
+     * 用作是否包装复核完成
+     */
     private String packflag;
 
     private String checkwho;
@@ -87,6 +91,9 @@ public class ActAllocationDetailsQuery implements IQuery {
 
     private String allocationdetailsidOld;
 
+    /**
+     * 用作是否拣货完成
+     */
     private String printflag;
 
     private String contrainerid;
@@ -116,4 +123,21 @@ public class ActAllocationDetailsQuery implements IQuery {
     private String lotatt04;
 
     private String lotatt05;
+
+    public ActAllocationDetailsQuery() {
+    }
+
+    /**
+     * 拣货查询分配明细的查询条件
+     */
+    public ActAllocationDetailsQuery(PdaDocPkQuery query) {
+
+        this.orderno = query.getOrderno();
+        this.customerid = query.getCustomerid();
+        this.sku = query.getSku();
+        this.lotatt04 = query.getLotatt04();
+        this.lotatt05 = query.getLotatt05();
+        this.location = query.getLocationid();
+        this.printflag = "0";
+    }
 }

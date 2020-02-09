@@ -4,10 +4,7 @@ import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.query.*;
-import com.wms.query.pda.PdaBasSkuQuery;
-import com.wms.query.pda.PdaDocPaDetailQuery;
-import com.wms.query.pda.PdaDocPackageQuery;
-import com.wms.query.pda.PdaDocQcDetailQuery;
+import com.wms.query.pda.*;
 import com.wms.utils.StringUtil;
 import com.wms.vo.Json;
 import com.wms.vo.form.pda.ScanResultForm;
@@ -397,6 +394,44 @@ public class CommonService extends BaseService{
         json.setSuccess(true);
         json.setMsg("可继续操作");
         json.setObj(docQcDetails.get(0));
+        return json;
+    }
+
+    /**
+     * 判断获取的拣货扫码数据是否齐全
+     * - 如果入库有批号 || 序列号，扫描了SKU需要提示扫描带批号 || 序列号的条码
+     * @param query ~
+     * @return 主要判断如果是批号或者序列号维护的产品，出入库扫描不可扫描SKU
+     */
+    Json matchPkDetails(PdaDocPkQuery query) {
+
+        Json json = new Json();
+
+        //1，查询分配明细
+        ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery(query);
+        List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsMybatisDao.queryForScan(actAllocationDetailsQuery);
+        if (actAllocationDetailsList.size() == 0) return Json.error("查无此产品的分配明细数据");
+
+        //2，如果commonVo中有批号/序列号，将查询到的分配明细返回
+        if (StringUtil.isNotEmpty(query.getLotatt04()) || StringUtil.isNotEmpty(query.getLotatt05())) {
+
+            json.setObj(actAllocationDetailsList.get(0));
+            json.setSuccess(true);
+            return json;
+        }
+
+        //3,如果SKU对应的明细中存在批号或者序列号，提示复核不允许扫描SKU进行
+        for (ActAllocationDetails actAllocationDetails : actAllocationDetailsList) {
+
+            InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetails.getLotnum());
+            if (StringUtil.isNotEmpty(invLotAtt.getLotatt04()) || StringUtil.isNotEmpty(invLotAtt.getLotatt05())) {
+
+                return Json.error("请扫描产品GS1条码进行复核操作！");
+            }
+        }
+
+        json.setObj(actAllocationDetailsList.get(0));
+        json.setSuccess(true);
         return json;
     }
 

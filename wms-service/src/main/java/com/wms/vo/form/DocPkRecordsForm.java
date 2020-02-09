@@ -1,8 +1,5 @@
 package com.wms.vo.form;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
-
 public class DocPkRecordsForm {
 
 	private String orderno;
