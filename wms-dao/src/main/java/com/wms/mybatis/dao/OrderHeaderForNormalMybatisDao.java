@@ -6,14 +6,13 @@ import com.wms.result.OrderStatusResult;
 import com.wms.result.ReceiptResult;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public interface OrderHeaderForNormalMybatisDao extends BaseDao {
 
 	List<OrderStatusResult> queryOrderType();
-
+	OrderStatusResult queryOrderTypeBycode(String orderType);
 	List<OrderStatusResult> queryOrderStatus();
 
 	List<OrderStatusResult> queryReleaseStatus();

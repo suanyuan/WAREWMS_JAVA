@@ -233,6 +233,7 @@ public class OrderDetailsForNormal implements Serializable {
     private String descr;//换算率
     private String skugroup5;//运输条件
     private String skugroup4;//存储条件
+    private String nums;//明细数
 	public OrderDetailsForNormal() {
 		
 	}

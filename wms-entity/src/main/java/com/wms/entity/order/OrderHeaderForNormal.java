@@ -472,6 +472,8 @@ public class OrderHeaderForNormal implements Serializable {
 	private List<OrderDetailsForNormal> orderDetailsForNormalList;
 	private List<DocOrderPacking> docOrderPackingList;
 	private String reservedfield07;//冷链标志
+	private String detailsNum;//明细总条数
+	private Double qtypickedNum;//拣货总件数
 
 //	导出
 

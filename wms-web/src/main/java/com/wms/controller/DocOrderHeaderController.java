@@ -275,7 +275,24 @@ public class DocOrderHeaderController {
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView";
     }
+    /**
+     * 打印拣货 新模板
+     */
+    @Login
+    @RequestMapping(params = "exportPackingPdfNewReport")
+    public String exportPackingPdfNewReport(Model model, @RequestParam(value = "orderno") String orderno) {
 
+        String[] s = orderno.split(",");
+        List<OrderHeaderForNormal> orderHeaderForNormal = new ArrayList<OrderHeaderForNormal>();
+        for (String a : s) {
+            orderHeaderForNormal.add(orderHeaderForNormalService.exportPickingPdfNewReport(a));
+        }
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(orderHeaderForNormal);
+        model.addAttribute("url", "WEB-INF/jasper/reportOrderHeaderNew.jasper");
+        model.addAttribute("format", Constant.JASPER_PDF);
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView";
+    }
 
     /**
      * 随货清单

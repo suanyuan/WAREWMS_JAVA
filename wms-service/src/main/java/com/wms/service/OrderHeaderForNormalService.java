@@ -1290,7 +1290,24 @@ public class OrderHeaderForNormalService extends BaseService {
             e.printStackTrace();
         }
     }
-
+    /**
+     * 打印拣货单-新模板
+     *
+     * @param orderno
+     * @return
+     */
+    public OrderHeaderForNormal exportPickingPdfNewReport(String orderno) {
+        OrderHeaderForNormal ohForNormal = orderHeaderForNormalMybatisDao.queryById(orderno);
+        OrderDetailsForNormal odForNormal= orderDetailsForNormalMybatisDao.queryBySum(orderno);
+        OrderStatusResult orderStatusResult = orderHeaderForNormalMybatisDao.queryOrderTypeBycode(ohForNormal.getOrdertype());
+        ohForNormal.setDetailsNum(odForNormal.getNums());//明细数
+        ohForNormal.setQtypickedNum(odForNormal.getQtypicked());//拣货件数
+        ohForNormal.getSoreference1();
+        ohForNormal.getOrderno();
+        ohForNormal.setOrdertype(orderStatusResult.getOrderTypeName());
+        ohForNormal.getCustomerid();
+        return  ohForNormal;
+    }
     /**
      * 打印拣货单-增加拣货单打印次数
      *

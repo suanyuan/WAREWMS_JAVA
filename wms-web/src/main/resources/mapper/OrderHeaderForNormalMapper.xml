@@ -2156,14 +2156,21 @@
 	</update>
 
     <!--订单类型-->
-    <select id="queryOrderType" resultMap="OrderHeaderForNormalMap" parameterType="Object">
+<select id="queryOrderType" resultMap="OrderHeaderForNormalMap" parameterType="Object">
 	select code as orderType,
 	codename_c as orderTypeName
 	from Bas_Codes
 	where codeid = 'SO_TYP'
 	order by show_sequence
 </select>
-
+    <!--订单类型-->
+    <select id="queryOrderTypeBycode" resultMap="OrderHeaderForNormalMap" parameterType="Object">
+	select code as orderType,
+	codename_c as orderTypeName
+	from Bas_Codes
+	where codeid = 'SO_TYP' and code=#{orderType,mode=IN,jdbcType=VARCHAR}
+	order by show_sequence
+</select>
     <!--订单状态-->
     <select id="queryOrderStatus" resultMap="OrderHeaderForNormalMap" parameterType="Object">
 	select code as orderStatus,

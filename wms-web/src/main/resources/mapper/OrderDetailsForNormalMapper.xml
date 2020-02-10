@@ -840,7 +840,7 @@ where 1=1
 </select>
     <!-- 订单明细 列表总数-->
 <select id="queryBySum" resultMap="OrderDetailsForNormalMap"  parameterType="Object">
-	select sum(qtyordered) qtyordered,sum(qtyallocated) qtyallocated,sum(qtypicked) qtypicked,sum(qtyshipped) qtyshipped
+	select count(1) nums,sum(qtyordered) qtyordered,sum(qtyallocated) qtyallocated,sum(qtypicked) qtypicked,sum(qtyshipped) qtyshipped
 	        ,sum(qtyordered_each) qtyorderedEach,sum(qtyallocated_each) qtyallocatedEach,sum(qtypicked_each) qtypickedEach,sum(qtyshipped_each) qtyshippedEach
 	from doc_order_details
 	where orderno = #{orderno}

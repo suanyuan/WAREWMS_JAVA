@@ -36,6 +36,8 @@
         var ezuiImportDataForm;
         var ezuiOutToExcelDataDialog;
         var ezuiOutToExcel1Form;
+        var ezuiPackDataDialog;
+        var ezuiPackForm;
         var ezuiOperateResultDataDialog;
         var ezuiOperateResultDataForm;
         var allocationDetailsDatagrid;
@@ -395,6 +397,17 @@
                 buttons: '#ezuiOutToExcel1Btn',
                 onClose: function () {
                     ezuiFormClear(ezuiOutToExcel1Form);
+                }
+            }).dialog('close');
+            //拣货单
+            ezuiPackDataDialog = $('#ezuiPackDataDialog').dialog({
+                modal: true,
+                width: 270,
+                height: 150,
+                title: '选择导出内容',
+                buttons: '#ezuiPackABtn',
+                onClose: function () {
+                    ezuiFormClear(ezuiPackForm);
                 }
             }).dialog('close');
             //批量操作返回结果
@@ -1317,7 +1330,30 @@
             }
         };
         /* 导出end */
-
+        /* 拣货start */
+        var doPack = function () {
+            var rows = $('#ezuiDatagrid').datagrid('getSelections');
+            var outtype = $("#ezuiPackForm #pack").combobox('getValue');
+            var orderno = "";
+            if (rows.length > 0) {
+                if(outtype == 1){
+                    for (var i = 0; i < rows.length; i++) {
+                        orderno += rows[i].orderno + ",";
+                    }
+                    /*ajaxDownloadFile(sy.bp()+"/docPaHeaderController.do?exportBatchPdf&pano="+pano);*/
+                    window.open(sy.bp() + "/docOrderHeaderController.do?exportPackingPdfNewReport&orderno=" + orderno);
+                }else{
+                    printPacking();
+                }
+            } else {
+                $.messager.show({
+                    msg: '<spring:message code="common.message.selectRecord"/>',
+                    title: '<spring:message code="common.message.prompt"/>'
+                });
+                ezuiPackDataDialog.dialog('close');
+            }
+        };
+        /* 拣货end */
         /* 导出随货start */
         var doExportGoodsList = function () {
             var rows = $('#ezuiDatagrid').datagrid('getSelections');
@@ -1447,6 +1483,10 @@
         var toOutData = function () {
             $('#outtype').combobox('select', '1');
             ezuiOutToExcelDataDialog.dialog('open');
+        };
+        var toPackData = function () {
+            $('#pack').combobox('select', '1');
+            ezuiPackDataDialog.dialog('open');
         };
         /* 下载导入模板 */
         var downloadTemplate = function () {
@@ -2830,7 +2870,7 @@
                 </div>
             </div>
             <div>
-                <a onclick='printPacking();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton'
+                <a onclick='toPackData();' id='ezuiBtn_PrintPacking' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印拣货单</a>
                 <a onclick='printAccompanying();' id='ezuiBtn_PrintAccompanying' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印随货清单</a>
@@ -2928,6 +2968,7 @@
         </table>
     </form>
 </div>
+
 <div id='ezuiOutToExcel1Btn'>
     <a onclick='doExport();' id='ezuiBtn_outDataCommit' class='easyui-linkbutton'
        href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
@@ -2935,6 +2976,37 @@
        href='javascript:void(0);'><spring:message code='common.button.close'/></a>
 </div>
 <!-- 导出end -->
+<!-- 拣货单start -->
+<div id='ezuiPackDataDialog' class='easyui-dialog' style='padding: 10px;'>
+    <form id='ezuiPackForm' method='post' enctype='multipart/form-data'>
+        <table>
+            <tr>
+                <th>选择拣货单类型</th>
+                <td><input id='pack' class="easyui-combobox" size='100' style="height:30px" data-options="
+																								editable: false,
+																								panelHeight: 'auto',
+																								width:'150',
+																								valueField: 'id',
+																								textField: 'value',
+																								data: [{
+																									id: '1',
+																									value: '新拣货单'
+																								},{
+																									id: '-1',
+																									value: '拣货单'
+																								}]"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div id='ezuiPackABtn'>
+    <a onclick='doPack();' id='ezuiBtn_PackCommit' class='easyui-linkbutton'
+       href='javascript:void(0);'><spring:message code='common.button.commit'/></a>
+    <a onclick='ezuiDialogClose("#ezuiPackDataDialog");' class='easyui-linkbutton'
+       href='javascript:void(0);'><spring:message code='common.button.close'/></a>
+</div>
+<!-- 拣货单end -->
 <!-- 批量操作返回start -->
 <div id='ezuiOperateResultDataDialog' class='easyui-dialog' style='padding: 10px;'>
     <form id='ezuiOperateResultDataForm' method='post' enctype='multipart/form-data'>
