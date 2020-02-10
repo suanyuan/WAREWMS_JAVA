@@ -79,14 +79,14 @@ public class PdaPackageController {
             return resultMap;
         }
         switch (headerVO.getSostatus()) {
-            case "40":
-            case "50":
+            case Constant.CODE_SO_STS_PICKED:
+            case Constant.CODE_SO_STS_PART_PACKED:
                 PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
                 resultMap.put(Constant.DATA, headerVO);
                 resultMap.put(Constant.RESULT, result);
                 return resultMap;
-            case "60":
-                resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此单已完全装箱"));
+            case Constant.CODE_SO_STS_PACKED:
+                resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此单已包装复核完毕"));
                 return resultMap;
                 default:
                     resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此单不处于包装复核阶段"));
