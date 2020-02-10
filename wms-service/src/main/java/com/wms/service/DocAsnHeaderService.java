@@ -513,7 +513,7 @@ public class DocAsnHeaderService extends BaseService {
 
     public void exportSerialNumTemplate(HttpServletResponse response, String token) {
         try (OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
-            File file = new File(ResourceUtil.getImportRootPath("docSerialNumRecord_template.xls"));
+            File file = new File(ResourceUtil.getImportRootPath("BasSerialNum_template.xls"));
             response.reset();
             Cookie cookie = new Cookie("downloadToken", token);
             cookie.setMaxAge(60);

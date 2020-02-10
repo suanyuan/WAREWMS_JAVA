@@ -280,7 +280,7 @@ where 1=1
 	<select id="countByClientAndProduct" resultType="java.lang.Integer"  parameterType="Object">
 		select  count(1) from first_business_apply t1
 		left join first_business_product_apply t2 on t1.apply_id = t2.apply_id
-		left join (select * from gsp_product_register_specs where is_use = '1') t3 on t2.specs_id = t3.specs_id
+		left join (select * from gsp_product_register_specs) t3 on t2.specs_id = t3.specs_id
 		where t1.client_id = #{clientId} and t3.product_code = #{sku} and t1.is_use = '1' and t2.is_use = '1'
 		and t1.first_state = '40'
 	</select>

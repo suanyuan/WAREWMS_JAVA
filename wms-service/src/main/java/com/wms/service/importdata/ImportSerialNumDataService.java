@@ -66,7 +66,7 @@ public class ImportSerialNumDataService {
             in = excelFile.getInputStream();
 
             //获取sheetName名字
-            String sheetName = "序列号记录";
+            String sheetName = "PACKING_LINE";
             //excel的表头与文字对应，获取excel表头
             LinkedHashMap<String, String> map = getLeadInFiledPublicQuestionBank();
             //获取组合excel表头数组，防止重复用的
@@ -203,7 +203,8 @@ public class ImportSerialNumDataService {
 	    // excel的表头与文字对应
 	    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 	    map.put("序号", "seq");
-//	    map.put("产品代码", "sku");
+		map.put("发货凭证号", "userdefine1");  	//无用
+		map.put("产品代码(必填)", "sku");			//无用
 	    map.put("批号(必填)", "batchNum");
 		map.put("序列号(必填)", "serialNum");
 

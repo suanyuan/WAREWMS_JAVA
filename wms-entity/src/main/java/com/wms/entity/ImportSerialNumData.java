@@ -26,6 +26,7 @@ public class ImportSerialNumData implements Serializable {
 	private String userdefine1;
 
 
+
 	public String getSeq() {
 		return seq;
 	}
