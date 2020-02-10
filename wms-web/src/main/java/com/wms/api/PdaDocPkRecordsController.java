@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("docPkRecordsController")
+@RequestMapping("mDocPk")
 @SuppressWarnings("unchecked")
 public class PdaDocPkRecordsController {
 
@@ -93,7 +93,7 @@ public class PdaDocPkRecordsController {
 	}
 
 	/**
-	 * 需拣货的库位列表
+	 * 需拣货的库位、货品明细
 	 */
 	@RequestMapping(params = "pickingLocations", method = RequestMethod.GET)
 	@ResponseBody
@@ -120,30 +120,28 @@ public class PdaDocPkRecordsController {
 	@ResponseBody
 	public Map<String, Object> singlePkCommit(PdaDocPkQuery query) {
 
-		Map<String, Object> resultMap = new HashMap<>();
 		Json json = basCodesService.verifyRequestValidation(query.getVersion());
 		if (!json.isSuccess()) {
 
 			return (Map<String, Object>) json.getObj();
 		}
-		resultMap.put(Constant.RESULT, docPkRecordsService.singlePkCommit(query));
-		return resultMap;
+		return docPkRecordsService.singlePkCommit(query);
 	}
 
-	/**
-	 * 结束拣货
-	 */
-	@RequestMapping(params = "endpicking", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> endpicking(PdaDocPkQuery query) {
-
-		Map<String, Object> resultMap = new HashMap<>();
-		Json json = basCodesService.verifyRequestValidation(query.getVersion());
-		if (!json.isSuccess()) {
-
-			return (Map<String, Object>) json.getObj();
-		}
-		resultMap.put(Constant.RESULT, docPkRecordsService.endPicking(query));
-		return resultMap;
-	}
+//	/**
+//	 * 结束拣货
+//	 */
+//	@RequestMapping(params = "endpicking", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Map<String, Object> endpicking(PdaDocPkQuery query) {
+//
+//		Map<String, Object> resultMap = new HashMap<>();
+//		Json json = basCodesService.verifyRequestValidation(query.getVersion());
+//		if (!json.isSuccess()) {
+//
+//			return (Map<String, Object>) json.getObj();
+//		}
+//		resultMap.put(Constant.RESULT, docPkRecordsService.endPicking(query));
+//		return resultMap;
+//	}
 }

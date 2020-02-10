@@ -24,9 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service("docPkRecordsService")
 public class DocPkRecordsService extends BaseService {
@@ -140,8 +138,10 @@ public class DocPkRecordsService extends BaseService {
 	/**
 	 * 拣货提交，单次提交一件
 	 */
-	public PdaResult singlePkCommit(PdaDocPkQuery query) {
+	public Map<String, Object> singlePkCommit(PdaDocPkQuery query) {
 
+        Map<String, Object> resultMap = new HashMap<>();
+        PdaActAllocationDetailVO actAllocationDetailVO = new PdaActAllocationDetailVO();
 		try {
 
 			int pickQty = 1;//单次提交，件数为1
@@ -152,12 +152,13 @@ public class DocPkRecordsService extends BaseService {
 			//订单状态校验
 			Json statusJson = orderStatusCheck(query.getOrderno());
 			if (!statusJson.isSuccess()) {
-				return new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg());
+			    resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, statusJson.getMsg()));
+				return resultMap;
 			}
 
-		/*
-        1，处理BasSku获取问题，并且返回准确的批号、序列号匹配条件
-         */
+            /*
+            1，处理BasSku获取问题，并且返回准确的批号、序列号匹配条件
+             */
 			ScanResultForm scanResultForm = new ScanResultForm();
 			//customerid, GTIN, lotatt04, lotatt05, otherCode
 			BeanUtils.copyProperties(query, scanResultForm);
@@ -167,25 +168,35 @@ public class DocPkRecordsService extends BaseService {
 			query.setLotatt04(commonVO.getBatchNum());
 			query.setLotatt05(commonVO.isSerialManagement() ? "" : commonVO.getSerialNum());
 
-		/*
-         2,判断获取的拣货扫码数据是否齐全，获取分配明细 + 产品档案
-         如果查询不到分配明细，要么就是扫错货了，要么就是拣货完成了
-         */
+            /*
+             2,判断获取的拣货扫码数据是否齐全，获取分配明细 + 产品档案
+             如果查询不到分配明细，要么就是扫错货了，要么就是拣货完成了
+             */
 			Json scanJson = commonService.matchPkDetails(query);
-			if (!scanJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg());
+			if (!scanJson.isSuccess()) {
+                resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg()));
+                return resultMap;
+            }
 
 			actAllocationDetails = (ActAllocationDetails) scanJson.getObj();
+			BeanUtils.copyProperties(actAllocationDetails, actAllocationDetailVO);
 
 			Json skuJson = commonService.fixBasSku(actAllocationDetails.getCustomerid(), actAllocationDetails.getSku());
-			if (!skuJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, skuJson.getMsg());
+			if (!skuJson.isSuccess()) {
+                resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, skuJson.getMsg()));
+                return resultMap;
+            }
 
 			basSku = (BasSku) skuJson.getObj();
 			BasPackage basPackage = basPackageMybatisDao.queryById(basSku.getPackid());
-			if (null == basPackage) return new PdaResult(PdaResult.CODE_FAILURE, "查无此产品包装规格数据");
+			if (null == basPackage) {
+                resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无此产品包装规格数据"));
+                return resultMap;
+            }
 
-		/*
-		 3,获取拣货记录明细（可能存在未创建的情况）
-		 */
+            /*
+             3,获取拣货记录明细（可能存在未创建的情况）
+             */
 			DocPkRecordsQuery pkRecordsQuery = new DocPkRecordsQuery(actAllocationDetails.getOrderno(), actAllocationDetails.getAllocationdetailsid());
 			docPkRecords = docPkRecordsMybatisDao.queryPickedRecord(pkRecordsQuery);
 			if (null == docPkRecords) {
@@ -201,10 +212,11 @@ public class DocPkRecordsService extends BaseService {
 				docPkRecords.setEditwho(query.getEditwho());
 				docPkRecordsMybatisDao.updatePickedQty(docPkRecords);
 			}
+			actAllocationDetailVO.setDocPkRecords(docPkRecords);
 
-		/*
-		 4,判断当前分配明细是否拣货完成
-		 */
+            /*
+             4,判断当前分配明细是否拣货完成
+             */
 			if (docPkRecords.getPickedqty() == actAllocationDetails.getQty()) {
 
 				//分配明细结束拣货
@@ -213,18 +225,29 @@ public class DocPkRecordsService extends BaseService {
 				actAllocationDetailsQuery.setAllocationdetailsid(actAllocationDetails.getAllocationdetailsid());
 				actAllocationDetailsMybatisDao.finishPicking(actAllocationDetailsQuery);
 			}
+
+            /*
+             5,判断出库单是否拣货完成
+             */
+            endPicking(query);
 		} catch (Exception e) {
 
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return new PdaResult(PdaResult.CODE_FAILURE, "系统错误，" + e.toString());
+            resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "系统错误，" + e.toString()));
+            return resultMap;
 		}
-		return new PdaResult(PdaResult.CODE_SUCCESS, "提交成功");
+
+		InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetailVO.getLotnum());
+		actAllocationDetailVO.setInvLotAtt(invLotAtt);
+		resultMap.put(Constant.DATA, actAllocationDetailVO);
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "提交成功"));
+        return resultMap;
 	}
 
 	/**
 	 * 结束拣货
 	 */
-	public PdaResult endPicking(PdaDocPkQuery query) {
+	private void endPicking(PdaDocPkQuery query) {
 
 		ActAllocationDetailsQuery actAllocationDetailsQuery = new ActAllocationDetailsQuery();
 		actAllocationDetailsQuery.setOrderno(query.getOrderno());
@@ -233,14 +256,13 @@ public class DocPkRecordsService extends BaseService {
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(actAllocationDetailsQuery));
 
 		List<ActAllocationDetails> undoneList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
-		if (undoneList.size() > 0) return new PdaResult(PdaResult.CODE_FAILURE, "拣货任务尚未完成，请查看拣货任务列表");
+		if (undoneList.size() == 0) {
 
-		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query.getOrderno());
-		orderHeaderForNormal.setSostatus(Constant.CODE_SO_STS_PICKED);
-		orderHeaderForNormal.setEditwho(query.getEditwho());
-		orderHeaderForNormal.setEdittime(new Date());
-		orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
-
-		return new PdaResult(PdaResult.CODE_SUCCESS, "提交成功");
+            OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query.getOrderno());
+            orderHeaderForNormal.setSostatus(Constant.CODE_SO_STS_PICKED);
+            orderHeaderForNormal.setEditwho(query.getEditwho());
+            orderHeaderForNormal.setEdittime(new Date());
+            orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
+        }
 	}
 }
