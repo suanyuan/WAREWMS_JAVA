@@ -41,6 +41,9 @@ public interface DocAsnDetailsMybatisDao extends BaseDao {
     void deleteByHead(String orderNo);
 
 
+    DocAsnDetail queryTotalReceivingNum(String[] asnnoList);
+
+
 //  根据单号查所有明细
     <T> List<T> queryByAsnNo(String Asnno);//总查询分页
 

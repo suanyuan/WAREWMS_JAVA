@@ -30,6 +30,9 @@ var productDialog_docAsnHeader;
 
 var ezuiImportSerialNumDataDialog;
 var ezuiImportSerialNumDataForm;
+
+var ezuiStatisticsDialog;
+
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -424,6 +427,19 @@ $(function() {
         buttons : '#ezuiImportSerialNumDataDialogBtn',
         onClose : function() {
             ezuiFormClear(ezuiImportSerialNumDataForm);
+        }
+    }).dialog('close');
+    /* 控件初始化end */
+
+    //统计收货数
+    ezuiStatisticsDialog = $('#ezuiStatisticsDialog').dialog({
+        modal : true,
+		// height:
+        width:200,
+        title : '统计',
+        buttons : '',
+        onClose : function() {
+            // ezuiFormClear(ezuiImportSerialNumDataForm);
         }
     }).dialog('close');
     /* 控件初始化end */
@@ -998,7 +1014,7 @@ var doSearch = function(){
         supplierid:$('#supplierId').val(),
         notes:$('#notes').val(),
         warehouseid:$('#warehouseId').combobox('getValue'),
-
+		skuGroup1:$('#skugroup1').val(),
         productId:$('#productId').val(),
 		userdefine2:$('#pano').val()//上架单号
 
@@ -2205,6 +2221,61 @@ function printResultList(){
 		}
 	}
 }
+
+
+//统计总收货数
+
+function statistics(){
+    var row = ezuiDatagrid.datagrid('getSelections');
+    var arr = new Array();
+    for(var i=0;i<row.length;i++){
+        arr.push(row[i].asnno);
+    }
+    // var row = ezuiDatagrid.datagrid('getSelected');
+    if(row==""||row==null){
+        $.messager.show({
+            msg: "请选择至少一条入库单",
+            title: "<spring:message code='common.message.prompt'/>"
+        });
+        return;
+    }
+
+    $.ajax({
+        url : 'docAsnHeaderController.do?selectTotalReceivingNum',
+        data : {'asnnos' : arr.join(",")},
+        type : 'POST',
+        dataType : 'JSON',
+        async: true,
+        success : function(result){
+            // $.messager.progress('close');
+            console.log(result.obj.receivedqty+'===='+result.obj.receivedqtyEach)
+
+
+            $('#receivedqtyQ').textbox('setValue',result.obj.receivedqty);
+            $('#receivedqtyEach').textbox('setValue',result.obj.receivedqtyEach);
+
+            var msg = '';
+            // try {
+            //     msg = result.msg.replace(/ /g, '\n');
+            // } catch (e) {
+            //     msg = '关单异常';
+            // } finally {
+            //     $("#nomergeReceivingResult").textbox("setValue",msg);
+            //     nomergeReceivingDialog.dialog("open");
+            //     ezuiDatagrid.datagrid('reload');
+            // }
+        }
+    });
+
+
+
+
+
+    ezuiStatisticsDialog.dialog('open')
+}
+
+
+
 //保存销退序列号
 function keepSerialNum(){
     var row = ezuiDatagrid.datagrid('getSelected');
@@ -2349,8 +2420,8 @@ var downloadSerialNumTemplate = function(){
 
 						</tr>
 						<tr>
-							<th>客户订单号</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>参考编号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户单号1</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户单号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
 							<!--<th>参考编号3</th><td><input type='text' id='asnreference3' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<th>供应商</th><td><input type="text" id="supplierId"/></td>
 							<%--仓库在js中设置--%>
@@ -2367,6 +2438,9 @@ var downloadSerialNumTemplate = function(){
 							<th>至</th><td><input type='text' id='edisendtime5' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>创建人</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
+							<th>产品线</th><td><input type='text' id='skugroup1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th colspan="2">
 								<input id="asnstatusCheck" type="checkbox" onclick="" checked="checked"><label for="asnstatusCheck">显示关闭/取消</label>
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
@@ -2374,7 +2448,6 @@ var downloadSerialNumTemplate = function(){
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
 							</th>
-
 						</tr>
 					</table>
 				</fieldset>
@@ -2398,6 +2471,8 @@ var downloadSerialNumTemplate = function(){
 				<div>
 					<a onclick='printTaskList();' id='ezuiBtn_taskList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货任务清单</a>
                     <a onclick='printResultList();' id='ezuiBtn_resultList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货记录</a>
+					<a onclick='statistics();' id='ezuiBtn_statistics' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>统计收货数</a>
+
 					<a onclick='keepSerialNum();' id='ezuiBtn_keepSerialNum' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>保存销退序列号</a>
 
 				</div>
@@ -2547,6 +2622,22 @@ var downloadSerialNumTemplate = function(){
 	<!--产品查询 -->
 	<div id="ezuiProductSearchDialog">
 
+	</div>
+
+
+	<%--统计总收货数--%>
+
+	<div id="ezuiStatisticsDialog" class='easyui-dialog' style='padding: 10px;'>
+		<table>
+			<tr>
+				<th>总收货件数</th>
+				<td><input id='receivedqtyQ' class="easyui-textbox" size='7'  data-options="editable:false,multiline:false"/></td>
+			</tr>
+			<tr>
+				<th>总收货数量</th>
+				<td><input id='receivedqtyEach' class="easyui-textbox" size='7'  data-options="editable:false,multiline:false"/></td>
+			</tr>
+		</table>
 	</div>
 </body>
 </html>

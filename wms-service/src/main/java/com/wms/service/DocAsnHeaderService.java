@@ -82,7 +82,8 @@ public class DocAsnHeaderService extends BaseService {
     private SfcRoleMybatisDao sfcRoleMybatisDao;
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
-
+    @Autowired
+    private ProductLineMybatisDao productLineMybatisDao;
 
 
     @Autowired
@@ -100,56 +101,78 @@ public class DocAsnHeaderService extends BaseService {
                 query.setCustomerid(SfcUserLoginUtil.getLoginUser().getId());
             }
         }
-
-        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-        mybatisCriteria.setCurrentPage(pager.getPage());
-        mybatisCriteria.setPageSize(pager.getRows());
-        mybatisCriteria.setCondition(query);
-        mybatisCriteria.setOrderByClause("asnno desc");
-        List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
-        DocAsnHeaderVO docAsnHeaderVO = null;
-        List<DocAsnHeaderVO> docAsnHeaderVOList = new ArrayList<DocAsnHeaderVO>();
-        for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
-            docAsnHeaderVO = new DocAsnHeaderVO();
-            BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
-            //判断冷链标记
-            if (docAsnHeader.getReservedfield07() != null) {
-                switch (docAsnHeader.getReservedfield07()) {
-                    case "FLL":
-                        docAsnHeaderVO.setColdTag("非冷链");
-                        break;
-                    case "LD":
-                        docAsnHeaderVO.setColdTag("冷冻");
-                        break;
-                    case "LC":
-                        docAsnHeaderVO.setColdTag("冷藏");
-                        break;
-                    default:
-                        docAsnHeaderVO.setColdTag("非冷链");
-                        break;
+        if(query.getSkuGroup1()!=null && query.getSkuGroup1() !=""){
+            List<ProductLine> productLineList = productLineMybatisDao.queryByName(query.getSkuGroup1());
+            for(ProductLine p:productLineList){
+                query.setSkuGroup1(p.getProductLineId());
+                MybatisCriteria mybatisCriteria = new MybatisCriteria();
+                mybatisCriteria.setCurrentPage(pager.getPage());
+                mybatisCriteria.setPageSize(pager.getRows());
+                mybatisCriteria.setCondition(query);
+                mybatisCriteria.setOrderByClause("asnno desc");
+                List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
+                DocAsnHeaderVO docAsnHeaderVO = null;
+                List<DocAsnHeaderVO> docAsnHeaderVOList = new ArrayList<DocAsnHeaderVO>();
+                for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
+                    docAsnHeaderVO = new DocAsnHeaderVO();
+                    BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
+                    //判断冷链标记
+                    if (docAsnHeader.getReservedfield07() != null) {
+                        switch (docAsnHeader.getReservedfield07()) {
+                            case "FLL":
+                                docAsnHeaderVO.setColdTag("非冷链");
+                                break;
+                            case "LD":
+                                docAsnHeaderVO.setColdTag("冷冻");
+                                break;
+                            case "LC":
+                                docAsnHeaderVO.setColdTag("冷藏");
+                                break;
+                            default:
+                                docAsnHeaderVO.setColdTag("非冷链");
+                                break;
+                        }
+                    }
+                    docAsnHeaderVOList.add(docAsnHeaderVO);
                 }
+                datagrid.setTotal((long) docAsnHeaderMybatisDao.queryByCount(mybatisCriteria));
+                datagrid.setRows(docAsnHeaderVOList);
+                return datagrid;
             }
-
-			/*DocAsnDetailQuery query1 = new DocAsnDetailQuery();
-			query1.setAsnno(docAsnHeader.getAsnno());
-			query1.setAsnlineno(1);
-			DocAsnDetailVO detailVO = docAsnDetailService.queryDocAsnDetail(query1);
-			if(detailVO!=null){
-				BasSku sku = basSkuService.getSkuInfo(detailVO.getCustomerid(),detailVO.getSku());
-				if(sku!=null && sku.getReservedfield07()!=null){
-					switch (sku.getReservedfield07()){
-						case "FLL":docAsnHeaderVO.setColdTag("非冷链");break;
-						case "LD":docAsnHeaderVO.setColdTag("冷冻");break;
-						case "LC":docAsnHeaderVO.setColdTag("冷藏");break;
-						default:docAsnHeaderVO.setColdTag("非冷链");break;
-					}
-
-				}
-			}*/
-            docAsnHeaderVOList.add(docAsnHeaderVO);
+        }else {
+            MybatisCriteria mybatisCriteria = new MybatisCriteria();
+            mybatisCriteria.setCurrentPage(pager.getPage());
+            mybatisCriteria.setPageSize(pager.getRows());
+            mybatisCriteria.setCondition(query);
+            mybatisCriteria.setOrderByClause("asnno desc");
+            List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
+            DocAsnHeaderVO docAsnHeaderVO = null;
+            List<DocAsnHeaderVO> docAsnHeaderVOList = new ArrayList<DocAsnHeaderVO>();
+            for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
+                docAsnHeaderVO = new DocAsnHeaderVO();
+                BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
+                //判断冷链标记
+                if (docAsnHeader.getReservedfield07() != null) {
+                    switch (docAsnHeader.getReservedfield07()) {
+                        case "FLL":
+                            docAsnHeaderVO.setColdTag("非冷链");
+                            break;
+                        case "LD":
+                            docAsnHeaderVO.setColdTag("冷冻");
+                            break;
+                        case "LC":
+                            docAsnHeaderVO.setColdTag("冷藏");
+                            break;
+                        default:
+                            docAsnHeaderVO.setColdTag("非冷链");
+                            break;
+                    }
+                }
+                docAsnHeaderVOList.add(docAsnHeaderVO);
+            }
+            datagrid.setTotal((long) docAsnHeaderMybatisDao.queryByCount(mybatisCriteria));
+            datagrid.setRows(docAsnHeaderVOList);
         }
-        datagrid.setTotal((long) docAsnHeaderMybatisDao.queryByCount(mybatisCriteria));
-        datagrid.setRows(docAsnHeaderVOList);
         return datagrid;
     }
 
@@ -539,7 +562,22 @@ public class DocAsnHeaderService extends BaseService {
 
 
 
+    public Json selectTotalReceivingNum(String asnnos){
+        Json json = null;
+        String[] asnnoList = asnnos.split(",");
+//        List<String> asnnoList = Arrays.asList(asnnoList1);
+        DocAsnDetail docAsnDetail =  docAsnDetailsMybatisDao.queryTotalReceivingNum(asnnoList);
 
+
+
+
+
+
+
+        return Json.success("",docAsnDetail);
+
+//        return json;
+    }
 
 
 
@@ -1234,7 +1272,6 @@ public class DocAsnHeaderService extends BaseService {
                     docAsnHeader.setCustomerIdRef(basCustomer.getDescrC());
                 } else {
                     docAsnHeader.setCustomerIdRef(" ");
-
                 }
                 BasCustomer basCustomer1 = basCustomerMybatisDao.queryByIdType(docAsnHeader1.getSupplierid(), Constant.CODE_CUS_TYP_VE);//供应商
                 if (basCustomer1 != null) {

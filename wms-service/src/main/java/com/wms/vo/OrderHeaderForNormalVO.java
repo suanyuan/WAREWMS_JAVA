@@ -1,18 +1,13 @@
 package com.wms.vo;
 
-import java.util.Date;
-import java.util.List;
-
 import com.wms.entity.DocOrderPacking;
 import com.wms.entity.order.OrderDetailsForNormal;
 import lombok.Data;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDateSerializer;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
-import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.Date;
+import java.util.List;
 
 @Data
 public class OrderHeaderForNormalVO {
@@ -477,4 +472,12 @@ public class OrderHeaderForNormalVO {
     private List<OrderDetailsForNormalVO> orderDetailsForNormalVOList;
 
     private List<DocOrderPacking> docOrderPackingList;
+
+    private String customerIdRef;
+    private Double qtyshipped;//件数
+    private Double qtyshippedEach;//数量
+    private String sourceOrder;            //来源订单号
+    private String soOrderNum;             //发货单号码
+    private String pname;//产品线
+
 }

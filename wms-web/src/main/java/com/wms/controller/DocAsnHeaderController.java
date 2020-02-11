@@ -188,7 +188,12 @@ public class DocAsnHeaderController {
 		docAsnHeaderService.exportSerialNumTemplate(response, token);
 	}
 
-
+    @Login
+    @RequestMapping(params = "selectTotalReceivingNum")
+    @ResponseBody
+    public Object selectTotalReceivingNum(String asnnos) {
+        return docAsnHeaderService.selectTotalReceivingNum(asnnos);
+    }
 
 
 

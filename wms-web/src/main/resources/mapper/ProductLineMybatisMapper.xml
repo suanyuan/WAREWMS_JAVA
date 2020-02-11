@@ -134,6 +134,17 @@ where 1=1
 	 from product_line where product_line_id = #{productLineId}
 </select>
 
+<select id="queryByDocAsn"  resultMap="BaseResultMap" parameterType="Object">
+	select * from product_line p
+	where p.customerid = (select customerid from bas_sku  where customerid=#{customerid} and sku=#{sku})
+	and p.product_line_id =(select sku_group1 from bas_sku  where customerid=#{customerid} and sku=#{sku})
+
+</select>
+<select id="queryByName"  resultMap="BaseResultMap" parameterType="Object">
+select * from product_line p where p.name LIKE concat('%', #{name},'%')
+
+
+</select>
 <!-- 生产线 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from product_line a

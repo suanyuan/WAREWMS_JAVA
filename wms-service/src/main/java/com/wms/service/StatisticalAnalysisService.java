@@ -6,6 +6,7 @@ import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
+import com.wms.entity.order.OrderDetailsForNormal;
 import com.wms.entity.order.OrderHeaderForNormal;
 import com.wms.mybatis.dao.*;
 import com.wms.query.DocAsnHeaderQuery;
@@ -36,7 +37,15 @@ public class StatisticalAnalysisService extends BaseService {
 	@Autowired
 	private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
 	@Autowired
+	private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
+	@Autowired
 	private BasCodesMybatisDao basCodesMybatisDao;
+	@Autowired
+	private BasCustomerMybatisDao basCustomerMybatisDao;
+	@Autowired
+	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
+	@Autowired
+	private ProductLineMybatisDao productLineMybatisDao;
 
 	/**************************************出入库流水****************************************/
 	public EasyuiDatagrid<RptSoAsnDailyLocation> getPagedDatagridRptSoAsnDailyLocation(EasyuiDatagridPager pager, RptSoAsnDailyLocation query) {
@@ -140,27 +149,40 @@ public class StatisticalAnalysisService extends BaseService {
 		mybatisCriteria.setCondition(query);
 		mybatisCriteria.setOrderByClause("asnno desc");
 		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
+		List<DocAsnDetail> docAsnDetails ;
 		DocAsnHeaderVO docAsnHeaderVO = null;
+		BasCustomer basCustomer = null;
+		ProductLine productLineList = null;
 		List<DocAsnHeaderVO> docAsnHeaderVOList = new ArrayList<DocAsnHeaderVO>();
+		Double expectedqty = 0.0;
+		Double expectedqtyNum = 0.0;
 		for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
 			docAsnHeaderVO = new DocAsnHeaderVO();
 			BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
-			//判断冷链标记
-			if (docAsnHeader.getReservedfield07() != null) {
-				switch (docAsnHeader.getReservedfield07()) {
-					case "FLL":
-						docAsnHeaderVO.setColdTag("非冷链");
-						break;
-					case "LD":
-						docAsnHeaderVO.setColdTag("冷冻");
-						break;
-					case "LC":
-						docAsnHeaderVO.setColdTag("冷藏");
-						break;
-					default:
-						docAsnHeaderVO.setColdTag("非冷链");
-						break;
+
+			//入库日期
+			docAsnDetails = docAsnDetailsMybatisDao.queryByAsnNo(docAsnHeaderVO.getAsnno());
+			if(docAsnDetails != null && docAsnDetails.size()>0){
+				docAsnHeaderVO.setLoatt03(docAsnDetails.get(0).getLotatt03());
+				//产品线
+				productLineList = productLineMybatisDao.queryByDocAsn(docAsnDetails.get(0).getCustomerid(),docAsnDetails.get(0).getSku());
+				if(productLineList !=null){
+					docAsnHeaderVO.setPname(productLineList.getName());
 				}
+			}
+			//件数  数量
+			for(DocAsnDetail docAsnDetail:docAsnDetails){
+				expectedqty  = docAsnDetail.getExpectedqty().doubleValue()+expectedqty;
+				expectedqtyNum = docAsnDetail.getExpectedqtyEach().doubleValue()+expectedqtyNum;
+			}
+			docAsnHeaderVO.setExpectedqty(expectedqty);
+			docAsnHeaderVO.setExpectedqtyNum(expectedqtyNum);
+			//货主
+			basCustomer = basCustomerMybatisDao.queryByIdType(docAsnHeaderVO.getCustomerid(), Constant.CODE_CUS_TYP_OW);
+			if (basCustomer != null) {
+				docAsnHeaderVO.setCustomerIdRef(basCustomer.getDescrC());
+			} else {
+				docAsnHeaderVO.setCustomerIdRef(" ");
 			}
 			docAsnHeaderVOList.add(docAsnHeaderVO);
 		}
@@ -306,11 +328,43 @@ public class StatisticalAnalysisService extends BaseService {
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		mybatisCriteria.setOrderByClause("orderno desc");
 		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
+		List<OrderDetailsForNormal> odForNormalList = null;
+		List<RptSalesSo> rptRptSalesSoList= null;
 		OrderHeaderForNormalVO orderHeaderForNormalVO;
+		BasCustomer basCustomer = null;
+		ProductLine productLineList = null;
 		List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<>();
+		Double qtyshipped = 0.0;//件数
+		Double qtyshippedEach = 0.0;//数量
 		for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
 			orderHeaderForNormalVO = new OrderHeaderForNormalVO();
 			BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
+			rptRptSalesSoList= statisticalAnalysisMybatisDao.querySalesSoList(mybatisCriteria);
+			if(rptRptSalesSoList !=null && rptRptSalesSoList.size()>0){
+				orderHeaderForNormalVO.setSoOrderNum(rptRptSalesSoList.get(0).getSoOrderNum());//发货单号码
+				orderHeaderForNormalVO.setSourceOrder(rptRptSalesSoList.get(0).getSourceOrder()); //来源订单号
+			}
+			odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo1(orderHeaderForNormalVO.getOrderno());
+			for (OrderDetailsForNormal docOrderDetail:odForNormalList){
+				qtyshipped = docOrderDetail.getQty()+qtyshipped;//件数
+				qtyshippedEach = docOrderDetail.getQtyeach()+qtyshippedEach;//数量
+			}
+			orderHeaderForNormalVO.setQtyshipped(qtyshipped);
+			orderHeaderForNormalVO.setQtyshippedEach(qtyshippedEach);
+			//产品线
+			if(odForNormalList != null && odForNormalList.size()>0){
+				productLineList = productLineMybatisDao.queryByDocAsn(odForNormalList.get(0).getCustomerid(),odForNormalList.get(0).getSku());
+				if(productLineList !=null ){
+					orderHeaderForNormalVO.setPname(productLineList.getName());
+				}
+			}
+			//货主
+			basCustomer = basCustomerMybatisDao.queryByIdType(orderHeaderForNormalVO.getCustomerid(), Constant.CODE_CUS_TYP_OW);
+			if (basCustomer != null) {
+				orderHeaderForNormalVO.setCustomerIdRef(basCustomer.getDescrC());
+			} else {
+				orderHeaderForNormalVO.setCustomerIdRef(" ");
+			}
 			orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
 		}
 		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
