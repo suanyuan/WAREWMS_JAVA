@@ -998,7 +998,7 @@ var doSearch = function(){
         supplierid:$('#supplierId').val(),
         notes:$('#notes').val(),
         warehouseid:$('#warehouseId').combobox('getValue'),
-
+		skuGroup1:$('#skugroup1').val(),
         productId:$('#productId').val(),
 		userdefine2:$('#pano').val()//上架单号
 
@@ -2349,8 +2349,8 @@ var downloadSerialNumTemplate = function(){
 
 						</tr>
 						<tr>
-							<th>客户订单号</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>参考编号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户单号1</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户单号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
 							<!--<th>参考编号3</th><td><input type='text' id='asnreference3' class='easyui-textbox' size='16' data-options=''/></td>-->
 							<th>供应商</th><td><input type="text" id="supplierId"/></td>
 							<%--仓库在js中设置--%>
@@ -2367,6 +2367,9 @@ var downloadSerialNumTemplate = function(){
 							<th>至</th><td><input type='text' id='edisendtime5' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>创建人</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
+						</tr>
+						<tr>
+							<th>产品线</th><td><input type='text' id='skugroup1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th colspan="2">
 								<input id="asnstatusCheck" type="checkbox" onclick="" checked="checked"><label for="asnstatusCheck">显示关闭/取消</label>
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
@@ -2374,7 +2377,6 @@ var downloadSerialNumTemplate = function(){
 								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导出</a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>
 							</th>
-
 						</tr>
 					</table>
 				</fieldset>

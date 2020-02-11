@@ -1,11 +1,10 @@
 package com.wms.vo;
 
-import java.util.List;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import com.wms.entity.DocAsnDetail;
 import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.List;
 
 public class DocAsnHeaderVO {
 	
@@ -152,6 +151,53 @@ public class DocAsnHeaderVO {
 	private List<DocAsnDetailVO> docAsnDetailVOList;
 	private String coldTag;
 	private String sup;
+	private String customerIdRef;
+	private Double expectedqty;//件数
+	private Double expectedqtyNum;//数量
+	private String loatt03;
+	private String pname;//产品线
+
+	public String getPname() {
+		return pname;
+	}
+
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
+
+	public Double getExpectedqty() {
+		return expectedqty;
+	}
+
+	public void setExpectedqty(Double expectedqty) {
+		this.expectedqty = expectedqty;
+	}
+
+	public Double getExpectedqtyNum() {
+		return expectedqtyNum;
+	}
+
+	public void setExpectedqtyNum(Double expectedqtyNum) {
+		this.expectedqtyNum = expectedqtyNum;
+	}
+
+	public String getLoatt03() {
+		return loatt03;
+	}
+
+	public void setLoatt03(String loatt03) {
+		this.loatt03 = loatt03;
+	}
+
+
+
+	public String getCustomerIdRef() {
+		return customerIdRef;
+	}
+
+	public void setCustomerIdRef(String customerIdRef) {
+		this.customerIdRef = customerIdRef;
+	}
 
 	public List<DocAsnDetailVO> getDocAsnDetailVOList() {
 		return docAsnDetailVOList;
