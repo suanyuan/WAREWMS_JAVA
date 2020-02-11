@@ -562,7 +562,22 @@ public class DocAsnHeaderService extends BaseService {
 
 
 
+    public Json selectTotalReceivingNum(String asnnos){
+        Json json = null;
+        String[] asnnoList = asnnos.split(",");
+//        List<String> asnnoList = Arrays.asList(asnnoList1);
+        DocAsnDetail docAsnDetail =  docAsnDetailsMybatisDao.queryTotalReceivingNum(asnnoList);
 
+
+
+
+
+
+
+        return Json.success("",docAsnDetail);
+
+//        return json;
+    }
 
 
 

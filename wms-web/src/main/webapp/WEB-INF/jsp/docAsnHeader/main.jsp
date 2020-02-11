@@ -30,6 +30,9 @@ var productDialog_docAsnHeader;
 
 var ezuiImportSerialNumDataDialog;
 var ezuiImportSerialNumDataForm;
+
+var ezuiStatisticsDialog;
+
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();
 	ezuiDetailsMenu = $('#ezuiDetailsMenu').menu();
@@ -424,6 +427,19 @@ $(function() {
         buttons : '#ezuiImportSerialNumDataDialogBtn',
         onClose : function() {
             ezuiFormClear(ezuiImportSerialNumDataForm);
+        }
+    }).dialog('close');
+    /* 控件初始化end */
+
+    //统计收货数
+    ezuiStatisticsDialog = $('#ezuiStatisticsDialog').dialog({
+        modal : true,
+		// height:
+        width:200,
+        title : '统计',
+        buttons : '',
+        onClose : function() {
+            // ezuiFormClear(ezuiImportSerialNumDataForm);
         }
     }).dialog('close');
     /* 控件初始化end */
@@ -2205,6 +2221,61 @@ function printResultList(){
 		}
 	}
 }
+
+
+//统计总收货数
+
+function statistics(){
+    var row = ezuiDatagrid.datagrid('getSelections');
+    var arr = new Array();
+    for(var i=0;i<row.length;i++){
+        arr.push(row[i].asnno);
+    }
+    // var row = ezuiDatagrid.datagrid('getSelected');
+    if(row==""||row==null){
+        $.messager.show({
+            msg: "请选择至少一条入库单",
+            title: "<spring:message code='common.message.prompt'/>"
+        });
+        return;
+    }
+
+    $.ajax({
+        url : 'docAsnHeaderController.do?selectTotalReceivingNum',
+        data : {'asnnos' : arr.join(",")},
+        type : 'POST',
+        dataType : 'JSON',
+        async: true,
+        success : function(result){
+            // $.messager.progress('close');
+            console.log(result.obj.receivedqty+'===='+result.obj.receivedqtyEach)
+
+
+            $('#receivedqtyQ').textbox('setValue',result.obj.receivedqty);
+            $('#receivedqtyEach').textbox('setValue',result.obj.receivedqtyEach);
+
+            var msg = '';
+            // try {
+            //     msg = result.msg.replace(/ /g, '\n');
+            // } catch (e) {
+            //     msg = '关单异常';
+            // } finally {
+            //     $("#nomergeReceivingResult").textbox("setValue",msg);
+            //     nomergeReceivingDialog.dialog("open");
+            //     ezuiDatagrid.datagrid('reload');
+            // }
+        }
+    });
+
+
+
+
+
+    ezuiStatisticsDialog.dialog('open')
+}
+
+
+
 //保存销退序列号
 function keepSerialNum(){
     var row = ezuiDatagrid.datagrid('getSelected');
@@ -2400,6 +2471,8 @@ var downloadSerialNumTemplate = function(){
 				<div>
 					<a onclick='printTaskList();' id='ezuiBtn_taskList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货任务清单</a>
                     <a onclick='printResultList();' id='ezuiBtn_resultList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货记录</a>
+					<a onclick='statistics();' id='ezuiBtn_statistics' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>统计收货数</a>
+
 					<a onclick='keepSerialNum();' id='ezuiBtn_keepSerialNum' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>保存销退序列号</a>
 
 				</div>
@@ -2549,6 +2622,22 @@ var downloadSerialNumTemplate = function(){
 	<!--产品查询 -->
 	<div id="ezuiProductSearchDialog">
 
+	</div>
+
+
+	<%--统计总收货数--%>
+
+	<div id="ezuiStatisticsDialog" class='easyui-dialog' style='padding: 10px;'>
+		<table>
+			<tr>
+				<th>总收货件数</th>
+				<td><input id='receivedqtyQ' class="easyui-textbox" size='7'  data-options="editable:false,multiline:false"/></td>
+			</tr>
+			<tr>
+				<th>总收货数量</th>
+				<td><input id='receivedqtyEach' class="easyui-textbox" size='7'  data-options="editable:false,multiline:false"/></td>
+			</tr>
+		</table>
 	</div>
 </body>
 </html>
