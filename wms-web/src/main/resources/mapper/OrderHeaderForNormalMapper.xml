@@ -1965,7 +1965,7 @@
         select
         <include refid="Base_Column_List"/>
         from doc_order_header
-        where sostatus = '40' or sostatus = '50'
+        where sostatus in ('30', '40', '50')
         order by addtime desc
         limit #{start}, #{pageSize}
     </select>
