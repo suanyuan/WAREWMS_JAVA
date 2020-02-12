@@ -534,7 +534,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     if (allocationList != null && allocationList.size() > 0) {
 
                         //恢复printflag的默认值0
-                        actAllocationDetailsMybatisDao.cancelPicking(orderNo);
+                        actAllocationDetailsMybatisDao.cancelPicking(orderNo, SfcUserLoginUtil.getLoginUser().getId());
                         //清除拣货记录
                         docPkRecordsMybatisDao.cancelPkRecords(orderNo);
                     }
@@ -544,7 +544,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     orderDetailsForNormalQuery.setOrderno(orderNo);
                     orderDetailsForNormalQuery.setLinestatus(Constant.CODE_SO_STS_CREATED);
                     mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(orderDetailsForNormalQuery));
-                    List<OrderDetailsForNormal> unallocatedOrderDetials = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+                    List<OrderDetailsForNormal> unallocatedOrderDetials = orderDetailsForNormalMybatisDao.queryByList(mybatisCriteria);
 
                     orderHeaderForNormal.setSostatus(
                             unallocatedOrderDetials.size() > 0 ?

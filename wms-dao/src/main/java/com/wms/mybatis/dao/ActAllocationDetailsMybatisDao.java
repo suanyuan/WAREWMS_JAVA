@@ -33,7 +33,7 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 	/**
 	 * 出库单.取消拣货，恢复分配明细中的printflag(拣货完成标识)
 	 */
-	int cancelPicking(@Param("orderno") String orderno);
+	int cancelPicking(@Param("orderno") String orderno, @Param("editwho") String editwho);
 
     /**
      * 此分配明细已装箱结束

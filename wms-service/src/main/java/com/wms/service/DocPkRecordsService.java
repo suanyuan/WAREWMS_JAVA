@@ -44,7 +44,7 @@ public class DocPkRecordsService extends BaseService {
 
 	public List<OrderHeaderForNormalVO> getUndoneList(PageForm form) {
 
-		List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryPackageList(form.getStart(), form.getPageSize());
+		List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryPkList(form.getStart(), form.getPageSize());
 		OrderHeaderForNormalVO orderHeaderForNormalVO;
 		List<OrderHeaderForNormalVO> orderHeaderForNormalVOS = new ArrayList<>();
 		for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormals) {
@@ -119,7 +119,7 @@ public class DocPkRecordsService extends BaseService {
 			}
 
 			switch (orderHeaderForNormal.getSostatus()) {
-//				case Constant.CODE_SO_STS_PART_ALLOCATED:
+				case Constant.CODE_SO_STS_PART_ALLOCATED:
 				case Constant.CODE_SO_STS_ALLOCATED:
 				case Constant.CODE_SO_STS_PART_PICKED:
 					return Json.success("000");
@@ -240,7 +240,7 @@ public class DocPkRecordsService extends BaseService {
 		InvLotAtt invLotAtt = invLotAttMybatisDao.queryById(actAllocationDetailVO.getLotnum());
 		actAllocationDetailVO.setInvLotAtt(invLotAtt);
 		resultMap.put(Constant.DATA, actAllocationDetailVO);
-        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "提交成功"));
+        resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, "提交成功"));
         return resultMap;
 	}
 

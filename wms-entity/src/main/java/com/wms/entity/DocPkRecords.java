@@ -1,9 +1,6 @@
 package com.wms.entity;
 
-
-import com.wms.utils.BeanUtils;
 import lombok.Data;
-
 import java.io.Serializable;
 
 @Data
@@ -38,7 +35,12 @@ public class DocPkRecords implements Serializable {
      */
     public DocPkRecords(ActAllocationDetails actAllocationDetails, BasSku basSku, int maxPklineno, BasPackage basPackage, int pickQty) {
 
-        BeanUtils.copyProperties(actAllocationDetails, this);
+        this.orderno = actAllocationDetails.getOrderno();
+        this.customerid = actAllocationDetails.getCustomerid();
+        this.sku = actAllocationDetails.getSku();
+        this.allocationdetailsid = actAllocationDetails.getAllocationdetailsid();
+        this.lotnum = actAllocationDetails.getLotnum();
+//        this.addwho = ?
         this.pklineno = maxPklineno + 1;
         this.skudesce = basSku.getDescrE();
         this.pickedqty = pickQty;

@@ -77,13 +77,14 @@ public class PdaDocPkRecordsController {
 			return resultMap;
 		}
 		switch (headerVO.getSostatus()) {
-			case "40":
-			case "50":
+			case Constant.CODE_SO_STS_PART_ALLOCATED:
+			case Constant.CODE_SO_STS_ALLOCATED:
+			case Constant.CODE_SO_STS_PART_PICKED:
 				PdaResult result = new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG);
 				resultMap.put(Constant.DATA, headerVO);
 				resultMap.put(Constant.RESULT, result);
 				return resultMap;
-			case "60":
+			case Constant.CODE_SO_STS_PICKED:
 				resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "此单已拣货完成"));
 				return resultMap;
 			default:
