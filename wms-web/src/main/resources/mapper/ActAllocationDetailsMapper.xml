@@ -516,6 +516,9 @@ where 1=1
 		LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
 		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 		WHERE  1=1
+		<if test="condition.productLineName != null and condition.productLineName != ''" >
+			and p.product_line_id=#{condition.productLineName}
+		</if>
 		<if test="condition.array!=null and condition.array.length>0">
 			and a.orderno in
 			<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">
@@ -537,6 +540,9 @@ where 1=1
 		LEFT JOIN `bas_sku` s ON s.`sku`=a.`sku` AND s.`customerid`=a.`customerid`
 		LEFT JOIN product_line p ON s.customerid = p.customerid AND s.sku_group1 = p.product_line_id
 		WHERE  1=1
+		<if test="condition.productLineName != null and condition.productLineName != ''" >
+			and p.product_line_id=#{condition.productLineName}
+		</if>
 		<if test="condition.array!=null and condition.array.length>0">
 			and a.orderno in
 			<foreach collection="condition.array" item="id" index="index" open="(" close=")" separator=",">

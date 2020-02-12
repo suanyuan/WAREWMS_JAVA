@@ -382,17 +382,7 @@ $(function() {
         }
     });
 
-	//骨科盘点 产品线
-    $("#ezuiDialogGuKe #productLineName").combobox({
-        // panelHeight: 'auto',
-        url:'/productLineController.do?getCombobox',
-        valueField:'id',
-        textField:'value',
-        onLoadSuccess:function () {
-            <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
-			$(this).combobox("setValue","88");//88产品线名称为Trauma 骨科
-        }
-    })
+
 });
 //增加
 var add = function(){
@@ -545,6 +535,17 @@ var GenerateInventoryPlan = function(){
 };
 //生成任务 骨科盘点
 var GuKeInventory = function(){
+	//骨科盘点 产品线
+	$("#ezuiDialogGuKe #productLineName").combobox({
+		// panelHeight: 'auto',
+		url:'/productLineController.do?getCombobox',
+		valueField:'id',
+		textField:'value',
+		onLoadSuccess:function () {
+			<%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
+			$(this).combobox("setValue","88");//88产品线名称为Trauma 骨科
+		}
+	})
 	//时间初始化
 	$("#SoTimeStart").datetimebox('setValue',ordertimeDate(new Date()));
 	$("#SoTimeEnd").datetimebox('setValue',ordertimeDateTo(new Date()));
@@ -662,14 +663,15 @@ var GuKeInventoryT = function(){
 	var msg='';
 	data.SoTimeStart=$("#SoTimeStart").datetimebox('getValue')+"";
 	data.SoTimeEnd=$("#SoTimeEnd").datetimebox('getValue')+"";
+	data.productLineName=$("#ezuiDialogGuKe #productLineName").combobox('getValue')+"";
 
-	$.messager.progress({
+		$.messager.progress({
 			text: '<spring:message code="common.message.data.processing"/>', interval: 100
 		});
 
 		$.ajax({
 			url: url,
-			data:{SoTimeStart:data.SoTimeStart,SoTimeEnd:data.SoTimeEnd},
+			data:{SoTimeStart:data.SoTimeStart,SoTimeEnd:data.SoTimeEnd,productLineName:data.productLineName},
 			dataType:"json",
 			error: function (a,b,c) {
 				//alert(a+b+c);
