@@ -2,7 +2,7 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri='http://www.springframework.org/tags' prefix='spring'%>
 <%--点击主页按钮弹出二级dialog--%>
-<div id='ezuiDialogGuKe' style="width:700px;height:600px;">
+<div id='ezuiDialogGuKe' style="width:750px;height:600px;">
     <div class='easyui-layout' data-options='fit:true,border:false'>
         <div data-options="region:'center'">
             <div id='ezuiToolbarGuKe' class='datagrid-toolbar' style="">
@@ -16,8 +16,6 @@
                             <td><input type='text' id='SoTimeEnd' class='easyui-datetimebox' size='17' data-options=""/></td>
                             <th>产品线</th>
                             <td><input type='text' id='productLineName' class='easyui-combobox' size='17' data-options=""/></td>
-
-
                             <td colspan="2">
                                 <a onclick='doxDialogSearchGuKe();' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
