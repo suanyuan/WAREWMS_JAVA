@@ -3,6 +3,7 @@ package com.wms.mybatis.dao;
 import com.wms.entity.ActAllocationDetails;
 import com.wms.mybatis.entity.pda.PdaOrderPackingForm;
 import com.wms.query.ActAllocationDetailsQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -28,6 +29,11 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 	 * @return ~
 	 */
 	int finishPicking(ActAllocationDetailsQuery query);
+
+	/**
+	 * 出库单.取消拣货，恢复分配明细中的printflag(拣货完成标识)
+	 */
+	int cancelPicking(@Param("orderno") String orderno);
 
     /**
      * 此分配明细已装箱结束

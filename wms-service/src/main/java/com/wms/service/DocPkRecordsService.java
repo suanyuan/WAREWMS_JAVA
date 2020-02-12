@@ -256,13 +256,11 @@ public class DocPkRecordsService extends BaseService {
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(actAllocationDetailsQuery));
 
 		List<ActAllocationDetails> undoneList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
-		if (undoneList.size() == 0) {
 
-            OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query.getOrderno());
-            orderHeaderForNormal.setSostatus(Constant.CODE_SO_STS_PICKED);
-            orderHeaderForNormal.setEditwho(query.getEditwho());
-            orderHeaderForNormal.setEdittime(new Date());
-            orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
-        }
+		OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(query.getOrderno());
+		orderHeaderForNormal.setSostatus(undoneList.size() == 0 ? Constant.CODE_SO_STS_PICKED : Constant.CODE_SO_STS_PART_PICKED);
+		orderHeaderForNormal.setEditwho(query.getEditwho());
+		orderHeaderForNormal.setEdittime(new Date());
+		orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
 	}
 }

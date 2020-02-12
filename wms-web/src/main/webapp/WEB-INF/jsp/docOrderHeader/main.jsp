@@ -872,8 +872,51 @@
             });
         };
 
+        /* 取消拣货按钮 */
+        var cancelPicked = function () {
+
+            $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否继续进行取消拣货操作', function (confirm) {
+                if (confirm) {
+                    $.messager.progress({
+                        text: '<spring:message code="common.message.data.processing"/>', interval: 100
+                    });
+
+                    var operateResult = '';
+                    var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
+                    var ordernos = '';
+
+                    $.each(checkedItems, function (index, item) {
+                        ordernos += item.orderno + ',';
+                    });
+
+                    $.ajax({
+                        async: true,
+                        url: 'docOrderHeaderController.do?cancelPicked',
+                        data: {ordernos: ordernos},
+                        type: 'POST',
+                        dataType: 'JSON',
+                        success: function (result) {
+
+                            $.messager.progress('close');
+                            try {
+                                operateResult = result.msg;
+                                clearDatagridSelection();
+                            } catch (e) {
+                                operateResult = '<spring:message code="common.message.data.delete.failed"/>';
+                            } finally {
+                                $('#ezuiOperateResultDataForm #operateResult').textbox('setValue', operateResult);
+                                $('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消拣货"});
+                                ezuiOperateResultDataDialog.dialog('open');
+                                ezuiDatagrid.datagrid('reload');
+                            }
+                        }
+                    });
+                }
+            });
+        };
+
         /* 复核按钮 */
-        var picking = function () {
+        var packing = function () {
 
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否继续进行复核操作', function (confirm) {
                 if (confirm) {
@@ -891,7 +934,7 @@
 
                     $.ajax({
                         async: true,
-                        url: 'docOrderHeaderController.do?picking',
+                        url: 'docOrderHeaderController.do?packing',
                         data: {ordernos: ordernos},
                         type: 'POST',
                         dataType: 'JSON',
@@ -916,7 +959,7 @@
         };
 
         /* 取消复核按钮 */
-        var unPicking = function () {
+        var unPacking = function () {
 
             $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否继续进行取消复核操作', function (confirm) {
                 if (confirm) {
@@ -934,7 +977,7 @@
 
                     $.ajax({
                         async: true,
-                        url: 'docOrderHeaderController.do?unPicking',
+                        url: 'docOrderHeaderController.do?unPacking',
                         data: {ordernos: ordernos},
                         type: 'POST',
                         dataType: 'JSON',
@@ -954,64 +997,6 @@
                             }
                         }
                     });
-                }
-            });
-        };
-
-        /* 取消装箱按钮 Deprecated */
-        var unPacking = function () {
-            $.messager.confirm('提示', '此操作将会删除所有的装箱明细记录，是否继续?', function (r) {
-                if (r) {
-                    var operateResult = '';
-                    var checkedItems = $('#ezuiDatagrid').datagrid('getChecked');
-                    $.each(checkedItems, function (index, item) {
-                        if (item.sostatus != '62' && item.sostatus != '63') {
-                            operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                            operateResult = operateResult + "处理时错误：订单此状态不能取消装箱" + "\n";
-                        } else {
-                            $.messager.progress({
-                                text: '<spring:message code="common.message.data.processing"/>', interval: 100
-                            });
-
-                            $.ajax({
-                                async: false,
-                                url: 'docOrderHeaderController.do?unPacking',
-                                data: {orderno: item.orderno},
-                                type: 'POST',
-                                dataType: 'JSON',
-                                success: function (result) {
-                                    $.messager.progress('close');
-                                    var msg = '';
-                                    try {
-                                        msg = result.msg;
-                                        if (msg == '000') {
-                                            operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                                            operateResult = operateResult + "处理完毕" + "\n";
-                                        } else {
-                                            operateResult = operateResult + "订单编号：" + item.orderno + ",";
-                                            operateResult = operateResult + "处理时错误：" + msg + "\n";
-                                        }
-                                        ;
-                                        ezuiDatagrid.datagrid('reload');
-                                    } catch (e) {
-                                        msg = '<spring:message code="common.message.data.delete.failed"/>';
-                                    } finally {
-                                        if (operateResult != '') {
-                                            $('#ezuiOperateResultDataForm #operateResult').textbox('setValue', operateResult);
-                                            $('#ezuiOperateResultDataDialog').panel({title: "批量操作：取消装箱"});
-                                            ezuiOperateResultDataDialog.dialog('open');
-                                            ezuiDatagrid.datagrid('reload');
-                                        }
-                                        ;
-                                    }
-                                }
-                            });
-                        }
-                        ;
-                    });
-
-                } else {
-                    return;
                 }
             });
         };
@@ -2845,16 +2830,17 @@
                 <a onclick='deAllocation();' id='ezuiBtn_cancelAllocation' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message
                         code='common.button.cancelAllocation'/></a>
-                <a onclick='picking();' id='ezuiBtn_picking' class='easyui-linkbutton'
+                <a onclick='cancelPicked();' id='ezuiBtn_cancelPicked' class='easyui-linkbutton'
+                   data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>取消拣货</a>
+                <a onclick='packing();' id='ezuiBtn_packing' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message
-                        code='common.button.picking'/></a>
-                <a onclick='unPicking();' id='ezuiBtn_cancelPicking' class='easyui-linkbutton'
+                        code='common.button.packing'/></a>
+                <a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message
-                        code='common.button.cancelPicking'/></a>
+                        code='common.button.cancelPacking'/></a>
                 <a onclick='shipment();' id='ezuiBtn_shipment' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'><spring:message
                         code='common.button.shipment'/></a>
-                <!-- <a onclick='unPacking();' id='ezuiBtn_cancelPacking' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>关闭订单（D）</a> -->
                 <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message
                         code='common.button.rubBish'/></a>
@@ -2981,7 +2967,7 @@
     <form id='ezuiPackForm' method='post' enctype='multipart/form-data'>
         <table>
             <tr>
-                <th>选择拣货单类型</th>
+                <th>拣货单类型</th>
                 <td><input id='pack' class="easyui-combobox" size='100' style="height:30px" data-options="
 																								editable: false,
 																								panelHeight: 'auto',
@@ -2990,7 +2976,7 @@
 																								textField: 'value',
 																								data: [{
 																									id: '1',
-																									value: '新拣货单'
+																									value: '拣货标签'
 																								},{
 																									id: '-1',
 																									value: '拣货单'

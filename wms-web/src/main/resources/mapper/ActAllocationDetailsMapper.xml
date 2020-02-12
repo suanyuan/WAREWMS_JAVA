@@ -489,6 +489,14 @@ where 1=1
        where allocationdetailsid = #{allocationdetailsid}
     </update>
 
+	<update id="cancelPicking" parameterType="java.util.Map">
+		update act_allocation_details set
+		  printflag = '0',
+		  edittime = now(),
+		  editwho = #{editwho}
+       where orderno = #{orderno}
+	</update>
+
     <update id="finishPacking" parameterType="java.util.Map">
       update act_allocation_details set
       packflag = '1', price = qty, edittime = now(), editwho = #{editwho}
