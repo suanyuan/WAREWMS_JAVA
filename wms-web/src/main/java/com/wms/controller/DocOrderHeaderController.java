@@ -140,10 +140,10 @@ public class DocOrderHeaderController {
     }
 
     @Login
-    @RequestMapping(params = "picking")
+    @RequestMapping(params = "cancelPicked")
     @ResponseBody
-    public Json picking(String ordernos) {
-        Json json = orderHeaderForNormalService.batchRecheck(ordernos);
+    public Json cancelPicked(String ordernos) {
+        Json json = orderHeaderForNormalService.batchCancelPicked(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
@@ -152,10 +152,22 @@ public class DocOrderHeaderController {
     }
 
     @Login
-    @RequestMapping(params = "unPicking")
+    @RequestMapping(params = "packing")
     @ResponseBody
-    public Json unPicking(String ordernos) {
-        Json json = orderHeaderForNormalService.batchUnRecheck(ordernos);
+    public Json packing(String ordernos) {
+        Json json = orderHeaderForNormalService.batchPacking(ordernos);
+        if (json == null) {
+            json = new Json();
+            json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+        }
+        return json;
+    }
+
+    @Login
+    @RequestMapping(params = "unPacking")
+    @ResponseBody
+    public Json unPacking(String ordernos) {
+        Json json = orderHeaderForNormalService.batchUnPacking(ordernos);
         if (json == null) {
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

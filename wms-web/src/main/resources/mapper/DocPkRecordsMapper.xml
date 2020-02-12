@@ -177,6 +177,10 @@ where 1=1
 		select ifnull(max(pklineno),0) from doc_pk_records where orderno = #{orderno,jdbcType=VARCHAR}
 	</select>
 
+	<delete id="cancelPkRecords" parameterType="java.util.Map">
+		delete from doc_pk_records where orderno = #{orderno}
+	</delete>
+
 	<select id="queryPickedRecord" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select
 			<include refid="Base_Column_List"/>

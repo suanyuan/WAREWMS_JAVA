@@ -52,15 +52,13 @@ import java.util.*;
 @Service("orderHeaderForNormalService")
 public class OrderHeaderForNormalService extends BaseService {
 
-//    static Logger logger = Logger.getLogger(OrderHeaderForNormalService.class.getName());
-
-//    private static final String END_POINT = ResourceUtil.geteEndpoint();
 
     @Autowired
     private OrderHeaderForNormalMybatisDao orderHeaderForNormalMybatisDao;
     @Autowired
+    private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
+    @Autowired
     private CommonService commonService;
-
     @Autowired
     private DocOrderPackingService docOrderPackingService;
     @Autowired
@@ -77,14 +75,10 @@ public class OrderHeaderForNormalService extends BaseService {
     private BasPackageMybatisDao basPackageMybatisDao;
     @Autowired
     private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
-//    @Autowired
-//    private BasSerialNumMybatisDao basSerialNumMybatisDao;
     @Autowired
     private ImportOrderDataService importOrderDataService;
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
-    @Autowired
-    private OrderDetailsForNormalMybatisDao orderDetailsForNormalMybatisDao;
     @Autowired
     private DocAsnDoublecMybatisDao docAsnDoublecMybatisDao;
     @Autowired
@@ -93,8 +87,6 @@ public class OrderHeaderForNormalService extends BaseService {
     private DocOrderPackingMybatisDao docOrderPackingMybatisDao;
     @Autowired
     private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
-//    @Autowired
-//    private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
     @Autowired
     private BasSkuMybatisDao basSkuMybatisDao;
     @Autowired
@@ -105,10 +97,12 @@ public class OrderHeaderForNormalService extends BaseService {
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
     @Autowired
     private DocOrderUtilService docOrderUtilService;
-//    @Autowired
-//    private SfcUserMybatisDao sfcUserMybatisDao;
     @Autowired
     private SfcRoleMybatisDao sfcRoleMybatisDao;
+    @Autowired
+    private DocPkRecordsMybatisDao docPkRecordsMybatisDao;
+
+
     /**
      * 订单列表显示
      */
@@ -314,11 +308,8 @@ public class OrderHeaderForNormalService extends BaseService {
             }
         } catch (Exception e) {
 
-            e.printStackTrace();
-            json.setMsg("系统错误：" + e.getMessage());
-            json.setSuccess(false);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return json;
+            return Json.error("系统错误：" + e.toString());
         }
 
         json.setMsg(resultMsg.toString());
@@ -387,48 +378,41 @@ public class OrderHeaderForNormalService extends BaseService {
 
                     if (StringUtil.isNotEmpty(result) && result.equals("000")) {
 
+                        /*
+                         * todo 引用出库单据暂不启用
+                         */
                         if (orderHeaderForNormal.getOrdertype().equals("DX")) {
+
+                            //跳过拣货操作，默认拣货完成
+                            orderHeaderForNormal.setSostatus(Constant.CODE_SO_STS_PICKED);
+                            orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
 
                             Json fixReuslt = docOrderPackingService.fixOrderPacking(orderHeaderForNormalForm.getOrderno());
                             if (!fixReuslt.isSuccess()) {
 
-                                json.setSuccess(false);
-                                json.setMsg(fixReuslt.getMsg());
-                                return json;
+                                return Json.error(fixReuslt.getMsg());
                             } else {
 
-                                json.setSuccess(true);
-                                json.setMsg("处理完毕");
-                                return json;
+                                return Json.success("处理完毕");
                             }
                         } else {
 
-                            json.setSuccess(true);
-                            json.setMsg("处理完毕");
-                            return json;
+                            return Json.success("处理完毕");
                         }
                     } else {
 
-                        json.setSuccess(false);
-                        json.setMsg("分配失败:" + result);
-                        return json;
+                        return Json.error("分配失败:" + result);
                     }
                 } else {
-                    json.setSuccess(false);
-                    json.setMsg("当前状态订单,不能操作分配!");
-                    return json;
+                    return Json.error("当前状态订单,不能操作分配!");
                 }
             } else {
-                json.setSuccess(false);
-                json.setMsg("查无出库单数据");
-                return json;
+                return Json.error("查无出库单数据");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            json.setMsg("系统错误:" + e.getLocalizedMessage());
+
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            json.setSuccess(false);
-            return json;
+            return Json.error("系统错误:" + e.toString());
         }
     }
 
@@ -465,10 +449,13 @@ public class OrderHeaderForNormalService extends BaseService {
         orderHeaderForNormalQuery.setOrderno(orderNo);
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
         if (orderHeaderForNormal != null) {
+
             if (orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_CREATED) ||
                     orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PART_ALLOCATED) ||
                     orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_ALLOCATED)) {
+
                 try {
+
                     Map<String, Object> map = new HashMap<>();
                     //map.put("warehouseId", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
                     map.put("orderNo", orderNo);
@@ -479,9 +466,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     if (result.contains("000")) {
                         docSerialNumRecordMybatisDao.clearRecordByOrderno(orderNo);
                     }
-                    json.setSuccess(true);
-                    json.setMsg("取消分配成功");
-                    return json;
+                    return Json.success("取消分配成功");
                 } catch (Exception e) {
 
                     e.printStackTrace();
@@ -491,21 +476,19 @@ public class OrderHeaderForNormalService extends BaseService {
                     return json;
                 }
             } else {
-                json.setSuccess(false);
-                json.setMsg("当前状态订单,不能取消分配!");
-                return json;
+
+                return Json.error("当前状态订单,不能取消分配!");
             }
         } else {
-            json.setSuccess(false);
-            json.setMsg("查无出库单数据");
-            return json;
+
+            return Json.error("查无出库单数据");
         }
     }
 
     /**
-     * 批量处理复核
+     * 批量处理取消拣货
      */
-    public Json batchRecheck(String ordernos) {
+    public Json batchCancelPicked(String ordernos) {
 
         if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
         Json json = new Json();
@@ -517,7 +500,90 @@ public class OrderHeaderForNormalService extends BaseService {
 
             if (StringUtil.isNotEmpty(orderno)) {
 
-                json = recheck(orderno);
+                json = cancelPicked(orderno);
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+
+    /**
+     * 取消拣货
+     */
+    private Json cancelPicked(String orderNo) {
+
+        OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+        orderHeaderForNormalQuery.setOrderno(orderNo);
+        OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+        if (orderHeaderForNormal != null) {
+
+            //判断订单状态 部分拣货 || 完全拣货
+            if (orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PART_PICKED) ||
+                    orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PICKED)) {
+
+                MybatisCriteria mybatisCriteria = new MybatisCriteria();
+                ActAllocationDetailsQuery allocationQuery = new ActAllocationDetailsQuery();
+                allocationQuery.setOrderno(orderNo);
+                allocationQuery.setPrintflag("1");
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(allocationQuery));
+                List<ActAllocationDetails> allocationList = actAllocationDetailsMybatisDao.queryByList(mybatisCriteria);
+
+                try {
+
+                    if (allocationList != null && allocationList.size() > 0) {
+
+                        //恢复printflag的默认值0
+                        actAllocationDetailsMybatisDao.cancelPicking(orderNo);
+                        //清除拣货记录
+                        docPkRecordsMybatisDao.cancelPkRecords(orderNo);
+                    }
+
+                    //变更出库单状态
+                    OrderDetailsForNormalQuery orderDetailsForNormalQuery = new OrderDetailsForNormalQuery();
+                    orderDetailsForNormalQuery.setOrderno(orderNo);
+                    orderDetailsForNormalQuery.setLinestatus(Constant.CODE_SO_STS_CREATED);
+                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(orderDetailsForNormalQuery));
+                    List<OrderDetailsForNormal> unallocatedOrderDetials = orderHeaderForNormalMybatisDao.queryByPageList(mybatisCriteria);
+
+                    orderHeaderForNormal.setSostatus(
+                            unallocatedOrderDetials.size() > 0 ?
+                                    Constant.CODE_SO_STS_PART_ALLOCATED :
+                                    Constant.CODE_SO_STS_ALLOCATED);
+                    orderHeaderForNormalMybatisDao.updateBySelective(orderHeaderForNormal);
+                } catch (Exception e) {
+
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return Json.error("系统异常，" + e.toString());
+                }
+
+                return Json.success("取消拣货成功");
+            } else {
+
+                return Json.error("当前状态订单,不可取消拣货!");
+            }
+        } else {
+
+            return Json.error("查无此订单数据");
+        }
+    }
+
+    /**
+     * 批量处理复核
+     */
+    public Json batchPacking(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = ordernos.split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                json = packing(orderno);
                 resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
             }
         }
@@ -528,7 +594,7 @@ public class OrderHeaderForNormalService extends BaseService {
     /**
      * 复核
      */
-    private Json recheck(String orderNo) {
+    private Json packing(String orderNo) {
 
         Json json = docOrderUtilService.fixLLPackage(orderNo);
         if (!json.isSuccess()) return json;
@@ -546,11 +612,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_ALLOCATED)) {
 
                 List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryPackageExist(orderNo);
-                if (docOrderPackingList.size() > 0) {
-                    json.setSuccess(false);
-                    json.setMsg("此出库单已开始装箱，不可一键拣货");
-                    return json;
-                }
+                if (docOrderPackingList.size() > 0) return Json.error("此出库单已开始复核，不可一键复核");
 
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByAllocationDetailsId(orderNo);
                 if (allocationDetailsIdList != null && allocationDetailsIdList.size() > 0) {
@@ -575,20 +637,20 @@ public class OrderHeaderForNormalService extends BaseService {
                             }
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                        json.setMsg("系统异常：" + e.getMessage());
+                        json.setMsg("系统异常：" + e.toString());
                         json.setSuccess(false);
 //                        json.setMsg("复核处理失败：订单数据异常！");
                         return json;
                     }
-                    return Json.success("拣货成功");
+                    return Json.success("复核成功");
                 } else {
-                    return Json.error("拣货失败,查询不到对应的分配明细");
+                    return Json.error("复核失败,查询不到对应的分配明细");
                 }
             } else {
                 json.setSuccess(false);
-                json.setMsg("当前状态订单,不能操作拣货!");
+                json.setMsg("当前状态订单,不能操作复核!");
                 return json;
             }
         } else {
@@ -601,7 +663,7 @@ public class OrderHeaderForNormalService extends BaseService {
     /**
      * 批量处理取消复核
      */
-    public Json batchUnRecheck(String ordernos) {
+    public Json batchUnPacking(String ordernos) {
 
         if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
         Json json = new Json();
@@ -613,7 +675,7 @@ public class OrderHeaderForNormalService extends BaseService {
 
             if (StringUtil.isNotEmpty(orderno)) {
 
-                json = unRecheck(orderno);
+                json = unPacking(orderno);
                 resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
             }
         }
@@ -624,7 +686,7 @@ public class OrderHeaderForNormalService extends BaseService {
     /**
      * 取消复核
      */
-    private Json unRecheck(String orderNo) {
+    private Json unPacking(String orderNo) {
         Json json = new Json();
         //
         OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
@@ -653,12 +715,12 @@ public class OrderHeaderForNormalService extends BaseService {
                                     continue;
                                 } else {
                                     json.setSuccess(false);
-                                    json.setMsg("取消拣货处理失败，" + pickResult);
+                                    json.setMsg("取消复核处理失败，" + pickResult);
                                     return json;
                                 }
                             } else {
                                 json.setSuccess(false);
-                                json.setMsg("取消拣货处理失败，订单数据异常！");
+                                json.setMsg("取消复核处理失败，订单数据异常！");
                                 return json;
                             }
                         }
@@ -667,11 +729,11 @@ public class OrderHeaderForNormalService extends BaseService {
                     } catch (Exception e) {
                         e.printStackTrace();
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                        return Json.success("取消拣货错误！");
+                        return Json.success("取消复核错误！");
                     }
-                    return Json.success("取消拣货成功");
+                    return Json.success("取消复核成功");
                 } else {
-                    return Json.success("取消拣货失败");
+                    return Json.success("取消复核失败");
                 }
             }
         } else {
@@ -1643,7 +1705,7 @@ public class OrderHeaderForNormalService extends BaseService {
             if (result.isSuccess()) {
                 head = orderHeaderForNormalMybatisDao.queryById(orderno);
                 if (head.getSostatus().equals(Constant.CODE_SO_STS_ALLOCATED)) {
-                    Json json = recheck(orderno);
+                    Json json = packing(orderno);
                     if (json.isSuccess()) {
                         result = shipment(orderno);
                         if (result.isSuccess()) {

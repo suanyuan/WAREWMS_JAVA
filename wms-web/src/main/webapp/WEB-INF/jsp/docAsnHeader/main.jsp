@@ -2471,7 +2471,7 @@ var downloadSerialNumTemplate = function(){
 				<div>
 					<a onclick='printTaskList();' id='ezuiBtn_taskList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货任务清单</a>
                     <a onclick='printResultList();' id='ezuiBtn_resultList'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-print"' href='javascript:void(0);'>打印收货记录</a>
-					<a onclick='statistics();' id='ezuiBtn_statistics' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>统计收货数</a>
+					<a onclick='statistics();' id='ezuiBtn_statistics' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>收货统计</a>
 
 					<a onclick='keepSerialNum();' id='ezuiBtn_keepSerialNum' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>保存销退序列号</a>
 

@@ -27,5 +27,8 @@ public interface DocPkRecordsMybatisDao extends BaseDao {
      */
     int getMaxPklineno(@Param("orderno") String orderno);
 
-
+    /**
+     * 清除拣货记录
+     */
+    void cancelPkRecords(@Param("orderno") String orderno);
 }
