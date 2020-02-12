@@ -188,6 +188,8 @@ public class CouRequestHeaderService extends BaseService {
             mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
             detailsList=actAllocationDetailsMybatisDao.queryByLocByOrderNo(mybatisCriteria);
         }else{
+            datagrid.setTotal((long)0);
+            datagrid.setRows(detailsList);
             return datagrid;
         }
 

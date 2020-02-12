@@ -2,6 +2,7 @@ package com.wms.service;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
+import com.wms.constant.Constant;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.*;
@@ -72,20 +73,49 @@ public class DocPaHeaderService extends BaseService {
     private BasPackageMybatisDao basPackageMybatisDao;
     @Autowired
     private BasCodesMybatisDao basCodesMybatisDao;
+    @Autowired
+    private ProductLineMybatisDao productLineMybatisDao;
+    @Autowired
+    private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
 
 	public EasyuiDatagrid<DocPaHeaderVO> getPagedDatagrid(EasyuiDatagridPager pager, DocPaHeaderQuery query) {
         EasyuiDatagrid<DocPaHeaderVO> datagrid = new EasyuiDatagrid<>();
+        if(query.getSkuGroup1() != null){
+            query.setSkuGroup1(query.getSkuGroup1());
+        }else {
+            query.setSkuGroup1("");
+        }
         MybatisCriteria mybatisCriteria = new MybatisCriteria();
         mybatisCriteria.setCurrentPage(pager.getPage());
         mybatisCriteria.setPageSize(pager.getRows());
         mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
         mybatisCriteria.setOrderByClause("addtime desc");
         List<DocPaHeader> docOrderHeaderList = docPaHeaderDao.queryByList(mybatisCriteria);
+        List<DocAsnDetail> docAsnDetails ;
         DocPaHeaderVO docOrderHeaderVO = null;
+        BasCustomer basCustomer = null;
+        ProductLine productLineList = null;
         List<DocPaHeaderVO> docOrderHeaderVOList = new ArrayList<DocPaHeaderVO>();
+
         for (DocPaHeader docOrderHeader : docOrderHeaderList) {
             docOrderHeaderVO = new DocPaHeaderVO();
             BeanUtils.copyProperties(docOrderHeader, docOrderHeaderVO);
+			//入库日期
+            docAsnDetails = docAsnDetailsMybatisDao.queryByAsnNo(docOrderHeaderVO.getAsnno());
+            if(docAsnDetails != null && docAsnDetails.size()>0){
+                //产品线
+                productLineList = productLineMybatisDao.queryByDocAsn(docAsnDetails.get(0).getCustomerid(),docAsnDetails.get(0).getSku());
+                if(productLineList !=null){
+                    docOrderHeaderVO.setPname(productLineList.getName());
+                }
+            }
+            //货主
+            basCustomer = basCustomerMybatisDao.queryByIdType(docOrderHeaderVO.getCustomerid(), Constant.CODE_CUS_TYP_OW);
+            if (basCustomer != null) {
+                docOrderHeaderVO.setCustomerIdRef(basCustomer.getDescrC());
+            } else {
+                docOrderHeaderVO.setCustomerIdRef(" ");
+            }
             docOrderHeaderVOList.add(docOrderHeaderVO);
         }
         datagrid.setTotal((long) docPaHeaderDao.queryByCount(mybatisCriteria));

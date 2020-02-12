@@ -41,6 +41,17 @@ public class ViewInvLocationQuery implements IQuery {
 	private  String customerid;      //货主
 	private Set<SfcCustomer> customerSet;
 
+
+	private String locationid; //查询所需   库位类别
+
+	public String getLocationid() {
+		return locationid;
+	}
+
+	public void setLocationid(String locationid) {
+		this.locationid = locationid;
+	}
+
 	public String getCustomerid() {
 		return customerid;
 	}

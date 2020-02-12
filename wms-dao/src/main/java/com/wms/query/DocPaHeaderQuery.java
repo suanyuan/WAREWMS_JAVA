@@ -1,8 +1,5 @@
 package com.wms.query;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
-
 public class DocPaHeaderQuery implements IQuery {
 
 	private String pano;
@@ -30,7 +27,15 @@ public class DocPaHeaderQuery implements IQuery {
 	private String warehouseid;
 	private String addtimeBegin;//附加查询起始到结束时间
 	private String addtimeEnd;
+	private String skuGroup1;//产品线
 
+	public String getSkuGroup1() {
+		return skuGroup1;
+	}
+
+	public void setSkuGroup1(String skuGroup1) {
+		this.skuGroup1 = skuGroup1;
+	}
 	public String getAddtimeBegin() {
 		return addtimeBegin;
 	}

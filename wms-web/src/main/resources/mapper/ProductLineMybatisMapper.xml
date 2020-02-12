@@ -135,10 +135,9 @@ where 1=1
 </select>
 
 <select id="queryByDocAsn"  resultMap="BaseResultMap" parameterType="Object">
-	select * from product_line p
-	where p.customerid = (select customerid from bas_sku  where customerid=#{customerid} and sku=#{sku})
-	and p.product_line_id =(select sku_group1 from bas_sku  where customerid=#{customerid} and sku=#{sku})
-
+	select  * from product_line p
+	LEFT JOIN bas_sku t1 on p.product_line_id = t1.sku_group1 AND P.customerid=t1.customerid
+	where t1.customerid = #{customerid}  and t1.sku = #{sku}
 </select>
 <select id="queryByName"  resultMap="BaseResultMap" parameterType="Object">
 select * from product_line p where p.name LIKE concat('%', #{name},'%')

@@ -5,6 +5,7 @@ import com.wms.entity.*;
 import com.wms.mybatis.dao.GspProductRegisterMybatisDao;
 import com.wms.mybatis.dao.GspProductRegisterSpecsMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
+import com.wms.mybatis.dao.ProductRegisterRelationMybatisDao;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
 import com.wms.query.*;
 import com.wms.utils.BeanConvertUtil;
@@ -56,6 +57,10 @@ public class GspVerifyService {
     private GspInstrumentCatalogService gspInstrumentCatalogService;
     @Autowired
     private GspProductRegisterMybatisDao gspProductRegisterMybatisDao;
+
+
+    @Autowired
+    private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
 
     /**
      * 验证上架提交日期有效性
@@ -365,12 +370,19 @@ public class GspVerifyService {
                 if(!StringUtil.isEmpty(lotatt01)){
                     //生产日期需要在最老的注册证发证日期和最新的注册证过期时间之内
 //                    List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(registerNo);
-                    MybatisCriteria mybatisCriteria = new MybatisCriteria();
-                    GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-                    historyQuery.setVersion(gspProductRegister.getVersion());
-                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
-                    mybatisCriteria.setOrderByClause("create_date desc");
-                    allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
+//                    MybatisCriteria mybatisCriteria = new MybatisCriteria();
+//                    GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
+
+//                    historyQuery.set(gspProductRegister.getVersion());
+//                    mybatisCriteria.setOrderByClause("create_date desc");
+
+//                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
+//                    productRegisterRelationMybatisDao.queryByList(mybatisCriteria);
+                   allRegister = gspProductRegisterMybatisDao.queryBysku(sku);
+
+
+
+//                    allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
                     Date beginDate = null;
                     Date endDate = null;
                     if(allRegister!=null && allRegister.size()>1){
