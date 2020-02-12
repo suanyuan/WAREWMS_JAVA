@@ -2967,7 +2967,7 @@
     <form id='ezuiPackForm' method='post' enctype='multipart/form-data'>
         <table>
             <tr>
-                <th>选择拣货单类型</th>
+                <th>拣货单类型</th>
                 <td><input id='pack' class="easyui-combobox" size='100' style="height:30px" data-options="
 																								editable: false,
 																								panelHeight: 'auto',
@@ -2976,7 +2976,7 @@
 																								textField: 'value',
 																								data: [{
 																									id: '1',
-																									value: '新拣货单'
+																									value: '拣货标签'
 																								},{
 																									id: '-1',
 																									value: '拣货单'

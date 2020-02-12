@@ -608,8 +608,7 @@ public class OrderHeaderForNormalService extends BaseService {
         OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
         if (orderHeaderForNormal != null) {
             //判断订单状态
-            if (orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PART_ALLOCATED) ||
-                    orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_ALLOCATED)) {
+            if (orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PICKED)) {
 
                 List<DocOrderPacking> docOrderPackingList = docOrderPackingMybatisDao.queryPackageExist(orderNo);
                 if (docOrderPackingList.size() > 0) return Json.error("此出库单已开始复核，不可一键复核");
