@@ -41,4 +41,12 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
 
 
     int countByproductResisterNo(Object id);
+
+
+    /**
+     * 通过sku查询所有关联的注册证
+     * @param sku   产品代码
+     * @return ~
+     */
+    List<PdaGspProductRegister> queryBysku(String sku);
 }

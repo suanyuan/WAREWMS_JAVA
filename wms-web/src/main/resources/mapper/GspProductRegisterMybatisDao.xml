@@ -345,6 +345,14 @@
 
 	</select>
 
+	<!-- 通过sku查询所有关联的注册证 -->
+	<select id="queryBysku"  resultMap="BaseResultMap" parameterType="Object">
+		select t1.* from gsp_product_register t1
+		LEFT JOIN product_register_relation t2 on t2.product_register_id = t1.product_register_id
+		where t2.product_code = #{sku} ORDER BY t1.create_date desc
+	</select>
+
+
 
 	<!-- 通过产品注册证查询总数-->
 	<select id="countByproductResisterNo" resultType="java.lang.Integer"  parameterType="Object">

@@ -428,7 +428,10 @@
                 lotatt02End: $('#lotatt02End').datebox('getValue'),//时间查询
                 lotatt03Start: $('#lotatt03Start').datebox('getValue'),//入库日期时间查询
                 lotatt03End: $('#lotatt03End').datebox('getValue'),//入库日期时时间查询
-                lotatt10: $('#lotatt10').combobox('getValue')
+                lotatt10: $('#lotatt10').combobox('getValue'),
+
+
+                locationid : $('#locationidQ').combobox('getValue'),
             });
         };
 
@@ -726,6 +729,18 @@
 																																	url:'<c:url value="/commonController.do?qcState"/>',
 																																	valueField: 'id',
 																																     textField: 'value'"/></td>
+                        <th>库位类别</th><td><input type='text' id='locationidQ' class='easyui-combobox' size='16' data-options=" panelHeight: 'auto',
+							                                                                                                        editable: false,
+							                                                                                                        valueField: 'label',
+																																	textField: 'value',
+																																data: [{label: 'STAGE01',
+																																        value: '收货暂存库'},
+																																        {label: '111111',
+																																        value: '正常库'},
+																																       {label: 'SORTATION01',
+																																         value: '分配拣货库'}
+																																       ]"/></td>
+
                         <td colspan="2">
                             <a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton'
                                data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
