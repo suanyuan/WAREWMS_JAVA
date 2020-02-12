@@ -51,7 +51,7 @@ public class UserStatisticsPerformanceController {
 	 */
 	@Login
 	@RequestMapping(params = "exportDocPaDataToExcel")
-	public void exportDocPaDataToExcel(HttpServletResponse response, String token, UserStatisticsPerformance usp) throws Exception {
+	public void exportDocPaDataToExcel(HttpServletResponse response, String token, UserStatisticsPerformanceQuery usp) throws Exception {
 		userStatisticsPerformanceService.exportDocPaDataToExcel(response, token, usp);
 	}
 	@Login

@@ -40,11 +40,6 @@ public class UserStatisticsPerformanceService extends BaseService {
 
 	public EasyuiDatagrid<UserStatisticsPerformanceVO> getPagedDatagrid(EasyuiDatagridPager pager, UserStatisticsPerformanceQuery query) throws ParseException {
 		EasyuiDatagrid<UserStatisticsPerformanceVO> datagrid = new EasyuiDatagrid<UserStatisticsPerformanceVO>();
-		//先通过用户ID查询用户信息
-		SfcUser sfcUserByName = sfcUserMybatisDao.queryByName(query.getUserId());
-		if(sfcUserByName != null){
-			query.setUserId(sfcUserByName.getId());
-		}
 
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
@@ -52,12 +47,10 @@ public class UserStatisticsPerformanceService extends BaseService {
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 		List<UserStatisticsPerformance> userStatisticsPerformanceList = userStatisticsPerformanceDao.queryByList(mybatisCriteria);
 
-		//根据用户ID 查找用户信息 获取用户名
+
 		List<UserStatisticsPerformanceVO> userStatisticsPerformanceVOList = new ArrayList<UserStatisticsPerformanceVO>();
 		for (UserStatisticsPerformance userStatisticsPerformance : userStatisticsPerformanceList) {
-			SfcUser sfcUserById = sfcUserMybatisDao.queryById(userStatisticsPerformance.getUserId());
 			UserStatisticsPerformanceVO userStatisticsPerformanceVO = new UserStatisticsPerformanceVO();
-			userStatisticsPerformance.setUserId(sfcUserById.getUserName());
 			userStatisticsPerformance.setPerfDate(simpleDateFormat.format(simpleDateFormat.parse(userStatisticsPerformance.getPerfDate())));
 			BeanUtils.copyProperties(userStatisticsPerformance, userStatisticsPerformanceVO);
 			userStatisticsPerformanceVOList.add(userStatisticsPerformanceVO);
@@ -112,7 +105,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 	/**
 	 * 导出上架任务清单
 	 */
-	public void exportDocPaDataToExcel(HttpServletResponse response, String token, UserStatisticsPerformance usp) throws IOException {
+	public void exportDocPaDataToExcel(HttpServletResponse response, String token, UserStatisticsPerformanceQuery usp) throws IOException {
 		Cookie cookie = new Cookie("exportToken",token);
 		cookie.setMaxAge(60);
 		response.addCookie(cookie);
@@ -126,13 +119,8 @@ public class UserStatisticsPerformanceService extends BaseService {
 			// excel要导出的数据
 
 			//先通过用户ID查询用户信息
-			UserStatisticsPerformance userStatisticsPerformance = new UserStatisticsPerformance();
-			SfcUser sfcUserByName = sfcUserMybatisDao.queryByName(usp.getUserId());
-			if(sfcUserByName != null){
-				userStatisticsPerformance.setUserId(sfcUserByName.getId());
-			}
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
-			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(userStatisticsPerformance));
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(usp));
 			List<UserStatisticsPerformance> userStatisticsPerformanceList = userStatisticsPerformanceDao.queryByList(mybatisCriteria);
 			List<UserStatisticsPerformanceVO> exportVOs = new ArrayList<>();
 			UserStatisticsPerformanceVO userStatisticsPerformanceVO;
@@ -153,7 +141,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 				System.out.println("用户绩效内容为空");
 			}else {
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(exportVOs, fieldMap, sheetName,65535, response,usp.getUserId());
+				ExcelUtil.listToExcel(exportVOs, fieldMap, sheetName,65535, response,"效绩统计");
 			}
 		} catch (ExcelException e) {
 			e.printStackTrace();

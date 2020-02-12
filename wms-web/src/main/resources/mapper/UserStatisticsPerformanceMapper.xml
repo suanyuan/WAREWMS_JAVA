@@ -34,7 +34,7 @@ where 1=1
 	    and id =  #{condition.id}
 	</if>
 	<if test="condition.userId != null and condition.userId != ''" >
-	    and user_id =  #{condition.userId}
+	    and b.USER_NAME like concat('%',#{condition.userId},'%')
 	</if>
 	<if test="condition.perfDate != null and condition.perfDate != ''" >
 	    and perf_date =  #{condition.perfDate}
@@ -144,19 +144,20 @@ where 1=1
 
 <!-- 绩效统计 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from user_statistics_performance 
+	select count(1)
+	from user_statistics_performance a
+	left join Sfc_User b on b.user_id=a.user_id
 	<include refid="Example_Where_Clause"/>
 </select>
   	
 <!-- 查询绩效统计列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
-	<include refid="Base_Column_List"/>
-	from user_statistics_performance 
+	select
+	id,b.USER_NAME user_id,perf_date,perf_pick,perf_recheck,perf_pa,perf_qc,perf_order,userdefine1,userdefine2,userdefine3,userdefine4,userdefine5
+	from user_statistics_performance a
+	left join Sfc_User b on b.user_id=a.user_id
 	<include refid="Example_Where_Clause"/>
-	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
+       order by  perf_date desc
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
