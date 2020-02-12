@@ -53,25 +53,26 @@ $(function() {
 		fit: true,
 		border: false,
 		fitColumns : false,
-		nowrap: true,
+		nowrap: false,
 		striped: true,
 		collapsible:false,
 		pagination:true,
 		rownumbers:true,
 		singleSelect:false,
+		checkOnSelect: true,
+		selectOnCheck: true,
 		idField : 'asnno',
 		queryParams: {
 			asnstatusCheck: $('#asnstatusCheck').is(':checked') == true ? "Y" : "N"
 		},
 		rowStyler:asnRowStyle,
 		columns : [[
-            {field: 'ck',                   checkbox:true },
+            {field: 'ck',                   checkbox:true ,width: 6},
 			{field: 'customerid',		    title: '客户编码',	    width: 71 },
 			{field: 'asnno',		        title: '入库单编号',	    width: 131 },
 			{field: 'asntypeName',		    title: '入库类型',	    width: 71 },
 			{field: 'asnstatusName',		title: '入库状态',	    width: 71 },
-            {field: 'sup',		title: '供应商',	    width: 170	 },
-
+            {field: 'sup',					title: '供应商',	    	width: 170 },
             {field: 'asnreference1',		title: '客户单号1',	    width: 131 },
 			{field: 'asnreference2',		title: '客户单号2',		width: 101 },
 			{field: 'userdefine2',		    title: '上架单号',	    width: 101 },
@@ -166,6 +167,7 @@ $(function() {
 			{field: 'skudescrc',			title: '产品名称',		width: 150 },
 			// {field: 'alternativesku',	title: '产品条码',		width: 70 },
             {field: 'coldName',				title: '冷链标记',		width: 60 },
+			{field: 'pname',				title: '产品线',			width: 101 },
 			{field: 'linestatusName',		title: '行状态',			width: 60 },
 			{field: 'expectedqty',			title: '预期件数',		width: 60 },
 			{field: 'expectedqtyEach',			title: '预期数量',		width: 60 },
@@ -532,6 +534,7 @@ var ezuiToolbarClear = function(){
 	$('#customerid').textbox('clear');
 	$('#asnno').textbox('clear');
 	$('#releasestatus').combobox('clear');
+	$('#skugroup1').combobox('clear');
 	$('#asnstatus').combobox('clear');
 	$('#userdefinea').combobox('clear');
 	$('#asntype').combobox('clear');
@@ -851,6 +854,51 @@ var mergeReceiving = function () {
     }
 
 }
+//确认收货
+var mergeReceivingAndOrder = function () {
+	var row = ezuiDatagrid.datagrid('getSelections');
+	if(row) {
+		$.messager.confirm('<spring:message code="common.message.confirm"/>', '是否进行确认收货？', function(confirm) {
+			if (confirm) {
+				$.messager.progress({
+					text : '<spring:message code="common.message.data.processing"/>', interval : 100
+				});
+				var arr = new Array();
+				for(var i=0;i<row.length;i++){
+					arr.push(row[i].asnno);
+				}
+				$.ajax({
+					url : sy.bp()+"/docAsnHeaderController.do?confirmReveiving",
+					data : {
+						"asnNos":arr.join(",")
+					},
+					type : 'POST',
+					dataType : 'JSON',
+					async  :true,
+					success : function(result){
+						$.messager.progress('close');
+						var msg='';
+						try{
+							if(result.success){
+								msg = result.msg;
+								mergeOrder();
+								ezuiDialog.dialog('close');
+							}else{
+								msg = '<font color="red">' + result.msg + '</font>';
+							}
+						}catch (e) {
+							msg = '<spring:message code="common.message.data.process.failed"/><br/>'+ msg;
+						} finally {
+							$.messager.alert('操作提示', result.msg);
+							$.messager.progress('close');
+						}
+					}
+				});
+			}
+		})
+	}
+
+}
 //取消收货
 var nomergeReceiving = function () {
 	var row = ezuiDatagrid.datagrid('getSelections');
@@ -1014,7 +1062,7 @@ var doSearch = function(){
         supplierid:$('#supplierId').val(),
         notes:$('#notes').val(),
         warehouseid:$('#warehouseId').combobox('getValue'),
-		skuGroup1:$('#skugroup1').val(),
+		skuGroup1:$('#skugroup1').combobox('getValue'),
         productId:$('#productId').val(),
 		userdefine2:$('#pano').val()//上架单号
 
@@ -2440,7 +2488,14 @@ var downloadSerialNumTemplate = function(){
 							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>产品线</th><td><input type='text' id='skugroup1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品线</th>
+							<td>
+								<input type='text' id='skugroup1' name="skugroup1" class='easyui-combobox' size='16' data-options="panelHeight: '300px',
+																															editable: false,
+																															url:'<c:url value="/productLineController.do?getCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/>
+							</td>
 							<th colspan="2">
 								<input id="asnstatusCheck" type="checkbox" onclick="" checked="checked"><label for="asnstatusCheck">显示关闭/取消</label>
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
@@ -2457,8 +2512,9 @@ var downloadSerialNumTemplate = function(){
 					<a onclick='deleteMain();' id='ezuiBtn_del' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>删除订单</a>
 					<a onclick='edit();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'><spring:message code='common.button.edit'/></a>
 					<!--<a onclick='clearDatagridSelected("#ezuiDatagrid");' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message code='common.button.cancelSelect'/></a>-->
-					<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>
-					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架任务清单</a>
+					<%--<a onclick='showRefIn()' id='ezuiBtn_ref' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>引用入库</a>--%>
+					<a onclick='mergeReceivingAndOrder()' id='ezuiBtn_receiving_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>收货/上架单生成</a>
+					<a onclick='mergeOrder();' id='ezuiBtn_merge' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>生成上架单</a>
 					<a onclick='mergeReceiving();' id='ezuiBtn_receiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>确认收货</a>
 					<a onclick='nomergeReceiving();' id='ezuiBtn_noreceiving' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-ok"' href='javascript:void(0);'>取消收货</a>
                     <a onclick='cancel();' id='ezuiBtn_cancel' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>取消订单</a>

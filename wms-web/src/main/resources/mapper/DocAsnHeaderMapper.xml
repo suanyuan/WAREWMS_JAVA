@@ -1688,7 +1688,11 @@ insert into doc_asn_header
 	and d.codeid = 'RLS_STS'
 	) as t
 	left join (select * from doc_asn_details where asnlineno=1) detail on t.asnno = detail.asnno
-	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid and sku.sku_group1 = #{condition.skuGroup1}
+	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid
+	where 1 = 1
+	<if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
+		and sku.sku_group1 = #{condition.skuGroup1}
+	</if>
 </select>
 
 <!-- 查询入库单管理列表 -->
@@ -1712,9 +1716,12 @@ insert into doc_asn_header
 		and d.codeid = 'RLS_STS'
 	) as t
 	left join (select * from doc_asn_details where asnlineno=1) detail on t.asnno = detail.asnno
-	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid and sku.sku_group1 = #{condition.skuGroup1}
+	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid
 	LEFT JOIN bas_customer customer on t.supplierid = customer.CUSTOMERID
 	where 1 = 1
+	<if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
+		and sku.sku_group1 = #{condition.skuGroup1}
+	</if>
 	<if test="orderByClause != null and orderByClause != ''" >
 		order by  ${orderByClause}
 	</if>

@@ -87,6 +87,7 @@ public class DocAsnDetailService extends BaseService {
 
         double zero = 0;
         DocAsnDetailVO docAsnDetailVO = null;
+        ProductLine productLineList = null;
         List<DocAsnDetailVO> docAsnDetailVOList = new ArrayList<DocAsnDetailVO>();
         //没有数据的话 总合计设为0
         if(docAsnDetailList.size()==0){
@@ -105,7 +106,11 @@ public class DocAsnDetailService extends BaseService {
                 docAsnDetailVO.setExpectedqtyEachSum(docAsnDetailSum.getExpectedqtyEach().doubleValue());
                 docAsnDetailVO.setReceivedqtySum(docAsnDetailSum.getReceivedqty().doubleValue());
             }
-
+            //产品线
+            productLineList = productLineMybatisDao.queryByDocAsn(docAsnDetailVO.getCustomerid(),docAsnDetailVO.getSku());
+            if(productLineList !=null){
+                docAsnDetailVO.setPname(productLineList.getName());
+            }
 			docAsnDetailVOList.add(docAsnDetailVO);
 		}
 		datagrid.setTotal((long) docAsnDetailsMybatisDao.queryByCount(mybatisCriteria));

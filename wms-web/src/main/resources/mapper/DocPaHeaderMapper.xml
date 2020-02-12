@@ -217,22 +217,44 @@ where 1=1
 
 <!-- 上架单头档 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
-	select count(1) from doc_pa_header 
+	select count(1) from (
+	select a.*
+	from (select
+	<include refid="Base_Column_List"/>
+	from doc_pa_header
 	<include refid="Example_Where_Clause"/>
+	) as a
+	) as t
+	left join (select * from doc_pa_details where asnlineno=1) detail on t.asnno = detail.asnno
+	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid
+	where 1 = 1
+	<if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
+		and sku.sku_group1 = #{condition.skuGroup1}
+	</if>
 </select>
   	
 <!-- 查询上架单头档列表 -->
 <select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
-	select 
+	select t.* from (
+	select a.*
+	from (select
 	<include refid="Base_Column_List"/>
-	from doc_pa_header 
+	from doc_pa_header
 	<include refid="Example_Where_Clause"/>
+	) as a
+	) as t
+	left join (select * from doc_pa_details where asnlineno=1) detail on t.asnno = detail.asnno
+	left join bas_sku sku on detail.sku = sku.sku and sku.customerid = t.customerid
+	where 1 = 1
+	<if test="condition.skuGroup1 != null and condition.skuGroup1 != ''" >
+		and sku.sku_group1 = #{condition.skuGroup1}
+	</if>
 	<if test="orderByClause != null and orderByClause != ''" >
-       order by  ${orderByClause}
-    </if>
-    <if test="limitClause != null and limitClause != ''" >
-       ${limitClause}
-    </if>
+		order by  ${orderByClause}
+	</if>
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
 </select>
 
     <!-- 查询未完成列表-->

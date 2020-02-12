@@ -28,6 +28,24 @@ public class DocPaHeaderVO {
 	private String editwho;
 	private String paPrintFlag;
 	private String warehouseid;
+	private String pname;//产品线
+	private String customerIdRef;//货主
+
+	public String getPname() {
+		return pname;
+	}
+
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
+
+	public String getCustomerIdRef() {
+		return customerIdRef;
+	}
+
+	public void setCustomerIdRef(String customerIdRef) {
+		this.customerIdRef = customerIdRef;
+	}
 
 	public String getPano() {
 		return pano;

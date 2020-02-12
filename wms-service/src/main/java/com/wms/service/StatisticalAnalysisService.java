@@ -143,6 +143,12 @@ public class StatisticalAnalysisService extends BaseService {
 	/**************************************入库单列表****************************************/
 	public EasyuiDatagrid<DocAsnHeaderVO> getPagedDatagridRptAsnList(EasyuiDatagridPager pager, DocAsnHeaderQuery query) {
 		EasyuiDatagrid<DocAsnHeaderVO> datagrid = new EasyuiDatagrid<DocAsnHeaderVO>();
+
+		if(query.getSkuGroup1() != null){
+			query.setSkuGroup1(query.getSkuGroup1());
+		}else {
+			query.setSkuGroup1("");
+		}
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());

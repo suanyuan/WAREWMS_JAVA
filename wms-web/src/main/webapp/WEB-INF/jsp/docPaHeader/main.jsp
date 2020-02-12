@@ -13,6 +13,9 @@ var ezuiForm;
 var ezuiDialog;
 var ezuiDatagrid;
 
+var ezuiCustDataDialog;
+var ezuiCustDataDialogId;
+
 var ezuiImportDataDialog; //导入
 var ezuiImportDataForm;   //导入form
 
@@ -42,6 +45,8 @@ $(function() {
 			{field: 'pano',		title: '上架任务单号',	width: 150 },
 			{field: 'asnno',		title: '入库单号',	width: 150},
 			{field: 'pareference1',		title: '发货凭证号',	width: 150},
+			{field: 'customerIdRef',		title: '货主',	    width: 131 },
+			{field: 'pname',		title: '产品线',		width: 101 },
 			// {field: 'patype',		title: '类型',	width: 71 },
 			{field: 'pastatus',		title: '上架状态',	width: 71,formatter: pastatusFormatter},
 			{field: 'addtime',		title: '创建时间',	width: 150},
@@ -78,7 +83,6 @@ $(function() {
 			ezuiFormClear(ezuiForm);
 		}
 	}).dialog('close');
-
     //导入
     ezuiImportDataDialog = $('#ezuiImportDataDialog').dialog({
         modal : true,
@@ -95,8 +99,106 @@ $(function() {
         textField:'value'
 
 	});
+	/* 控件初始化start */
+	$("#customerid").textbox({
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiCustDataDialog #customerid").textbox('clear');
+				ezuiCustDataClick();
+				ezuiCustDataDialogSearch();
+			}
+		}]
+	});
+	//客户选择弹框
+	ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
+		modal: true,
+		title: '<spring:message code="common.dialog.title"/>',
+		buttons: '',
+		onOpen: function () {
+
+		},
+		onClose: function () {
+
+		}
+	}).dialog('close');
+
 });
 
+/* 客户选择弹框-主界面 */
+var ezuiCustDataClick = function () {
+	$("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combo('readonly', true);
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combo('readonly', true);
+	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+		url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
+		method: 'POST',
+		toolbar: '#ezuiCustToolbar',
+		title: '客户档案',
+		pageSize: 50,
+		pageList: [50, 100, 200],
+		fit: true,
+		border: false,
+		fitColumns: true,
+		nowrap: false,
+		striped: true,
+		collapsible: false,
+		pagination: true,
+		rownumbers: true,
+		singleSelect: true,
+		queryParams: {
+			customerType: $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+			activeFlag: $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+		},
+		idField: 'customerid',
+		columns: [[
+			{field: 'customerid', title: '客户代码', width: 15},
+			{field: 'descrC', title: '中文名称', width: 50},
+			{field: 'descrE', title: '英文名称', width: 50},
+			{field: 'customerTypeName', title: '类型', width: 15},
+			{
+				field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
+					return rowData.activeFlag == '1' ? '是' : '否';
+				}
+			}
+		]],
+		onDblClickCell: function (index, field, value) {
+			selectCust();
+		},
+		onRowContextMenu: function (event, rowIndex, rowData) {
+		}, onLoadSuccess: function (data) {
+			$(this).datagrid('unselectAll');
+		}
+	});
+	ezuiCustDataDialog.dialog('open');
+};
+/* 客户选择-主界面 */
+var selectCust = function () {
+	var row = ezuiCustDataDialogId.datagrid('getSelected');
+	if (row) {
+		var customerids = $("#toolbar #customerid").textbox('getValue');
+		console.log(customerids);
+		if (customerids != "" && customerids != undefined) {
+			customerids = customerids + "," + row.customerid;
+		} else {
+			customerids = row.customerid;
+		}
+		$("#toolbar #customerid").textbox('setValue', customerids);
+		ezuiCustDataDialog.dialog('close');
+	}
+	;
+};
+/* 客户选择弹框查询 */
+var ezuiCustDataDialogSearch = function () {
+	ezuiCustDataDialogId.datagrid('load', {
+		customerid: $("#ezuiCustDataDialog #customerid").textbox("getValue"),
+		customerType: $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+		activeFlag: $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+	});
+};
+/* 客户选择弹框清空 */
+var ezuiCustToolbarClear = function () {
+	$("#ezuiCustDataDialog #customerid").textbox('clear');
+};
 var edit = function(row){
 	processType = 'edit';
 	var row = row;
@@ -269,6 +371,7 @@ var doSearch = function(){
 		editwho : $('#editwho').val(),
 		paPrintFlag : $('#paPrintFlag').val(),
 		warehouseid : $('#warehouseid').val(),
+		skuGroup1:$('#skugroup1').combobox('getValue'),
 		// 附加查询起始到结束时间
         addtimeBegin:$('#addtimeBegin').datebox("getValue"),
         addtimeEnd:$('#addtimeEnd').datebox("getValue")
@@ -466,9 +569,19 @@ function btnReset() {
 						<tr>
 							<th>创建时间起始：</th><td><input type='text' id='addtimeBegin' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>创建时间结束：</th><td><input type='text' id='addtimeEnd' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>是否打印：</th><td><input type='text' id='paPrintFlag' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>是否打印：</th><td><input type='text' id='paPrintFlag' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>货主</th>
+							<td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>产品线</th>
+							<td>
+								<input type='text' id='skugroup1' name="skugroup1" class='easyui-combobox' size='16' data-options="panelHeight: '300px',
+																															editable: false,
+																															url:'<c:url value="/productLineController.do?getCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/>
+							</td>
 							<th>仓库：</th><td><input type='text' id='warehouseid' class='easyui-textbox' size='16' data-options=''/></td>
 							<td colspan="2">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
@@ -589,5 +702,6 @@ function btnReset() {
         <a onclick='ezuiDialogClose("#ezuiImportDataDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message code='common.button.close'/></a>
     </div>
 
+	<c:import url='/WEB-INF/jsp/docPaHeader/custDialog.jsp'/>
 </body>
 </html>
