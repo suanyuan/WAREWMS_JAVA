@@ -141,7 +141,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 				System.out.println("用户绩效内容为空");
 			}else {
 				//将list集合转化为excle
-				ExcelUtil.listToExcel(exportVOs, fieldMap, sheetName,65535, response,"效绩统计");
+				ExcelUtil.listToExcel(exportVOs, fieldMap, sheetName,65535, response,null);
 			}
 		} catch (ExcelException e) {
 			e.printStackTrace();
