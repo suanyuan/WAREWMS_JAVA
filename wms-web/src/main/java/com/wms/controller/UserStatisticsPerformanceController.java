@@ -104,4 +104,15 @@ public class UserStatisticsPerformanceController {
 		return userStatisticsPerformanceService.getUserStatisticsPerformanceCombobox();
 	}
 
+	/**
+	 * 用于统计效绩  接口被调用
+	 * @return
+	 */
+	@Login
+	@RequestMapping(params = "performanceStatistics")
+	@ResponseBody
+	public  String performanceStatistics() {
+		userStatisticsPerformanceService.performanceStatistics();
+		return "OK";
+	}
 }

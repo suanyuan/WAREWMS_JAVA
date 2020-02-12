@@ -19,15 +19,14 @@ import com.wms.vo.form.UserStatisticsPerformanceForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Service("userStatisticsPerformanceService")
 public class UserStatisticsPerformanceService extends BaseService {
@@ -178,5 +177,45 @@ public class UserStatisticsPerformanceService extends BaseService {
 		superClassMap.put("perfRecheck", "复核绩效");
 
 		return superClassMap;
+	}
+
+	/**
+	 * 统计前一天所有人效绩
+	 */
+	public  void performanceStatistics() {
+
+		//获得前一天时间
+		Date dNow = new Date();
+		Date dBefore = new Date();
+
+		Calendar calendar = Calendar.getInstance(); //得到日历
+		calendar.setTime(dNow);//把当前时间赋给日历
+//		calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
+		calendar.add(Calendar.DAY_OF_MONTH,-0);  //设置为前一天
+		dBefore = calendar.getTime();   //得到前一天的时间
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd"); //设置时间格式
+		String defaultStartDate = sdf.format(dBefore);    //格式化前一天
+		defaultStartDate = defaultStartDate + " 00:00:00";
+		String defaultEndDate = defaultStartDate.substring(0, 10) + " 23:59:59";
+
+		//获得所有人效绩 并且插入数据库
+		try {
+
+			UserStatisticsPerformanceQuery query = new UserStatisticsPerformanceQuery();
+			query.setAddtimeBegin(defaultStartDate);
+			query.setAddtimeEnd(defaultEndDate);
+			List<UserStatisticsPerformance> userStatisticsPerformanceList = userStatisticsPerformanceDao.performanceStatisticsList(query);
+			if (userStatisticsPerformanceList.size() > 0) {
+				for (UserStatisticsPerformance performance : userStatisticsPerformanceList) {
+					performance.setPerfDate(defaultStartDate);
+					userStatisticsPerformanceDao.add(performance);
+				}
+			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
 	}
 }

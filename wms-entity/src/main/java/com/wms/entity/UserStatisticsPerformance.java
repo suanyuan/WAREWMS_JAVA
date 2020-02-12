@@ -11,12 +11,12 @@ public class UserStatisticsPerformance implements Serializable {
   private long id;
   private String userId;
   @JsonSerialize(using = JsonDatetimeSerializer.class)
-  private String perfDate;
-  private long perfPick;
-  private long perfRecheck;
-  private long perfPa;
-  private long perfQc;
-  private long perfOrder;
+  private String perfDate;  //效绩统计时间
+  private long perfPick;   //拣货效绩
+  private long perfRecheck;//复核绩效
+  private long perfPa;    //上架效绩
+  private long perfQc;    //验收效绩
+  private long perfOrder; //订单效绩
   private String userdefine1;
   private String userdefine2;
   private String userdefine3;

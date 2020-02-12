@@ -162,4 +162,38 @@ where 1=1
     </if>
 </select>
 
+
+
+
+	<!--统计前一天所有人效绩-->
+	<select id="performanceStatisticsList" resultType="com.wms.entity.UserStatisticsPerformance"  parameterType="Object">
+		SELECT aa.editwho userId,SUM(aa.qty) perfOrder,SUM(aa.paqty) perfPa,SUM(aa.qcqty) perfQc,SUM(aa.pkqty) perfPick,SUM(aa.orderqty)  perfRecheck
+		FROM
+		(SELECT  editwho,COUNT(1)  qty,'0' paqty,'0' qcqty,'0' pkqty,'0' orderqty FROM `doc_asn_details`
+		WHERE linestatus='99' AND edittime &gt;=#{addtimeBegin} AND edittime &lt;=#{addtimeEnd}
+		GROUP BY editwho
+		  UNION ALL
+		SELECT editwho,COUNT(1)  qty,'0' paqty,'0' qcqty,'0' pkqty,'0' orderqty   FROM `doc_order_details`
+		WHERE linestatus='99' AND edittime &gt;=#{addtimeBegin} AND edittime &lt;=#{addtimeEnd}
+		GROUP BY editwho
+		  UNION ALL
+		SELECT  editwho,'0' qty,SUM(PUTWAYQTY_COMPLETED)  paqty,'0' qcqty,'0' pkqty,'0' orderqty FROM `doc_pa_details`
+		WHERE linestatus='40' AND edittime &gt;=#{addtimeBegin} AND edittime &lt;=#{addtimeEnd}
+		GROUP BY editwho
+		  UNION ALL
+		SELECT  editwho,'0' qty,'0' paqty,SUM(qcqty_completed) qcqty,'0' pkqty,'0' orderqty FROM `doc_qc_details`
+		WHERE linestatus='40' AND edittime &gt;=#{addtimeBegin} AND edittime &lt;=#{addtimeEnd}
+		GROUP BY editwho
+		  UNION ALL
+		SELECT addwho AS editwho,'0' qty,'0' paqty,'0' qcqty,SUM(pickedqty) pkqty,'0' orderqty FROM doc_pk_records
+		WHERE   addtime &gt;=#{addtimeBegin} AND addtime &lt;=#{addtimeEnd}
+		GROUP BY addwho
+		  UNION ALL
+		SELECT  editwho,'0' qty,'0' paqty,'0' qcqty,'0' pkqty,SUM(qty) orderqty FROM doc_order_packing_carton
+		WHERE   edittime &gt;=#{addtimeBegin} AND edittime &lt;=#{addtimeEnd}
+		GROUP BY editwho
+		)
+		AS aa
+		GROUP BY aa.editwho
+	</select>
 </mapper>   
