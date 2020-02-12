@@ -390,6 +390,7 @@ $(function() {
         textField:'value',
         onLoadSuccess:function () {
             <%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
+			$(this).combobox("setValue","88");//88产品线名称为Trauma 骨科
         }
     })
 });
@@ -565,8 +566,9 @@ var GuKeInventory = function(){
 		pagination:true,
 		queryParams:{
 			SoTimeStart:$("#SoTimeStart").datetimebox('getValue'),
-			SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue')
-         },
+			SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue'),
+			productLineName:$('#ezuiDialogGuKe #productLineName').combobox('getValue')
+		},
 		columns: [[
 			{field: 'customerid', title: '货主', width: 71},
 			{field: 'sku', title: '产品代码', width: 150},
