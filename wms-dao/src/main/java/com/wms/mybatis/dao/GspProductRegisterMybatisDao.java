@@ -48,5 +48,5 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      * @param sku   产品代码
      * @return ~
      */
-    List<PdaGspProductRegister> queryBysku(String sku);
+    List<PdaGspProductRegister> queryBysku(@Param("sku") String sku,@Param("orderBy") String orderBy);
 }
