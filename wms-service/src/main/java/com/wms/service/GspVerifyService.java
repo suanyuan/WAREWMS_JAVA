@@ -368,7 +368,7 @@ public class GspVerifyService {
 //                }
 
                 if(!StringUtil.isEmpty(lotatt01)){
-                    //生产日期需要在最老的注册证发证日期和最新的注册证过期时间之内
+                    //生产日期需要在所有注册证中  最老的发证日期和最新的注册证过期时间之内
 //                    List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(registerNo);
 //                    MybatisCriteria mybatisCriteria = new MybatisCriteria();
 //                    GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
@@ -378,20 +378,22 @@ public class GspVerifyService {
 
 //                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
 //                    productRegisterRelationMybatisDao.queryByList(mybatisCriteria);
-                   allRegister = gspProductRegisterMybatisDao.queryBysku(sku);
 
 
 
 //                    allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
                     Date beginDate = null;
                     Date endDate = null;
-                    if(allRegister!=null && allRegister.size()>1){
-                        beginDate = allRegister.get(allRegister.size()-1).getApproveDate();
-                        endDate = allRegister.get(0).getProductRegisterExpiryDate();
-                    }else{
-                        beginDate = allRegister.get(0).getApproveDate();
-                        endDate = allRegister.get(0).getProductRegisterExpiryDate();
-                    }
+//                    if(allRegister!=null && allRegister.size()>1){
+//                        beginDate = allRegister.get(allRegister.size()-1).getApproveDate();
+//                        endDate = allRegister.get(0).getProductRegisterExpiryDate();
+//                    }else{
+
+                    allRegister = gspProductRegisterMybatisDao.queryBysku(sku,"t1.approve_date asc");
+                    beginDate = allRegister.get(0).getApproveDate();
+                    allRegister = gspProductRegisterMybatisDao.queryBysku(sku,"t1.product_register_expiry_date desc");
+                    endDate = allRegister.get(0).getProductRegisterExpiryDate();
+//                    }
                     if(checkDate(lotatt01,beginDate)<0){
                         return Json.error("生产日期小于注册证批准日期："+sku);
                     }
