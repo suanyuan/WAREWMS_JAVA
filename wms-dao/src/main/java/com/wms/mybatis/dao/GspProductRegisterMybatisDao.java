@@ -35,6 +35,12 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      */
     List<PdaGspProductRegister> queryAllByNo(@Param("registerNo") String registerNo);
 
+    /**
+     * 获取相同注册证号的list，且进行排序
+     * 排序1，根据批准日期；排序2，根据有效日期
+     */
+    List<GspProductRegister> queryByNoAndOrderBy(@Param("registerNo") String registerNo, @Param("orderby") String orderby);
+
 
     //查询需要比较的字段
     public <T> T selectProductRegisterByCompare(Object id);
@@ -48,5 +54,5 @@ public interface GspProductRegisterMybatisDao extends BaseDao {
      * @param sku   产品代码
      * @return ~
      */
-    List<PdaGspProductRegister> queryBysku(@Param("sku") String sku,@Param("orderBy") String orderBy);
+    List<GspProductRegister> queryBysku(@Param("sku") String sku,@Param("orderBy") String orderBy);
 }

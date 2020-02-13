@@ -47,7 +47,7 @@ public class DocAsnDetailService extends BaseService {
 	private BasPackageMybatisDao basPackageMybatisDao;
 
 	@Autowired
-	private InvLotAttMybatisDao invLotAttMybatisDao;
+	private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 
 	@Autowired
 	private BasGtnLotattService basGtnLotattService;
@@ -213,46 +213,74 @@ public class DocAsnDetailService extends BaseService {
 
     /**
      * 根据所输入的、所选的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
-     * @param pdaGspProductRegisters 产品最新的证号所有关联的已失效的注册证信息
+     * @param lotatt06 传入注册证，就匹配这个证号的
+     * 其中有个逻辑漏洞，生产日期为空，但是传入了注册证，结果返回可能不是填入的注册证号
      */
-    public DocAsnDetail adaptSuitableRegisterNo(List<PdaGspProductRegister> pdaGspProductRegisters, BasSku basSku, String lotatt01) {
+    public DocAsnDetail adaptSuitableRegisterNo(String lotatt06, BasSku basSku, String lotatt01) {
 
         DocAsnDetail subAsnDetail = new DocAsnDetail();
+        List<GspProductRegister> gspProductRegisterList;
+        GspEnterpriseInfo enterpriseInfo;
+
+        if (StringUtil.isNotEmpty(lotatt06)) {
+
+            gspProductRegisterList = gspProductRegisterMybatisDao.queryByNoAndOrderBy(
+                    lotatt06,
+                    "product_register_expiry_date desc");
+            if (gspProductRegisterList.size() == 0) {
+
+                subAsnDetail.setLotatt06(lotatt06);
+                subAsnDetail.setLotatt15(basSku.getReservedfield14());
+                return subAsnDetail;
+            } else {
+
+                GspProductRegister gspProductRegister = gspProductRegisterList.get(0);
+                enterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspProductRegister.getEnterpriseId());
+                subAsnDetail.setLotatt06(gspProductRegister.getProductRegisterNo());
+                subAsnDetail.setLotatt15(
+                        null == enterpriseInfo || StringUtil.isEmpty(enterpriseInfo.getEnterpriseName()) ?
+                        basSku.getReservedfield14() :
+                        enterpriseInfo.getEnterpriseName());
+                return subAsnDetail;
+            }
+        }
+
+        //如果导入的内容中没有生产日期，则将产品上下发的那个注册证赋上并查出生产厂家
+        if (StringUtil.isEmpty(lotatt01)) {
+
+            subAsnDetail.setLotatt06(basSku.getReservedfield03());
+            PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(basSku.getReservedfield03());
+            //生产厂家
+            subAsnDetail.setLotatt15(
+                    productRegister != null && productRegister.getEnterpriseInfo() != null ?
+                            productRegister.getEnterpriseInfo().getEnterpriseName() :
+                            basSku.getReservedfield14());
+            return subAsnDetail;
+        }
+
+        gspProductRegisterList = gspProductRegisterMybatisDao.queryBysku(
+                basSku.getSku(),
+                "t1.product_register_expiry_date desc");
 
         //没有注册证的产品直接返回产品档案里的生产企业,注册证是没有的（非医疗器械）
-        if (pdaGspProductRegisters.size() == 0) {
+        if (gspProductRegisterList.size() == 0) {
 
             subAsnDetail.setLotatt06("");
             subAsnDetail.setLotatt15(basSku.getReservedfield14());
             return subAsnDetail;
         }
 
-        //如果导入的内容中没有生产日期，则将产品上下发的那个注册证赋上并查处生产厂家
-        if (StringUtil.isEmpty(lotatt01)) {
-
-            subAsnDetail.setLotatt06(basSku.getReservedfield03());
-            PdaGspProductRegister productRegister = gspProductRegisterMybatisDao.queryByNo(basSku.getReservedfield03());
-            //生产厂家
-            if (productRegister != null && productRegister.getEnterpriseInfo() != null) {
-
-                subAsnDetail.setLotatt15(productRegister.getEnterpriseInfo().getEnterpriseName());
-            }
-            return subAsnDetail;
-        }
-
         //根据所输入的、所选的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
-        for (PdaGspProductRegister pdaGspProductRegister : pdaGspProductRegisters) {
+        for (GspProductRegister gspProductRegister : gspProductRegisterList) {
 
-            if (DateUtil.betweenOn(lotatt01, pdaGspProductRegister.getApproveDate(), pdaGspProductRegister.getProductRegisterExpiryDate())) {
+            if (DateUtil.betweenOn(lotatt01, gspProductRegister.getApproveDate(), gspProductRegister.getProductRegisterExpiryDate())) {
 
-                subAsnDetail.setLotatt06(pdaGspProductRegister.getProductRegisterNo());
-                if (pdaGspProductRegister.getEnterpriseInfo() != null) {
-
-                    subAsnDetail.setLotatt15(pdaGspProductRegister.getEnterpriseInfo().getEnterpriseName());
-                }else {
-
-                    subAsnDetail.setLotatt15(basSku.getReservedfield14());
-                }
+                subAsnDetail.setLotatt06(gspProductRegister.getProductRegisterNo());
+                enterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspProductRegister.getEnterpriseId());
+                subAsnDetail.setLotatt15(
+                        null == enterpriseInfo || StringUtil.isEmpty(enterpriseInfo.getEnterpriseName()) ?
+                                basSku.getReservedfield14() :
+                                enterpriseInfo.getEnterpriseName());
                 break;
             }
         }
@@ -265,20 +293,7 @@ public class DocAsnDetailService extends BaseService {
      */
     private DocAsnDetail adaptSuitableRegisterNo(BasSku basSku, String lotatt01) {
 
-        GspProductRegister register = gspProductRegisterService.queryByRegisterNo(basSku.getReservedfield03());
-        if (register == null) {
-
-            return adaptSuitableRegisterNo(new ArrayList<PdaGspProductRegister>(), basSku, lotatt01);
-        } else {
-
-            MybatisCriteria mybatisCriteria = new MybatisCriteria();
-            GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-            historyQuery.setVersion(register.getVersion());
-            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
-            mybatisCriteria.setOrderByClause("create_date desc");
-            List<PdaGspProductRegister> allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
-            return adaptSuitableRegisterNo(allRegister, basSku, lotatt01);
-        }
+        return adaptSuitableRegisterNo("", basSku, lotatt01);
     }
 
 	public Json addDocAsnDetail(DocAsnDetailForm docAsnDetailForm) throws Exception {

@@ -324,145 +324,104 @@ public class GspVerifyService {
             }
         }
 
-        //如果有产品需要判断注册证
-        List<PdaGspProductRegister> allRegister = new ArrayList<>();
+        /*
+         * 判断注册证、日期批属
+         * 1，如果有lotatt06，即对注册证和日期做校验
+         * 2，如果没有，则使用sku获取注册证历史
+         */
         if(!StringUtils.isEmpty(sku)){
-            String registerNo = "";
+
+            Date beginDate;//注册证批准日期
+            Date endDate;//注册证失效日期
+            GspProductRegister gspProductRegister;
+            List<GspProductRegister> approveRegisters;//批准日期list
+            List<GspProductRegister> expiryRegisters;//失效日期list
+
             if (StringUtil.isNotEmpty(lotatt06)) {
 
-                registerNo = lotatt06;
-            }else {
-                BasSku basSku = basSkuService.getSkuInfo(customerId,sku);
-                if(basSku == null){
-                    //如果为空查询是否是未下发产品
-                    GspProductRegisterSpecs specs = gspProductRegisterSpecsMybatisDao.queryById(sku);
-                    if(specs!=null){
-                        if(!StringUtil.isEmpty(specs.getProductRegisterId())){
-                            GspProductRegister register = gspProductRegisterService.queryById(specs.getProductRegisterId());
-                            if(register != null){
-                                registerNo = register.getProductRegisterNo();
-                            }
-                        }
-                    }else {
-                        return Json.error("查询不到对应的产品："+sku);
-                    }
-                }else {
-                    registerNo = basSku.getReservedfield03();
+                approveRegisters = gspProductRegisterMybatisDao.queryByNoAndOrderBy(
+                        lotatt06,
+                        "approve_date asc"
+                );
+                if (approveRegisters.size() == 0) return Json.error("查无此注册证数据，" + lotatt06);
+                expiryRegisters = gspProductRegisterMybatisDao.queryByNoAndOrderBy(
+                        lotatt06,
+                        "product_register_expiry_date desc"
+                );
+            } else {
+
+                approveRegisters = gspProductRegisterMybatisDao.queryBysku(
+                        sku,
+                        "t1.approve_date asc"
+                );
+                if (approveRegisters.size() == 0) return Json.success("此产品无注册证数据");
+                expiryRegisters = gspProductRegisterMybatisDao.queryBysku(
+                        sku,
+                        "t1.product_register_expiry_date desc"
+                );
+            }
+
+            //一般失效期最久的也就是最新的注册证了，就用这条数据做流转判断注册证的器械目录
+            gspProductRegister = expiryRegisters.get(expiryRegisters.size() - 1);
+
+            if(StringUtil.isNotEmpty(lotatt01)){
+
+                beginDate = approveRegisters.get(0).getApproveDate();
+                endDate = expiryRegisters.get(0).getProductRegisterExpiryDate();
+
+                if(checkDate(lotatt01,beginDate)<0){
+                    return Json.error(sku + ",生产日期小于注册证(" + lotatt06 + ")批准日期(" + beginDate + ")");
+                }
+                if(checkDate(lotatt01,endDate)>0){
+                    return Json.error(sku + ",生产日期超出注册证(" + lotatt06 + ")失效日期(" + endDate + ")");
                 }
             }
 
-            GspProductRegister gspProductRegister = new GspProductRegister();
-            String gspProductRegisterId = "";
-            List<PdaGspProductRegister> pdaGspProductRegisterList = gspProductRegisterMybatisDao.queryAllByNo(registerNo);
-
-            if(pdaGspProductRegisterList != null && pdaGspProductRegisterList.size() > 0){
-                for(PdaGspProductRegister p:pdaGspProductRegisterList){
-                    if("1".equals(p.getIsUse())){
-//                        gspProductRegisterId = p.getProductRegisterId();
-                        gspProductRegister = p;
+            //效期判断
+            if(!StringUtil.isEmpty(lotatt02)){
+                try{
+                    //效期当天或者超期
+                    if(checkDate(lotatt02,new Date())<0){
+                        return Json.error("产品已超过效期："+sku);
                     }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return Json.error("效期校验出错："+sku);
                 }
-//                gspProductRegister = pdaGspProductRegisterList.get(0);
-//                if(checkDate(gspProductRegister.getProductRegisterExpiryDate(),new Date())<0){
-//                    return Json.error("关联产品注册证已过期："+sku);
-//                }
-
-                if(!StringUtil.isEmpty(lotatt01)){
-                    //生产日期需要在所有注册证中  最老的发证日期和最新的注册证过期时间之内
-//                    List<PdaGspProductRegister> allRegister = gspProductRegisterService.queryAllByRegisterNo(registerNo);
-//                    MybatisCriteria mybatisCriteria = new MybatisCriteria();
-//                    GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-
-//                    historyQuery.set(gspProductRegister.getVersion());
-//                    mybatisCriteria.setOrderByClause("create_date desc");
-
-//                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
-//                    productRegisterRelationMybatisDao.queryByList(mybatisCriteria);
-
-
-
-//                    allRegister = gspProductRegisterMybatisDao.queryByList(mybatisCriteria);
-                    Date beginDate = null;
-                    Date endDate = null;
-//                    if(allRegister!=null && allRegister.size()>1){
-//                        beginDate = allRegister.get(allRegister.size()-1).getApproveDate();
-//                        endDate = allRegister.get(0).getProductRegisterExpiryDate();
-//                    }else{
-
-                    allRegister = gspProductRegisterMybatisDao.queryBysku(sku,"t1.approve_date asc");
-                    beginDate = allRegister.get(0).getApproveDate();
-                    allRegister = gspProductRegisterMybatisDao.queryBysku(sku,"t1.product_register_expiry_date desc");
-                    endDate = allRegister.get(0).getProductRegisterExpiryDate();
-//                    }
-                    if(checkDate(lotatt01,beginDate)<0){
-                        return Json.error("生产日期小于注册证批准日期："+sku);
-                    }
-                    if(checkDate(lotatt01,endDate)>0){
-                        return Json.error("生产日期超出注册证失效日期："+sku);
-                    }
-                }
-
-                if(!StringUtil.isEmpty(lotatt02)){
-                    try{
-                        //效期当天或者超期
-                        if(checkDate(lotatt02,new Date())<0){
-                            return Json.error("产品已超过效期："+sku);
-                        }
-                    }catch (Exception e){
-                        e.printStackTrace();
-                        return Json.error("效期校验出错："+sku);
-                    }
-                }
-
-                //获取注册证器械目录
-                List<GspOperateDetailVO> operateDetailList = getOperateDetail(gspProductRegister.getProductRegisterId());
-                if(operateDetailList!=null && operateDetailList.size()>0){
-                    GspInstrumentCatalog catalog = gspInstrumentCatalogService.getGspInstrumentCatalog(operateDetailList.get(0).getOperateId());
-
-                    //产品与货主供应商匹配
-                    List<GspOperateDetailVO> productVo = new ArrayList<>();
-                    productVo.add(operateDetailList.get(0));
-
-                    boolean customerFlag = checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier);
-                    if(customerFlag == false){
-                        return Json.error("货主与供应商经营范围没有交集");
-                    }
-
-                    if(catalog.getClassifyId() !=null){
-                        if(catalog.getClassifyId().equals("I")){
-                            json = Json.success("一类不需要匹配经营范围");
-                            json.setObj(allRegister);
-                            return json;
-                        }
-                    }
-
-                    boolean skuFlag = checkOperateIsRight(operateDetailVOSCustomer,productVo);
-                    if(skuFlag == false){
-                        return Json.error("货主与产品经营范围不匹配");
-                    }
-                    if(!checkOperateIsRight(operateDetailVOSSupplier,productVo)){
-                        return Json.error("供应商与产品经营范围不匹配");
-                    }
-                }else {
-                    return Json.error("产品注册证没有关联器械目录");
-                }
-
-                json = Json.success("");
-                json.setObj(allRegister);
-                return json;
-            }else {
-                json = Json.success("产品没有注册证号");
-                json.setObj(allRegister);
-                return json;
             }
-        }else{
-             if(checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier)){
-                 json = Json.success("");
-                 json.setObj(allRegister);
-                 return json;
-             }else {
-                 return Json.error("货主与供应商经营范围没有交集");
-             }
+
+            //获取注册证器械目录
+            List<GspOperateDetailVO> operateDetailList = getOperateDetail(gspProductRegister.getProductRegisterId());
+            if(operateDetailList!=null && operateDetailList.size()>0){
+                GspInstrumentCatalog catalog = gspInstrumentCatalogService.getGspInstrumentCatalog(operateDetailList.get(0).getOperateId());
+
+                //产品与货主供应商匹配
+                List<GspOperateDetailVO> productVo = new ArrayList<>();
+                productVo.add(operateDetailList.get(0));
+
+                boolean customerFlag = checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier);
+                if(!customerFlag){
+                    return Json.error("货主与供应商经营范围没有交集");
+                }
+
+                if(catalog.getClassifyId() !=null){
+                    if(catalog.getClassifyId().equals("I")) return Json.success("一类不需要匹配经营范围");
+                }
+
+                if(!checkOperateIsRight(operateDetailVOSCustomer,productVo)){
+                    return Json.error("货主与产品经营范围不匹配");
+                }
+                if(!checkOperateIsRight(operateDetailVOSSupplier,productVo)){
+                    return Json.error("供应商与产品经营范围不匹配");
+                }
+            }else {
+                return Json.error("产品注册证没有关联器械目录");
+            }
+            return Json.success("");
+        } else {
+
+             if (checkOperateIsRight(operateDetailVOSCustomer,operateDetailVOSSupplier)) return Json.success("");
+            return Json.error("货主与供应商经营范围没有交集");
         }
     }
 

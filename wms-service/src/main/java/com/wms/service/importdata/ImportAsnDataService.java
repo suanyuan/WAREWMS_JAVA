@@ -18,6 +18,7 @@ import com.wms.vo.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,14 +61,6 @@ public class ImportAsnDataService {
     private DocAsnDetailService docAsnDetailService;
     @Autowired
     private BasCodesMybatisDao basCodesMybatisDao;
-
-    /**
-     * 1，导入有供应商代码
-     * 2，没有的话就在saveAsn方法中进行GSP验证
-     * SKU + LOTATT04 + LOTATT05 是 key 存的是当前产品的所有注册证历史
-     */
-    private Map<String, Object> registerMap = new HashMap<>();
-//    private List<PdaGspProductRegister> allRegister = new ArrayList<>();
 
     /**
      * 导入入库单
@@ -206,7 +199,6 @@ public class ImportAsnDataService {
                 if (!verifyJson.isSuccess()) {
                     rowResult.append("序号：").append(dataArray.getSeq()).append(verifyJson.getMsg()).append(" ");
                 }
-                registerMap.put(dataArray.getSku() + dataArray.getLotatt04() + dataArray.getLotatt05(), verifyJson.getObj());
             }
 
 			/*try {
@@ -690,15 +682,8 @@ public class ImportAsnDataService {
                 String resultCode = map.get("resultCode").toString();
                 String resultNo = map.get("resultNo").toString();
                 if (resultCode.substring(0, 3).equals("000")) {
-                    Map<String, Object> existGsp = new HashMap<>();
-                    for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
 
-                        //判断预入库明细里面的sku和客户id下的18个批属是否存在
-                    /*DocAsnDetail docAsnDetail = new DocAsnDetail();
-                    BeanUtils.copyProperties(importDetailsDataVO, docAsnDetail);
-                    InvLotAtt invLotAtt = invLotAttService.queryInsertLotatts(docAsnDetail);
-                    //判断是否要插入扫码批次匹配表
-                    basGtnLotattService.queryInsertGtnLotatt(invLotAtt, importDetailsDataVO.getAsnno());*/
+                    for (DocAsnDetailVO importDetailsDataVO : importDataVO.getDocAsnDetailVOList()) {
 
                         DocAsnDetail asnDetails = new DocAsnDetail();
                         BeanUtils.copyProperties(importDetailsDataVO, asnDetails);
@@ -749,35 +734,14 @@ public class ImportAsnDataService {
 
                         if (asnDetails.getLotatt08().equals("") || asnDetails.getLotatt08() == null) {
 
-                            String existKey = asnDetails.getCustomerid() + basSku.getSkuGroup6() + asnDetails.getSku() + asnDetails.getLotatt01() + asnDetails.getLotatt02() + asnDetails.getLotatt06();
-                            if (existGsp.get(existKey) != null) {
-
-                                if (existGsp.get(existKey).equals("1")) {
-
-                                    asnDetails.setLotatt08(basSku.getSkuGroup6());
-                                    registerMap.put(asnDetails.getSku() + asnDetails.getLotatt04() + asnDetails.getLotatt05(), existGsp.get(existKey + "-register"));
-                                } else {
-
-                                    addfalg = false;
-                                    json.setSuccess(false);
-                                    resultMsg.append("序号：").append(importDetailsDataVO.getSeq()).append(existGsp.get(existKey)).append(" ");
-                                    continue;
-                                }
+                            Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(), basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02(), asnDetails.getLotatt06());
+                            if (!verifyJson.isSuccess()) {
+                                addfalg = false;
+                                json.setSuccess(false);
+                                resultMsg.append("序号：").append(importDetailsDataVO.getSeq()).append(verifyJson.getMsg()).append(" ");
+                                continue;
                             } else {
-
-                                Json verifyJson = gspVerifyService.verifyOperate(asnDetails.getCustomerid(), basSku.getSkuGroup6(), asnDetails.getSku(), asnDetails.getLotatt01(), asnDetails.getLotatt02(), asnDetails.getLotatt06());
-                                if (!verifyJson.isSuccess()) {
-                                    addfalg = false;
-                                    json.setSuccess(false);
-                                    resultMsg.append("序号：").append(importDetailsDataVO.getSeq()).append(verifyJson.getMsg()).append(" ");
-                                    existGsp.put(existKey, verifyJson.getMsg());
-                                    continue;
-                                } else {
-                                    asnDetails.setLotatt08(basSku.getSkuGroup6());
-                                    existGsp.put(existKey, "1");
-                                    existGsp.put(existKey + "-register", verifyJson.getObj());
-                                    registerMap.put(asnDetails.getSku() + asnDetails.getLotatt04() + asnDetails.getLotatt05(), verifyJson.getObj());
-                                }
+                                asnDetails.setLotatt08(basSku.getSkuGroup6());
                             }
                         }
                         supplierid = asnDetails.getLotatt08();//用于存储于头档的供应商
@@ -800,7 +764,7 @@ public class ImportAsnDataService {
                         asnDetails.setLotatt14(resultNo);
 
                         //根据所输入的生产日期适配一个最适宜的注册证号和生产厂家给入库明细
-                        DocAsnDetail subAsnDetail = docAsnDetailService.adaptSuitableRegisterNo((List<PdaGspProductRegister>) registerMap.get(asnDetails.getSku() + asnDetails.getLotatt04() + asnDetails.getLotatt05()), basSku, asnDetails.getLotatt01());
+                        DocAsnDetail subAsnDetail = docAsnDetailService.adaptSuitableRegisterNo(asnDetails.getLotatt06(), basSku, asnDetails.getLotatt01());
                         //产品注册证
                         asnDetails.setLotatt06(subAsnDetail.getLotatt06());
                         //生产厂家

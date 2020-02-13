@@ -350,7 +350,9 @@
 		select t1.* from gsp_product_register t1
 		LEFT JOIN product_register_relation t2 on t2.product_register_id = t1.product_register_id
 		where t2.product_code = #{sku}
-		ORDER BY #{orderBy}
+		<if test="orderBy != null and orderBy != ''">
+			ORDER BY #{orderBy}
+		</if>
 	</select>
 
 
@@ -414,6 +416,15 @@
 		select
 		<include refid="Base_Column_List"/>
 		from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR} order by create_date asc
+	</select>
+
+	<select id="queryByNoAndOrderBy" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from gsp_product_register where product_register_no = #{registerNo}
+		<if test="orderby != null and orderby != ''">
+			order by #{orderby}
+		</if>
 	</select>
 
 <!--查询所有历史产品档案中使用过的注册证号-->
