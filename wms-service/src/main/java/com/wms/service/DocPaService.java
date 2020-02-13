@@ -405,7 +405,7 @@ public class DocPaService {
                     if(asnHeader.getAsnstatus().equals("30")||asnHeader.getAsnstatus().equals("40")){
 
                     }else{
-                        return Json.error("单号:"+s+",没有收货不可取消收货!");
+                        return Json.error("单号:"+s+",当前状态不可取消收货!");
                     }
                 }else{
                     return Json.error("单号:"+s+",不存在!");
