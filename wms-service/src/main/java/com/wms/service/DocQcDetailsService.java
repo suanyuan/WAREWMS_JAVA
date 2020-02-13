@@ -236,23 +236,25 @@ public class DocQcDetailsService extends BaseService {
         /*
         888,当前批次-产品注册证对应的 生产厂家
          */
-        PdaGspProductRegister productRegister = null;
-        List<PdaGspProductRegister> pdaGspProductRegisterList = productRegisterMybatisDao.queryAllByNo(lotAtt.getLotatt06());
+        List<GspProductRegister> productRegisterList = productRegisterMybatisDao.queryByNoAndOrderBy(
+                lotAtt.getLotatt06(),
+                GspProductRegister.ORDERBY_EXPIRY_DATE_DESC);
 
-        if (pdaGspProductRegisterList.size() == 0 &&
+        if (productRegisterList.size() == 0 &&
                 StringUtil.isEmpty(basSku.getReservedfield14())) {
             map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "查无生产企业信息"));
             return map;
-        } else if (pdaGspProductRegisterList.size() > 0) {
+        } else if (productRegisterList.size() > 0) {
 
-            productRegister = pdaGspProductRegisterList.get(0);
+            GspProductRegister productRegister = productRegisterList.get(0);
+            GspEnterpriseInfo enterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(productRegister.getEnterpriseId());
 
             pdaDocQcDetailVO.setEnterpriseName(
-                    (productRegister.getEnterpriseInfo() == null)
+                    (enterpriseInfo == null)
                             ?
                             basSku.getReservedfield14()
                             :
-                            productRegister.getEnterpriseInfo().getEnterpriseName()
+                            enterpriseInfo.getEnterpriseName()
             );
         } else {
 
@@ -260,29 +262,30 @@ public class DocQcDetailsService extends BaseService {
         }
 
         /*
-        888，最新+历史注册证(+生产企业详情)
+        999，最新+历史注册证(+生产企业详情)
          */
-        if (productRegister != null && StringUtil.isNotEmpty(productRegister.getVersion())) {
+        PdaGspProductRegister pdaGspProductRegister;
+        List<PdaGspProductRegister> returnRgisterList = new ArrayList<>();
+        List<String> numberList = new ArrayList<>();
+        List<GspProductRegister> skuProductRegisterList = productRegisterMybatisDao.queryBysku(
+                basSku.getSku(),
+                GspProductRegister.ORDERBY_EXPIRY_DATE_DESC_SKU);
+        for (GspProductRegister gspProductRegister : skuProductRegisterList) {
 
-            MybatisCriteria mybatisCriteria = new MybatisCriteria();
-            GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-            historyQuery.setVersion(productRegister.getVersion());
-            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
-            List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
-            List<PdaGspProductRegister> returnRgisterList = new ArrayList<>();
-            List<String> numberList = new ArrayList<>();
-            for (PdaGspProductRegister pdaGspProductRegister : gspProductRegisterList) {
+            if (StringUtil.isEmpty(gspProductRegister.getProductRegisterNo())) continue;
 
-                if (StringUtil.isEmpty(pdaGspProductRegister.getProductRegisterNo())) continue;
+            if (!numberList.contains(gspProductRegister.getProductRegisterNo())) {
 
-                if (!numberList.contains(pdaGspProductRegister.getProductRegisterNo())) {
+                pdaGspProductRegister = new PdaGspProductRegister();
+                BeanUtils.copyProperties(gspProductRegister, pdaGspProductRegister);
+                GspEnterpriseInfo enterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspProductRegister.getEnterpriseId());
+                pdaGspProductRegister.setEnterpriseInfo(enterpriseInfo);
 
-                    numberList.add(pdaGspProductRegister.getProductRegisterNo());
-                    returnRgisterList.add(JSONObject.parseObject(JSON.toJSONString(pdaGspProductRegister, SerializerFeature.DisableCircularReferenceDetect), PdaGspProductRegister.class));
-                }
+                returnRgisterList.add(JSONObject.parseObject(JSON.toJSONString(pdaGspProductRegister, SerializerFeature.DisableCircularReferenceDetect), PdaGspProductRegister.class));
+                numberList.add(gspProductRegister.getProductRegisterNo());
             }
-            pdaDocQcDetailVO.setProductRegisterList(returnRgisterList);
         }
+        pdaDocQcDetailVO.setProductRegisterList(returnRgisterList);
 
         map.put(Constant.DATA, pdaDocQcDetailVO);
         map.put(Constant.RESULT, new PdaResult(PdaResult.CODE_SUCCESS, Constant.SUCCESS_MSG));
@@ -347,15 +350,7 @@ public class DocQcDetailsService extends BaseService {
      */
     public PdaResult submitDocQc(PdaDocQcDetailForm form) {
 
-        //add by Gizmo 2019-10-26 日期校验
-//        DocQcDetailsQuery qcQuery = new DocQcDetailsQuery();
-//        qcQuery.setQcno(form.getQcno());
-//        qcQuery.setQclineno(form.getQclineno());
-//        MybatisCriteria mybatisCriteria = new MybatisCriteria();
-//        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(qcQuery));
-//        List<DocQcDetails> docQcDetailsList = docQcDetailsDao.queryByList(mybatisCriteria);
-//        if (null == docQcDetailsList || docQcDetailsList.size() == 0) return new PdaResult(PdaResult.CODE_FAILURE, "查无此验收明细数据");
-//        DocQcDetails docQcDetails = docQcDetailsList.get(0);
+        //日期校验
         Json json = gspVerifyService.verifyQcDateValidation(form.getLotatt01(), form.getLotatt02(), form.getLotatt06());
         if (!json.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, json.getMsg());
 

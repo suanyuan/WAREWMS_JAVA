@@ -39,6 +39,8 @@ public class PdaDocPaDetailForm {
 
     private String userdefine5;//pda传参 上架的产品状态 HG || DJ
 
+    private String recommendLoc;//推荐库位，上架完成之后需要释放状态
+
     private String packid;
 
     private String userid;

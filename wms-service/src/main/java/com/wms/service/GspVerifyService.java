@@ -341,23 +341,23 @@ public class GspVerifyService {
 
                 approveRegisters = gspProductRegisterMybatisDao.queryByNoAndOrderBy(
                         lotatt06,
-                        "approve_date asc"
+                        GspProductRegister.ORDERBY_APPROVE_DATE_ASC
                 );
                 if (approveRegisters.size() == 0) return Json.error("查无此注册证数据，" + lotatt06);
                 expiryRegisters = gspProductRegisterMybatisDao.queryByNoAndOrderBy(
                         lotatt06,
-                        "product_register_expiry_date desc"
+                        GspProductRegister.ORDERBY_EXPIRY_DATE_DESC
                 );
             } else {
 
                 approveRegisters = gspProductRegisterMybatisDao.queryBysku(
                         sku,
-                        "t1.approve_date asc"
+                        GspProductRegister.ORDERBY_APPROVE_DATE_ASC_SKU
                 );
                 if (approveRegisters.size() == 0) return Json.success("此产品无注册证数据");
                 expiryRegisters = gspProductRegisterMybatisDao.queryBysku(
                         sku,
-                        "t1.product_register_expiry_date desc"
+                        GspProductRegister.ORDERBY_EXPIRY_DATE_DESC_SKU
                 );
             }
 

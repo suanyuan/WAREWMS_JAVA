@@ -226,7 +226,7 @@ public class DocAsnDetailService extends BaseService {
 
             gspProductRegisterList = gspProductRegisterMybatisDao.queryByNoAndOrderBy(
                     lotatt06,
-                    "product_register_expiry_date desc");
+                    GspProductRegister.ORDERBY_EXPIRY_DATE_DESC);
             if (gspProductRegisterList.size() == 0) {
 
                 subAsnDetail.setLotatt06(lotatt06);
@@ -260,7 +260,7 @@ public class DocAsnDetailService extends BaseService {
 
         gspProductRegisterList = gspProductRegisterMybatisDao.queryBysku(
                 basSku.getSku(),
-                "t1.product_register_expiry_date desc");
+                GspProductRegister.ORDERBY_EXPIRY_DATE_DESC_SKU);
 
         //没有注册证的产品直接返回产品档案里的生产企业,注册证是没有的（非医疗器械）
         if (gspProductRegisterList.size() == 0) {

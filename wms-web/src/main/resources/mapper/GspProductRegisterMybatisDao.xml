@@ -351,7 +351,7 @@
 		LEFT JOIN product_register_relation t2 on t2.product_register_id = t1.product_register_id
 		where t2.product_code = #{sku}
 		<if test="orderBy != null and orderBy != ''">
-			ORDER BY #{orderBy}
+			ORDER BY ${orderBy}
 		</if>
 	</select>
 
@@ -423,7 +423,7 @@
 		<include refid="Base_Column_List"/>
 		from gsp_product_register where product_register_no = #{registerNo}
 		<if test="orderby != null and orderby != ''">
-			order by #{orderby}
+			order by ${orderby}
 		</if>
 	</select>
 

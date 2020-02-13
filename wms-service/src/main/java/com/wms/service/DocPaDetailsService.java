@@ -321,6 +321,8 @@ public class DocPaDetailsService extends BaseService {
 
         if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
 
+            //更新推荐库位状态
+            basLocationService.releaseOccupiedLocation(form.getRecommendLoc());
             return new PdaResult(PdaResult.CODE_SUCCESS, "上架成功");
         } else {
 

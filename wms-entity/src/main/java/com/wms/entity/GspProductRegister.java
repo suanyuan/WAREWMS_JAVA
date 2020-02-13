@@ -9,6 +9,31 @@ import java.io.Serializable;
 @Entity
 public class GspProductRegister  implements Serializable {
 
+	/**
+	 * 根据批准日期排序
+	 * gspProductRegisterMybatisDao.queryByNoAndOrderBy
+	 */
+	public final static String ORDERBY_APPROVE_DATE_ASC = "approve_date asc";
+
+	/**
+	 * 根据产品失效期排序
+	 * gspProductRegisterMybatisDao.queryByNoAndOrderBy
+	 */
+	public final static String ORDERBY_EXPIRY_DATE_DESC = "product_register_expiry_date desc";
+
+	/**
+	 * 根据批准日期排序
+	 * gspProductRegisterMybatisDao.queryBysku
+	 */
+	public final static String ORDERBY_APPROVE_DATE_ASC_SKU = "t1.approve_date asc";
+
+	/**
+	 * 根据产品失效期排序
+	 * gspProductRegisterMybatisDao.queryBysku
+	 */
+	public final static String ORDERBY_EXPIRY_DATE_DESC_SKU = "t1.product_register_expiry_date desc";
+
+
 	private String productRegisterId;
 
 	private String productRegisterNo;
