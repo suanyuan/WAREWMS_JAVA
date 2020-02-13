@@ -544,7 +544,7 @@ public class OrderHeaderForNormalService extends BaseService {
                     orderDetailsForNormalQuery.setOrderno(orderNo);
                     orderDetailsForNormalQuery.setLinestatus(Constant.CODE_SO_STS_CREATED);
                     mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(orderDetailsForNormalQuery));
-                    List<OrderDetailsForNormal> unallocatedOrderDetials = orderDetailsForNormalMybatisDao.queryByList(mybatisCriteria);
+                    List<OrderDetailsForNormal> unallocatedOrderDetials = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
 
                     orderHeaderForNormal.setSostatus(
                             unallocatedOrderDetials.size() > 0 ?
@@ -697,8 +697,6 @@ public class OrderHeaderForNormalService extends BaseService {
             if (orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PART_PACKED) ||
                     orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PACKED)) {
 
-                return Json.error("当前状态订单,不可取消复核!");
-            } else {
                 List<OrderHeaderForNormal> allocationDetailsIdList = orderHeaderForNormalMybatisDao.queryByUnAllocationDetailsId(orderNo);
                 if (allocationDetailsIdList != null) {
                     try {
@@ -732,8 +730,11 @@ public class OrderHeaderForNormalService extends BaseService {
                     }
                     return Json.success("取消复核成功");
                 } else {
-                    return Json.success("取消复核失败");
+                    return Json.error("取消复核失败");
                 }
+            } else {
+
+                return Json.error("当前状态订单,不可取消复核!");
             }
         } else {
             json.setSuccess(false);

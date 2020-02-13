@@ -119,7 +119,7 @@ public class ImportAsnDataService {
                             if (resultMsg.length() == 0) {
                                 json = this.saveAsn(importDataList, resultMsg);// 转成订单资料存入资料库
                                 if (!json.isSuccess()) {
-                                    json.setSuccess(true);
+//                                    json.setSuccess(true);
                                     return json;
                                 }
                                 isSuccess = true;
@@ -877,10 +877,8 @@ public class ImportAsnDataService {
             }
         } catch (Exception e) {
 
-            e.printStackTrace();
-            log.error(e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return Json.error(e.getMessage());
+            return Json.error(e.toString());
         }
     }
 }
