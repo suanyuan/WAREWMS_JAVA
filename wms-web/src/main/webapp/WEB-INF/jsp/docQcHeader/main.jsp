@@ -637,11 +637,10 @@ var acceptanceWork = function(){
 		$("#ezuiAcceptanceFormS #qcqtyExpectedEach").textbox('enable');
 		$("#ezuiAcceptanceFormS #qcqtyEach").textbox('enable');
 		//注册证combobox
-		var lotatt06=rows[0].lotatt06;
-		getRgisterListBylotatt06(lotatt06);
+		var sku = rows[0].sku;
+		getRgisterListBySku(sku);
 		//判断是否医疗
 		var num=rows[0].reservedfield09;
-		console.log(num);
 		if(num.toString()=="1"){
 			$("#ezuiAcceptanceFormS #lotatt15").textbox({
 				required:true
@@ -910,10 +909,10 @@ var ezuiCustToolbarClear = function () {
 
 
 //单个验收作业 注册证combobox
-var  getRgisterListBylotatt06= function (lotatt06) {
+var  getRgisterListBySku= function (lotatt06) {
 
 	$('#ezuiAcceptanceFormS #lotatt06').combobox({
-		url:'/docQcDetailsController.do?getRgisterListBylotatt06',
+		url:'/docQcDetailsController.do?getRgisterListBySku',
 		valueField:'productRegisterNo',
 		textField:'productRegisterNo',
 		panelHeight: 'auto',
@@ -923,7 +922,6 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 		onSelect:function () {
 			var v=$(this).combobox("getValue");
 			var opts = $(this).combobox("getData");
-			console.log(opts)
 			var result=null;
 			for(var i=0;i<opts.length;i++){
 				if(opts[i].productRegisterNo==v){
@@ -933,7 +931,6 @@ var  getRgisterListBylotatt06= function (lotatt06) {
 			}
 			console.log(result)
 			if(result!=null){
-				console.log(result.enterpriseInfo.enterpriseName)
 
 				$("#ezuiAcceptanceFormS #lotatt15").textbox('setValue',result.enterpriseInfo.enterpriseName); //生产企业
 				$("#ezuiAcceptanceFormS #lotatt11").textbox('setValue',result.storageConditions);             //存储条件

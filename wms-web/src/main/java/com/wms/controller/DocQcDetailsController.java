@@ -86,13 +86,12 @@ public class DocQcDetailsController {
 		return json;
 	}
 	/**
-	 * 根据lotatt06查询所有注册证号
-	 * @return
+	 * 根据sku查询所有注册证号
 	 * */
-	@RequestMapping(params = "getRgisterListBylotatt06")
+	@RequestMapping(params = "getRgisterListBySku")
 	@ResponseBody
-	public List<PdaGspProductRegister> getRgisterListBylotatt06(String lotatt06){
-		return docQcDetailsService.getRgisterListBylotatt06(lotatt06);
+	public List<PdaGspProductRegister> getRgisterListBySku(String lotatt06){
+		return docQcDetailsService.getRgisterListBySku(lotatt06);
 	}
 
 //	@Login

@@ -729,37 +729,31 @@ public class DocQcDetailsService extends BaseService {
     }
 
     /**
-     * 根据lotatt06查询所有注册证号
+     * 根据sku查询所有注册证号
      */
 
-    public List<PdaGspProductRegister> getRgisterListBylotatt06(String lotatt06) {
+    public List<PdaGspProductRegister> getRgisterListBySku(String sku) {
 
-        List<PdaGspProductRegister> pdaGspProductRegisterList = productRegisterMybatisDao.queryAllByNo(lotatt06);
-//        PdaGspProductRegister productRegister = productRegisterMybatisDao.queryByNo(lotatt06);
+        PdaGspProductRegister pdaGspProductRegister;
         List<PdaGspProductRegister> returnRgisterList = new ArrayList<>();
-        if (pdaGspProductRegisterList != null &&
-                pdaGspProductRegisterList.size() > 0 &&
-                StringUtil.isNotEmpty(pdaGspProductRegisterList.get(0).getVersion())) {
+        List<String> numberList = new ArrayList<>();
+        List<GspProductRegister> skuProductRegisterList = productRegisterMybatisDao.queryBysku(
+                sku,
+                GspProductRegister.ORDERBY_EXPIRY_DATE_DESC_SKU);
+        for (GspProductRegister gspProductRegister : skuProductRegisterList) {
 
-            PdaGspProductRegister firstPdaGspProductRegister = pdaGspProductRegisterList.get(0);
-            MybatisCriteria mybatisCriteria = new MybatisCriteria();
-            GspProductRegisterQuery historyQuery = new GspProductRegisterQuery();
-            historyQuery.setVersion(firstPdaGspProductRegister.getVersion());
-            mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(historyQuery));
-            List<PdaGspProductRegister> gspProductRegisterList = productRegisterMybatisDao.queryByList(mybatisCriteria);
-            List<String> numberList = new ArrayList<>();
-            for (PdaGspProductRegister pdaGspProductRegister : gspProductRegisterList) {
+            if (StringUtil.isEmpty(gspProductRegister.getProductRegisterNo())) continue;
 
-                if (StringUtil.isEmpty(pdaGspProductRegister.getProductRegisterNo())) continue;
+            if (!numberList.contains(gspProductRegister.getProductRegisterNo())) {
 
-                if (!numberList.contains(pdaGspProductRegister.getProductRegisterNo())) {
+                pdaGspProductRegister = new PdaGspProductRegister();
+                BeanUtils.copyProperties(gspProductRegister, pdaGspProductRegister);
+                GspEnterpriseInfo enterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(gspProductRegister.getEnterpriseId());
+                pdaGspProductRegister.setEnterpriseInfo(enterpriseInfo);
 
-                    String jsonStr1 = JSON.toJSONString(pdaGspProductRegister, SerializerFeature.DisableCircularReferenceDetect);
-                    numberList.add(pdaGspProductRegister.getProductRegisterNo());
-                    returnRgisterList.add(JSONObject.parseObject(jsonStr1, PdaGspProductRegister.class));
-                }
+                returnRgisterList.add(JSONObject.parseObject(JSON.toJSONString(pdaGspProductRegister, SerializerFeature.DisableCircularReferenceDetect), PdaGspProductRegister.class));
+                numberList.add(gspProductRegister.getProductRegisterNo());
             }
-
         }
         return returnRgisterList;
     }
