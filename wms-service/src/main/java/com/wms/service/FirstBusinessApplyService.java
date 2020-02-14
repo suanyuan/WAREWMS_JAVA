@@ -261,15 +261,21 @@ public class FirstBusinessApplyService extends BaseService {
 			}
 			String[] arrSup = supplierArr.split(",");
             String[] arr = productArr.split(",");
-            for(String supplierId : arrSup){
-				//检查经营范围
-				for(String specsId :arr){
-					Json checkScopeResult =gspVerifyService.verifyOperate(clientId,supplierId,specsId);
-					if(!checkScopeResult.isSuccess()){
-						return checkScopeResult;
-					}
+			for(int a=0;a<arrSup.length;a++){
+				Json checkScopeResult =gspVerifyService.verifyOperate(clientId,arrSup[a],arr[a]);
+				if(!checkScopeResult.isSuccess()){
+					return checkScopeResult;
 				}
 			}
+//            for(String supplierId : arrSup){
+//				//检查经营范围
+//				for(String specsId :arr){
+//					Json checkScopeResult =gspVerifyService.verifyOperate(clientId,supplierId,specsId);
+//					if(!checkScopeResult.isSuccess()){
+//						return checkScopeResult;
+//					}
+//				}
+//			}
 //			for(int a =0;arr.length>0;a++){
 			boolean flag = true;
 			int n = 0;
