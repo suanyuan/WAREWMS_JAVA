@@ -430,9 +430,10 @@ where 1=1
           docno
 		from act_transaction_log t1
 		left join bas_sku t2 on t1.FMSKU = t2.sku
+		LEFT JOIN product_line p on t2.sku_group1 = p.product_line_id
 		where 1=1
 		<if test="skuGroup1 != null and skuGroup1 != ''" >
-			and t2.sku_group1 =  #{skuGroup1}
+			and p.name =  #{skuGroup1}
 		</if>
 		<if test="transactiontype != null and transactiontype != ''" >
 			and t1.transactiontype =  #{transactiontype}

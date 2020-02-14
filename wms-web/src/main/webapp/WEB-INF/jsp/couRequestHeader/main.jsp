@@ -536,16 +536,8 @@ var GenerateInventoryPlan = function(){
 //生成任务 骨科盘点
 var GuKeInventory = function(){
 	//骨科盘点 产品线
-	$("#ezuiDialogGuKe #productLineName").combobox({
-		// panelHeight: 'auto',
-		url:'/productLineController.do?getCombobox',
-		valueField:'id',
-		textField:'value',
-		onLoadSuccess:function () {
-			<%--$("#productLine").combobox("setValue",'${firstBusinessApply1.productline}');--%>
-			$(this).combobox("setValue","88");//88产品线名称为Trauma 骨科
-		}
-	})
+	$("#ezuiDialogGuKe #productLineName").combobox("setText","Trauma");//88产品线名称为Trauma 骨科
+
 	//时间初始化
 	$("#SoTimeStart").datetimebox('setValue',ordertimeDate(new Date()));
 	$("#SoTimeEnd").datetimebox('setValue',ordertimeDateTo(new Date()));
@@ -568,7 +560,7 @@ var GuKeInventory = function(){
 		queryParams:{
 			SoTimeStart:$("#SoTimeStart").datetimebox('getValue'),
 			SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue'),
-			productLineName:$('#ezuiDialogGuKe #productLineName').combobox('getValue')
+			productLineName:$('#ezuiDialogGuKe #productLineName').combobox('getText')
 		},
 		columns: [[
 			{field: 'customerid', title: '货主', width: 71},
@@ -663,7 +655,7 @@ var GuKeInventoryT = function(){
 	var msg='';
 	data.SoTimeStart=$("#SoTimeStart").datetimebox('getValue')+"";
 	data.SoTimeEnd=$("#SoTimeEnd").datetimebox('getValue')+"";
-	data.productLineName=$("#ezuiDialogGuKe #productLineName").combobox('getValue')+"";
+	data.productLineName=$("#ezuiDialogGuKe #productLineName").combobox('getText')+"";
 
 		$.messager.progress({
 			text: '<spring:message code="common.message.data.processing"/>', interval: 100
@@ -831,7 +823,7 @@ var doxDialogSearchGuKe = function(){
 	ezuiDetailsDatagridGuKe.datagrid('load', {
 		SoTimeStart:$("#SoTimeStart").datetimebox('getValue'),
 		SoTimeEnd:$("#SoTimeEnd").datetimebox('getValue'),
-        productLineName:$('#ezuiDialogGuKe #productLineName').combobox('getValue'),
+        productLineName:$('#ezuiDialogGuKe #productLineName').combobox('getText'),
 	});
 };
 //按钮盘点任务datagrid查询

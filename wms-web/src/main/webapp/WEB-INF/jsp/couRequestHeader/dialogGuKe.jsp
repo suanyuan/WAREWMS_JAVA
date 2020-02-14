@@ -15,7 +15,11 @@
                             <th>至</th>
                             <td><input type='text' id='SoTimeEnd' class='easyui-datetimebox' size='17' data-options=""/></td>
                             <th>产品线</th>
-                            <td><input type='text' id='productLineName' class='easyui-combobox' size='17' data-options=""/></td>
+                            <td><input type='text' id='productLineName' class='easyui-combobox' size='17' data-options="editable: false,
+                                                                                                                         readonly:true,
+																																	url:'<c:url value="/productLineController.do?getCombobox"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
                             <td colspan="2">
                                 <a onclick='doxDialogSearchGuKe();' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
