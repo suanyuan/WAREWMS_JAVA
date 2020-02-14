@@ -178,11 +178,11 @@ public class UserStatisticsPerformanceService extends BaseService {
 
 		Calendar calendar = Calendar.getInstance(); //得到日历
 		calendar.setTime(dNow);//把当前时间赋给日历
-//		calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
-		calendar.add(Calendar.DAY_OF_MONTH,-0);  //设置为前一天
+    	calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
+//		calendar.add(Calendar.DAY_OF_MONTH,-0);
 		dBefore = calendar.getTime();   //得到前一天的时间
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd"); //设置时间格式
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); //设置时间格式
 		String defaultStartDate = sdf.format(dBefore);    //格式化前一天
 		defaultStartDate = defaultStartDate + " 00:00:00";
 		String defaultEndDate = defaultStartDate.substring(0, 10) + " 23:59:59";
@@ -196,7 +196,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 			List<UserStatisticsPerformance> userStatisticsPerformanceList = userStatisticsPerformanceDao.performanceStatisticsList(query);
 			if (userStatisticsPerformanceList.size() > 0) {
 				for (UserStatisticsPerformance performance : userStatisticsPerformanceList) {
-					performance.setPerfDate(defaultStartDate);
+					performance.setPerfDate(sdf.format(new Date()));//当前时间
 					userStatisticsPerformanceDao.add(performance);
 				}
 			}
