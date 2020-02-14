@@ -224,6 +224,7 @@
 
 	var unitFormatter = function(value,row,index) {
 		value+="";
+
 		switch (value) {
 			case "BA" : return "包";
 			case "CS" : return "箱";

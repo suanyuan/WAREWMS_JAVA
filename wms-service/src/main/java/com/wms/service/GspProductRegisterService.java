@@ -232,7 +232,7 @@ public class GspProductRegisterService extends BaseService {
                 gspProductRegister.setProductRegisterExpiryDate(DateUtil.parse(gspProductRegisterForm.getProductRegisterExpiryDate(),"yyyy-MM-dd"));
                 gspProductRegister.setEditDate(new Date());
                 gspProductRegister.setEditId(SfcUserLoginUtil.getLoginUser().getId());
-
+				gspProductRegister.setIsUse(Constant.IS_USE_YES);
                 gspProductRegisterMybatisDao.updateBySelective(gspProductRegister);
 
                 //保存经营范围

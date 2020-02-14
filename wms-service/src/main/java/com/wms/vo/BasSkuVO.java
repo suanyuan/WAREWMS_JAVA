@@ -88,8 +88,18 @@ public class BasSkuVO {
 
 	private String riskAssessment;//风险评估
 
+	private String unit;
 
 	private Double qty1;
+
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 
 	public String getRiskAssessment() {
 		return riskAssessment;

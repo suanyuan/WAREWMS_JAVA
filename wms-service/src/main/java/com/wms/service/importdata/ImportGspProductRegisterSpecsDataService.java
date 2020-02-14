@@ -181,10 +181,11 @@ public class ImportGspProductRegisterSpecsDataService {
 
 			try {
 				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
-
 				if(gspProductRegister!=null){
 					importDataVO.setProductRegisterId(gspProductRegister.getProductRegisterId());
 //						productRegisterRelationMybatisDao.
+					importDataVO.setProductRegisterNo(dataArray.getProductRegisterId());
+
 
 				}else {
 					if("是".equals(dataArray.getMedicalDeviceMark())){
