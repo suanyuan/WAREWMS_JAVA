@@ -880,8 +880,11 @@ insert into doc_asn_details
 </select>
 <!-- 根据id查询 入库单管理明细 -->
 <select id="queryByAsnNo"  resultMap="DocAsnDetailMap" parameterType="Object">
-	select <include refid="Base_Column_List" />
-	 from Doc_Asn_Details where asnno = #{asnno, jdbcType=VARCHAR}
+	select d.*,p.`name`,bc.DESCR_C as descre from doc_asn_details d
+	LEFT JOIN bas_customer bc ON bc.CUSTOMERID=d.customerid and bc.CUSTOMER_TYPE='OW'
+	LEFT JOIN bas_sku b ON b.customerid=d.customerid and b.sku=d.sku
+	LEFT JOIN product_line p ON p.customerid=d.customerid and p.product_line_id = b.sku_group1
+	where d.asnno=#{asnno, jdbcType=VARCHAR}
 </select>
 
 

@@ -97,7 +97,6 @@ var doSearch = function(){
 		edisendflag :$("#toolbar #edisendflag").combobox('getValue'), //回传标识
 		asnreference1 : $('#asnreference1').val(),
 		asnreference2 : $('#asnreference2').val(),
-		asnreference3 : $('#asnreference3').val(),
 		expectedarrivetime1 : $('#expectedarrivetime1').datetimebox('getValue'),
 		expectedarrivetime2 : $('#expectedarrivetime2').datetimebox('getValue'),
 		addtime : $('#addtime').datetimebox('getValue'),
@@ -110,45 +109,40 @@ var doSearch = function(){
 		skuGroup1:$('#skugroup1').combobox('getValue'),
 		productId:$('#productId').val(),
 		userdefine2:$('#pano').val()//上架单号
-/*		lotatt03StartDate:$('#lotatt03StartDate').datebox('getValue'),
-		lotatt03EndDate:$('#lotatt03EndDate').datebox('getValue'),
-		customerid : $('#customerid').val(),
-		lotatt12:$('#lotatt12').val(),
-		sku:$('#sku').val(),
-		lotatt04 : $('#lotatt04').val(),
-		lotatt05 : $('#lotatt05').val(),
-		documentNo : $('#documentNo').val(),*/
 	});
 };
 
 /* 导出start */
 var doExport = function(){
-	console.log("aaa");
-        var token = new Date().getTime();
-        var param = new HashMap();
-		param.put("token", token);
-		param.put("customerid",$('#customerid').val());
-		param.put("asnno",$('#asnno').val());
-		param.put("asnreference1",$('#asnreference1').val());
-		param.put("asnreference2",$('#asnreference2').val());
-		param.put("addwho",$('#addwho').val());
-		param.put("editwho",$('#editwho').val());
-		param.put("supplierid",$('#supplierid').val());
-		param.put("notes",$('#notes').val());
-		param.put("productId",$('#productId').val());
-		param.put("asnstatus",$('#asnstatus').combobox('getValue'));
-		param.put("userdefinea",$('#userdefinea').combobox('getValue'));
-		param.put("asntype",$('#asntype').combobox('getValue'));
-		param.put("edisendflag",$('#edisendflag').combobox('getValue'));
-		param.put("expectedarrivetime1",$('#expectedarrivetime1').datebox('getValue'));
-		param.put("expectedarrivetime2",$('#expectedarrivetime2').datebox('getValue'));
-		param.put("addtime",$('#addtime').datebox('getValue'));
-		param.put("edisendtime5",$('#edisendtime5').datebox('getValue'));
-        //--导出Excel
-		ajaxDownloadFile(sy.bp()+ "/statisticalAnalysisController.do?exportAsnListDataToExcel",param);
-		$.messager.show({
-			msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
-		});
+	var token = new Date().getTime();
+	var param = new HashMap();
+	param.put("token", token);
+	param.put("customerid",$('#customerid').val());
+	param.put("asnno",$('#asnno').val());
+	param.put("releasestatus",$('#releasestatus').combobox('getValue'));
+	param.put("pano",$('#pano').val());
+	param.put("asnstatus",$('#asnstatus').combobox('getValue'));
+	param.put("userdefinea",$('#userdefinea').combobox('getValue'));
+	param.put("asntype",$('#asntype').combobox('getValue'));
+	param.put("edisendflag",$('#edisendflag').combobox('getValue'));
+	param.put("asnreference1",$('#asnreference1').val());
+	param.put("asnreference2",$('#asnreference2').val());
+	param.put("supplierid",$('#supplierid').val());
+	param.put("warehouseId",$('#warehouseId').combobox('getValue'));
+	param.put("expectedarrivetime1",$('#expectedarrivetime1').datebox('getValue'));
+	param.put("expectedarrivetime2",$('#expectedarrivetime2').datebox('getValue'));
+	param.put("notes",$('#notes').val());
+	param.put("productId",$('#productId').val());
+	param.put("addtime",$('#addtime').datebox('getValue'));
+	param.put("edisendtime5",$('#edisendtime5').datebox('getValue'));
+	param.put("addwho",$('#addwho').val());
+	param.put("editwho",$('#editwho').val());
+	param.put("skugroup1",$('#skugroup1').combobox('getValue'));
+	//--导出Excel
+	ajaxDownloadFile(sy.bp()+ "/statisticalAnalysisController.do?exportAsnListDataToExcel",param);
+	$.messager.show({
+		msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+	});
 };
 /* 导出end */
 
@@ -209,7 +203,7 @@ var doExport = function(){
 							<th>客户订单号</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>参考编号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
 							<!--<th>参考编号3</th><td><input type='text' id='asnreference3' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>供应商</th><td><input type="text" id="supplierId"/></td>
+							<th>供应商</th><td><input type="text" id="supplierId" class='easyui-textbox' size='16' data-options=''/></td>
 							<%--仓库在js中设置--%>
 							<th style="text-align: right">仓库</th><td><input type="text" class='easyui-combobox' size='16' id="warehouseId"/></td>
 						</tr>

@@ -98,6 +98,7 @@ var doSearch = function(){
 		soreference1: $('#soreference1').val(),
 		soreference2: $('#soreference2').val(),
 		consigneeid: $('#consigneeid').val(),
+		cAddress4: $('#cAddress4Q').val(),
 		psName: $("#toolbar #productLineOrder").combobox('getText'),
 		edisendflag: $("#toolbar #edisendflag").combobox('getValue'), //回传标识
 		orderStatusName: $('#sostatus').combobox('getValue'),
@@ -108,7 +109,6 @@ var doSearch = function(){
 		edittimeTo: $('#edittimeTo').datetimebox('getValue'),
 		orderTypeName: $('#ordertype').combobox('getValue'),
 		releasestatus: $('#releasestatus').combobox('getValue'),
-		cAddress4: $('#cAddress4Q').val(),
 	});
 };
 
@@ -121,8 +121,13 @@ var doExport = function(){
 	param.put("soreference1",$('#soreference1').val());
 	param.put("soreference2",$('#soreference2').val());
 	param.put("consigneeid",$('#consigneeid').val());
-	param.put("releasestatus",$('#releasestatus').combobox('getValue'));
+	param.put("cAddress4Q",$('#cAddress4Q').val());
+	param.put("productLineOrder",$('#productLineOrder').combobox('getValue'));
+	param.put("edisendflag",$('#edisendflag').combobox('getValue'));
+	param.put("sostatus",$('#sostatus').combobox('getValue'));
 	param.put("sostatusTo",$('#sostatusTo').combobox('getValue'));
+	param.put("ordertype",$('#ordertype').combobox('getValue'));
+	param.put("releasestatus",$('#releasestatus').combobox('getValue'));
 	param.put("ordertime",$('#ordertime').datebox('getValue'));//时间查询
 	param.put("ordertimeTo",$('#ordertimeTo').datebox('getValue'));//入库单号时间查询
 	param.put("edittime",$('#edittime').datebox('getValue'));//入库单号时间查询

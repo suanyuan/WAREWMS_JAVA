@@ -1,9 +1,7 @@
 package com.wms.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.*;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -258,8 +256,15 @@ public class DocAsnDetail implements Serializable {
     private BigDecimal receivedqtySum;
 
     private String descre;//规格
+	private String name;//产品线
 
+	public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public DocAsnDetail() {
 	}
