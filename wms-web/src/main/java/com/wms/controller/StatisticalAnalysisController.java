@@ -3,7 +3,6 @@ package com.wms.controller;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.RptOrderPackingcartonByOrderNo;
-import com.wms.entity.RptSalesSo;
 import com.wms.entity.RptSendReceiveAndSave;
 import com.wms.entity.RptSoAsnDailyLocation;
 import com.wms.mybatis.entity.SfcUserLogin;
@@ -125,7 +124,7 @@ public class StatisticalAnalysisController {
 	@Login
 	@RequestMapping(params = "showDatagridRptSalesSoList")
 	@ResponseBody
-	public EasyuiDatagrid<OrderHeaderForNormalVO> showDatagridRptSalesSoList(EasyuiDatagridPager pager, OrderHeaderForNormalQuery query) {
+	public EasyuiDatagrid<OrderHeaderForNormalVO> showDatagridRptSalesSoList(EasyuiDatagridPager pager, OrderHeaderForNormalQuery query){
 		return statisticalAnalysisService.getPagedDatagridRptSalesSoList(pager, query);
 	}
 	@Login

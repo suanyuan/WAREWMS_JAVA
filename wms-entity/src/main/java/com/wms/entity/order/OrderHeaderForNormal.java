@@ -474,6 +474,7 @@ public class OrderHeaderForNormal implements Serializable {
 	private String reservedfield07;//冷链标志
 	private String detailsNum;//明细总条数
 	private Double qtypickedNum;//拣货总件数
+	private String pname;//产品线
 
 //	导出
 

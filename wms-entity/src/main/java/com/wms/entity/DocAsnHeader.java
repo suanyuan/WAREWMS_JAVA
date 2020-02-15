@@ -386,7 +386,33 @@ public class DocAsnHeader implements Serializable {
 
 	private String supplierIdRef;
 	private String customerIdRef;
+	private String name;//产品线w
+	private String loatt03star;
+	private String loatt03end;
 
+	public String getLoatt03star() {
+		return loatt03star;
+	}
+
+	public void setLoatt03star(String loatt03star) {
+		this.loatt03star = loatt03star;
+	}
+
+	public String getLoatt03end() {
+		return loatt03end;
+	}
+
+	public void setLoatt03end(String loatt03end) {
+		this.loatt03end = loatt03end;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getSup() {
 		return sup;

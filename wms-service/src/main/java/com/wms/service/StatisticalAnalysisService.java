@@ -23,7 +23,10 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Service("statisticalAnalysisService")
 public class StatisticalAnalysisService extends BaseService {
@@ -46,6 +49,7 @@ public class StatisticalAnalysisService extends BaseService {
 	private DocAsnDetailsMybatisDao docAsnDetailsMybatisDao;
 	@Autowired
 	private ProductLineMybatisDao productLineMybatisDao;
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**************************************出入库流水****************************************/
 	public EasyuiDatagrid<RptSoAsnDailyLocation> getPagedDatagridRptSoAsnDailyLocation(EasyuiDatagridPager pager, RptSoAsnDailyLocation query) {
@@ -149,6 +153,7 @@ public class StatisticalAnalysisService extends BaseService {
 		}else {
 			query.setSkuGroup1("");
 		}
+		query.setAsnstatus("99");
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
@@ -157,11 +162,9 @@ public class StatisticalAnalysisService extends BaseService {
 		List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
 		List<DocAsnDetail> docAsnDetails ;
 		DocAsnHeaderVO docAsnHeaderVO = null;
-		BasCustomer basCustomer = null;
-		ProductLine productLineList = null;
 		List<DocAsnHeaderVO> docAsnHeaderVOList = new ArrayList<DocAsnHeaderVO>();
-		Double expectedqty = 0.0;
-		Double expectedqtyNum = 0.0;
+		double qty=0.0;
+		double qtyeach=0.0;
 		for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
 			docAsnHeaderVO = new DocAsnHeaderVO();
 			BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
@@ -171,24 +174,26 @@ public class StatisticalAnalysisService extends BaseService {
 			if(docAsnDetails != null && docAsnDetails.size()>0){
 				docAsnHeaderVO.setLoatt03(docAsnDetails.get(0).getLotatt03());
 			}
+			//产品线
+			if(docAsnHeader.getName() !=null){
+				docAsnHeaderVO.setPname(docAsnHeader.getName());
+			}
+			//货主
+			if (docAsnHeader.getSup() != null) {
+				docAsnHeaderVO.setCustomerIdRef(docAsnHeader.getSup());
+			} else {
+				docAsnHeaderVO.setCustomerIdRef(" ");
+			}
 			//件数  数量
 			for(DocAsnDetail docAsnDetail:docAsnDetails){
-				expectedqty  = docAsnDetail.getExpectedqty().doubleValue()+expectedqty;
-				expectedqtyNum = docAsnDetail.getExpectedqtyEach().doubleValue()+expectedqtyNum;
-				//产品线
-				if(docAsnDetail.getName() !=null){
-					docAsnHeaderVO.setPname(docAsnDetail.getName());
-				}
-				//货主
-				if (docAsnDetail.getDescre() != null) {
-					docAsnHeaderVO.setCustomerIdRef(docAsnDetail.getDescre());
-				} else {
-					docAsnHeaderVO.setCustomerIdRef(" ");
-				}
-			}
-			docAsnHeaderVO.setExpectedqty(expectedqty);
-			docAsnHeaderVO.setExpectedqtyNum(expectedqtyNum);
+				qty = Double.valueOf(docAsnDetail.getExpectedqty().toString()) + qty;
+				qtyeach = Double.valueOf(docAsnDetail.getExpectedqtyEach().toString()) + qtyeach;
 
+			}
+			docAsnHeaderVO.setExpectedqty(qty);
+			docAsnHeaderVO.setExpectedqtyNum(qtyeach);
+			qty =0.0;
+			qtyeach = 0.0;
 
 			docAsnHeaderVOList.add(docAsnHeaderVO);
 		}
@@ -202,23 +207,22 @@ public class StatisticalAnalysisService extends BaseService {
 		response.addCookie(cookie);
 		response.setContentType(ContentTypeEnum.csv.getContentType());
 		try {
+			form.setAsnstatus("99");
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(form);
 			mybatisCriteria.setOrderByClause("asnno desc");
-			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
 			// excel表格的表头，map
 			LinkedHashMap<String, String> fieldMap = getLeadToFiledPublicQuestionBankAsnList();
 			// excel的sheetName
 			String sheetName = "入库单列表";
 			// excel要导出的数据
-			List<DocAsnHeader> rptAsnList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
+			List<DocAsnHeader> docAsnHeaderList = docAsnHeaderMybatisDao.queryByPageList(mybatisCriteria);
 			List<DocAsnDetail> docAsnDetails ;
 			DocAsnHeaderVO docAsnHeaderVO = null;
-			BasCustomer basCustomer = null;
-			ProductLine productLineList = null;
 			List<DocAsnHeaderVO> docAsnHeaderVOList = new ArrayList<DocAsnHeaderVO>();
-			Double expectedqty = 0.0;
-			Double expectedqtyNum = 0.0;
-			for (DocAsnHeader docAsnHeader : rptAsnList) {
+			double qty=0.0;
+			double qtyeach=0.0;
+			for (DocAsnHeader docAsnHeader : docAsnHeaderList) {
 				docAsnHeaderVO = new DocAsnHeaderVO();
 				BeanUtils.copyProperties(docAsnHeader, docAsnHeaderVO);
 
@@ -227,27 +231,31 @@ public class StatisticalAnalysisService extends BaseService {
 				if(docAsnDetails != null && docAsnDetails.size()>0){
 					docAsnHeaderVO.setLoatt03(docAsnDetails.get(0).getLotatt03());
 				}
+				//产品线
+				if(docAsnHeader.getName() !=null){
+					docAsnHeaderVO.setPname(docAsnHeader.getName());
+				}
+				//货主
+				if (docAsnHeader.getSup() != null) {
+					docAsnHeaderVO.setCustomerIdRef(docAsnHeader.getSup());
+				} else {
+					docAsnHeaderVO.setCustomerIdRef(" ");
+				}
 				//件数  数量
 				for(DocAsnDetail docAsnDetail:docAsnDetails){
-					expectedqty  = docAsnDetail.getExpectedqty().doubleValue()+expectedqty;
-					expectedqtyNum = docAsnDetail.getExpectedqtyEach().doubleValue()+expectedqtyNum;
-					//产品线
-					if(docAsnDetail.getName() !=null){
-						docAsnHeaderVO.setPname(docAsnDetail.getName());
-					}
-					//货主
-					if (docAsnDetail.getDescre() != null) {
-						docAsnHeaderVO.setCustomerIdRef(docAsnDetail.getDescre());
-					} else {
-						docAsnHeaderVO.setCustomerIdRef(" ");
-					}
+					qty = Double.valueOf(docAsnDetail.getExpectedqty().toString()) + qty;
+					qtyeach = Double.valueOf(docAsnDetail.getExpectedqtyEach().toString()) + qtyeach;
+
 				}
-				docAsnHeaderVO.setExpectedqty(expectedqty);
-				docAsnHeaderVO.setExpectedqtyNum(expectedqtyNum);
+				docAsnHeaderVO.setExpectedqty(qty);
+				docAsnHeaderVO.setExpectedqtyNum(qtyeach);
+				qty =0.0;
+				qtyeach = 0.0;
+
 				docAsnHeaderVOList.add(docAsnHeaderVO);
 			}
 			// 导出
-			if (rptAsnList== null || rptAsnList.size() == 0) {
+			if (docAsnHeaderVOList== null || docAsnHeaderVOList.size() == 0) {
 				System.out.println("题库为空");
 			}else {
 				//将list集合转化为excle
@@ -354,6 +362,7 @@ public class StatisticalAnalysisService extends BaseService {
 	public EasyuiDatagrid<OrderHeaderForNormalVO> getPagedDatagridRptSalesSoList(EasyuiDatagridPager pager, OrderHeaderForNormalQuery query) {
 		EasyuiDatagrid<OrderHeaderForNormalVO> datagrid = new EasyuiDatagrid<>();
 
+		query.setSostatusTo("99");
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
@@ -361,29 +370,28 @@ public class StatisticalAnalysisService extends BaseService {
 		mybatisCriteria.setOrderByClause("orderno desc");
 		List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
 		List<OrderDetailsForNormal> odForNormalList = null;
-		List<RptSalesSo> rptRptSalesSoList= null;
 		OrderHeaderForNormalVO orderHeaderForNormalVO;
-		BasCustomer basCustomer = null;
-		ProductLine productLineList = null;
 		List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<>();
 		Double qtyshipped = 0.0;//件数
 		Double qtyshippedEach = 0.0;//数量
 		for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
 			orderHeaderForNormalVO = new OrderHeaderForNormalVO();
 			BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
-			rptRptSalesSoList= statisticalAnalysisMybatisDao.querySalesSoList(mybatisCriteria);
-			if(rptRptSalesSoList !=null && rptRptSalesSoList.size()>0){
-				orderHeaderForNormalVO.setSoOrderNum(rptRptSalesSoList.get(0).getSoOrderNum());//发货单号码
-				orderHeaderForNormalVO.setSourceOrder(rptRptSalesSoList.get(0).getSourceOrder()); //来源订单号
+			orderHeaderForNormalVO.setSoOrderNum(orderHeaderForNormal.getSoreference1());//发货单号码
+			orderHeaderForNormalVO.setSourceOrder(orderHeaderForNormal.getSoreference2()); //来源订单号
+			//产品线
+			if(orderHeaderForNormal.getPname() !=null ){
+				orderHeaderForNormalVO.setPname(orderHeaderForNormal.getPname());
 			}
 			odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo2(orderHeaderForNormalVO.getOrderno());
 			for (OrderDetailsForNormal docOrderDetail:odForNormalList){
-				qtyshipped = docOrderDetail.getQty()+qtyshipped;//件数
-				qtyshippedEach = docOrderDetail.getQtyeach()+qtyshippedEach;//数量
-				//产品线
-				if(docOrderDetail.getName() !=null ){
-					orderHeaderForNormalVO.setPname(docOrderDetail.getName());
+				if(docOrderDetail.getQtyshipped() !=null){
+					qtyshipped = docOrderDetail.getQtyshipped()+qtyshipped;//件数
 				}
+				if(docOrderDetail.getQtyshippedEach() !=null){
+					qtyshippedEach = docOrderDetail.getQtyshippedEach()+qtyshippedEach;//数量
+				}
+
 				//货主
 				if (docOrderDetail.getDescrc() != null) {
 					orderHeaderForNormalVO.setCustomerIdRef(docOrderDetail.getDescrc());
@@ -393,19 +401,23 @@ public class StatisticalAnalysisService extends BaseService {
 			}
 			orderHeaderForNormalVO.setQtyshipped(qtyshipped);
 			orderHeaderForNormalVO.setQtyshippedEach(qtyshippedEach);
+			qtyshipped=0.0;
+			qtyshippedEach=0.0;
 			orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
 		}
 		datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
 		datagrid.setRows(orderHeaderForNormalVOList);
 		return datagrid;
 	}
-	public void exportSalesSoListDataToExcel(HttpServletResponse response, OrderHeaderForNormalQuery form) throws IOException {
+
+
+	public void exportSalesSoListDataToExcel(HttpServletResponse response, OrderHeaderForNormalQuery form) throws Exception {
 		Cookie cookie = new Cookie("exportToken",form.getToken());
 		cookie.setMaxAge(60);
 		response.addCookie(cookie);
 		response.setContentType(ContentTypeEnum.csv.getContentType());
 		try {
-
+			form.setSostatusTo("99");
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
 			mybatisCriteria.setOrderByClause("orderno desc");
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
@@ -416,28 +428,28 @@ public class StatisticalAnalysisService extends BaseService {
 			// excel要导出的数据
 			List<OrderHeaderForNormal> orderHeaderForNormalList = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteria);
 			List<OrderDetailsForNormal> odForNormalList = null;
-			List<RptSalesSo> rptRptSalesSoList= null;
 			OrderHeaderForNormalVO orderHeaderForNormalVO;
-			BasCustomer basCustomer = null;
-			ProductLine productLineList = null;
 			List<OrderHeaderForNormalVO> orderHeaderForNormalVOList = new ArrayList<>();
 			Double qtyshipped = 0.0;//件数
 			Double qtyshippedEach = 0.0;//数量
 			for (OrderHeaderForNormal orderHeaderForNormal : orderHeaderForNormalList) {
 				orderHeaderForNormalVO = new OrderHeaderForNormalVO();
 				BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
-				rptRptSalesSoList= statisticalAnalysisMybatisDao.querySalesSoList(mybatisCriteria);
-				if(rptRptSalesSoList !=null && rptRptSalesSoList.size()>0){
-					orderHeaderForNormalVO.setSoOrderNum(rptRptSalesSoList.get(0).getSoOrderNum());//发货单号码
-					orderHeaderForNormalVO.setSourceOrder(rptRptSalesSoList.get(0).getSourceOrder()); //来源订单号
+				String dt = simpleDateFormat.format(orderHeaderForNormalVO.getEdittime());
+				orderHeaderForNormalVO.setExtime(dt);
+				orderHeaderForNormalVO.setSoOrderNum(orderHeaderForNormal.getSoreference1());//发货单号码
+				orderHeaderForNormalVO.setSourceOrder(orderHeaderForNormal.getSoreference2()); //来源订单号
+				//产品线
+				if(orderHeaderForNormal.getPname() !=null ){
+					orderHeaderForNormalVO.setPname(orderHeaderForNormal.getPname());
 				}
 				odForNormalList = orderDetailsForNormalMybatisDao.queryByOrderNo2(orderHeaderForNormalVO.getOrderno());
 				for (OrderDetailsForNormal docOrderDetail:odForNormalList){
-					qtyshipped = docOrderDetail.getQty()+qtyshipped;//件数
-					qtyshippedEach = docOrderDetail.getQtyeach()+qtyshippedEach;//数量
-					//产品线
-					if(docOrderDetail.getName() !=null ){
-						orderHeaderForNormalVO.setPname(docOrderDetail.getName());
+					if(docOrderDetail.getQtyshipped() !=null){
+						qtyshipped = docOrderDetail.getQtyshipped()+qtyshipped;//件数
+					}
+					if(docOrderDetail.getQtyshippedEach() !=null){
+						qtyshippedEach = docOrderDetail.getQtyshippedEach()+qtyshippedEach;//数量
 					}
 					//货主
 					if (docOrderDetail.getDescrc() != null) {
@@ -448,11 +460,13 @@ public class StatisticalAnalysisService extends BaseService {
 				}
 				orderHeaderForNormalVO.setQtyshipped(qtyshipped);
 				orderHeaderForNormalVO.setQtyshippedEach(qtyshippedEach);
+				qtyshipped=0.0;
+				qtyshippedEach=0.0;
 				orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
 			}
 
 			// 导出
-			if (rptRptSalesSoList== null || rptRptSalesSoList.size() == 0) {
+			if (orderHeaderForNormalVOList== null || orderHeaderForNormalVOList.size() == 0) {
 				System.out.println("题库为空");
 			}else {
 				//将list集合转化为excle
@@ -470,7 +484,7 @@ public class StatisticalAnalysisService extends BaseService {
 	 */
 	public LinkedHashMap<String, String> getLeadToFiledPublicQuestionBankRptSalesSoList() {
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
-		superClassMap.put("edittime", "出库日期");
+		superClassMap.put("extime", "出库日期");
 		superClassMap.put("customerIdRef", "货主");
 		superClassMap.put("orderTypeName", "订单类型");
 		superClassMap.put("orderno", "SO编号");

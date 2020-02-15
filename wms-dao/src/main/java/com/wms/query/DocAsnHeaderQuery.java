@@ -150,6 +150,25 @@ public class DocAsnHeaderQuery implements IQuery {
 	private String token;
 	private String skuGroup1;//产品线
 
+	private String loatt03star;
+	private String loatt03end;
+
+	public String getLoatt03star() {
+		return loatt03star;
+	}
+
+	public void setLoatt03star(String loatt03star) {
+		this.loatt03star = loatt03star;
+	}
+
+	public String getLoatt03end() {
+		return loatt03end;
+	}
+
+	public void setLoatt03end(String loatt03end) {
+		this.loatt03end = loatt03end;
+	}
+
 	public String getSkuGroup1() {
 		return skuGroup1;
 	}

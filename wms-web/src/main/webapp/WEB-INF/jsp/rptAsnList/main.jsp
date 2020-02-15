@@ -81,7 +81,13 @@ $(function() {
 			$(this).datagrid('unselectAll');
 		}
 	});
-
+	$("#warehouseId").combobox({
+		panelHeight: 'auto',
+		editable: false,
+		url:'<c:url value="/docPoHeaderController.do?getWarehouseCombobox"/>',
+		valueField: 'id',
+		textField: 'value'
+	});
 });
 
 
@@ -90,25 +96,17 @@ var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		customerid : $('#customerid').val(),
 		asnno : $('#asnno').val(),
-		releasestatus : $('#releasestatus').combobox('getValue'),
-		asnstatus : $('#asnstatus').combobox('getValue'),
-		userdefinea : $('#userdefinea').combobox('getValue'),
 		asntype : $('#asntype').combobox('getValue'),
-		edisendflag :$("#toolbar #edisendflag").combobox('getValue'), //回传标识
 		asnreference1 : $('#asnreference1').val(),
 		asnreference2 : $('#asnreference2').val(),
-		expectedarrivetime1 : $('#expectedarrivetime1').datetimebox('getValue'),
-		expectedarrivetime2 : $('#expectedarrivetime2').datetimebox('getValue'),
-		addtime : $('#addtime').datetimebox('getValue'),
-		edisendtime5 : $('#edisendtime5').datetimebox('getValue'),
-		addwho : $('#addwho').val(),
 		editwho : $('#editwho').val(),
-		supplierid:$('#supplierId').val(),
 		notes:$('#notes').val(),
 		warehouseid:$('#warehouseId').combobox('getValue'),
 		skuGroup1:$('#skugroup1').combobox('getValue'),
-		productId:$('#productId').val(),
+		loatt03star : $('#loatt03star').datebox('getValue'),
+		loatt03end : $('#loatt03end').datebox('getValue'),
 		userdefine2:$('#pano').val()//上架单号
+
 	});
 };
 
@@ -119,24 +117,15 @@ var doExport = function(){
 	param.put("token", token);
 	param.put("customerid",$('#customerid').val());
 	param.put("asnno",$('#asnno').val());
-	param.put("releasestatus",$('#releasestatus').combobox('getValue'));
-	param.put("pano",$('#pano').val());
-	param.put("asnstatus",$('#asnstatus').combobox('getValue'));
-	param.put("userdefinea",$('#userdefinea').combobox('getValue'));
+	param.put("userdefine2",$('#pano').val());
 	param.put("asntype",$('#asntype').combobox('getValue'));
-	param.put("edisendflag",$('#edisendflag').combobox('getValue'));
 	param.put("asnreference1",$('#asnreference1').val());
 	param.put("asnreference2",$('#asnreference2').val());
-	param.put("supplierid",$('#supplierid').val());
 	param.put("warehouseId",$('#warehouseId').combobox('getValue'));
-	param.put("expectedarrivetime1",$('#expectedarrivetime1').datebox('getValue'));
-	param.put("expectedarrivetime2",$('#expectedarrivetime2').datebox('getValue'));
 	param.put("notes",$('#notes').val());
-	param.put("productId",$('#productId').val());
-	param.put("addtime",$('#addtime').datebox('getValue'));
-	param.put("edisendtime5",$('#edisendtime5').datebox('getValue'));
-	param.put("addwho",$('#addwho').val());
 	param.put("editwho",$('#editwho').val());
+	param.put("loatt03star",$('#loatt03star').datebox('getValue'));
+	param.put("loatt03end",$('#loatt03end').datebox('getValue'));
 	param.put("skugroup1",$('#skugroup1').combobox('getValue'));
 	//--导出Excel
 	ajaxDownloadFile(sy.bp()+ "/statisticalAnalysisController.do?exportAsnListDataToExcel",param);
@@ -162,64 +151,26 @@ var doExport = function(){
 						<tr>
 							<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>入库单编号</th><td><input type='text' id='asnno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>释放状态</th><td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/docAsnHeaderController.do?getReleasestatusCombobox"/>',
-																																	valueField: 'id',
-																																textField: 'value'"/></td>
 							<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
-
-						</tr>
-						<tr>
-							<th>单据状态</th><td><input type='text' id='asnstatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
-																															editable: false,
-																															url:'<c:url value="/docAsnHeaderController.do?getAsnstatusCombobox"/>',
-																															valueField: 'id',
-																															textField: 'value'"/></td>
-							<th>至</th><td><input type='text' id='userdefinea' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
-																															editable: false,
-																															url:'<c:url value="/docAsnHeaderController.do?getAsnstatusCombobox"/>',
-																															valueField: 'id',
-																															textField: 'value'"/></td>
-							<th>入库类型</th><td><input type='text' id='asntype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+							<th>入库类型</th><td>
+							<input type='text' id='asntype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
 																															url:'<c:url value="/docAsnHeaderController.do?getAsnTypeCombobox"/>',
 																															valueField: 'id',
 																															textField: 'value'"/></td>
-							<th>回传标识</th>
-							<td>
-								<input type='text' id='edisendflag' name="edisendflag" class='easyui-combobox' size='16' data-options="panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '已回传'},
-																																{id: '0', value: '未回传'}
-																															]"/>
-							</td>
+
 
 						</tr>
 						<tr>
-							<th>客户订单号</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>参考编号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
-							<!--<th>参考编号3</th><td><input type='text' id='asnreference3' class='easyui-textbox' size='16' data-options=''/></td>-->
-							<th>供应商</th><td><input type="text" id="supplierId" class='easyui-textbox' size='16' data-options=''/></td>
-							<%--仓库在js中设置--%>
+							<th>客户单号1</th><td><input type='text' id='asnreference1' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>客户单号2</th><td><input type='text' id='asnreference2' class='easyui-textbox' size='16' data-options=''/></td>
 							<th style="text-align: right">仓库</th><td><input type="text" class='easyui-combobox' size='16' id="warehouseId"/></td>
-						</tr>
-						<tr>
-							<th>预计入库时间</th><td><input type='text' id='expectedarrivetime1' class='easyui-datetimebox' size='16' data-options=''/></td>
-							<th>至</th><td><input type='text' id='expectedarrivetime2' class='easyui-datetimebox' size='16' data-options=''/></td>
 							<th>备注</th><td><input type='text' id='notes' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>产品代码</th><td><input type="text" class='easyui-textbox' size='16' id="productId"/></td>
 						</tr>
 						<tr>
-							<th>创建时间</th><td><input type='text' id='addtime' class='easyui-datetimebox' size='16' data-options=''/></td>
-							<th>至</th><td><input type='text' id='edisendtime5' class='easyui-datetimebox' size='16' data-options=''/></td>
-							<th>创建人</th><td><input type='text' id='addwho' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>入库日期</th><td><input type='text' id='loatt03star' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>至</th><td><input type='text' id='loatt03end' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
-						</tr>
-						<tr>
 							<th>产品线</th>
 							<td>
 								<input type='text' id='skugroup1' name="skugroup1" class='easyui-combobox' size='16' data-options="panelHeight: '300px',
@@ -228,6 +179,7 @@ var doExport = function(){
 																															valueField: 'id',
 																															textField: 'value'"/>
 							</td>
+
 							<th colspan="2">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

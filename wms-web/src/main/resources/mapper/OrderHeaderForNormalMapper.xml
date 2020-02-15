@@ -124,6 +124,7 @@
         <result column="orderStatusName" property="orderStatusName"/>
         <result column="orderTypeName" property="orderTypeName"/>
         <result column="courier_complaint" property="courierComplaint"/>
+        <result column="pname" property="pname"/>
 
         <!--<result column="rfgettask" property="rfgettask"/>-->
         <!--<result column="warehouseid" property="warehouseid"/>-->
@@ -1873,7 +1874,7 @@
     <!-- 查询出库任务头档列表 -->
     <select id="queryByList" resultMap="BaseResultMap" parameterType="Object">
         select
-        <include refid="Base_Column_QueryList"/>,sos.orderStatusName,sot.orderTypeName
+        <include refid="Base_Column_QueryList"/>,sos.orderStatusName,sot.orderTypeName,ps.name pname
         from doc_order_header a
         LEFT JOIN (
         SELECT
@@ -1915,8 +1916,7 @@
         AND a.customerid = bsk.customerid
         LEFT JOIN (
         SELECT
-        product_line_id,
-        NAME NAME
+        *
         FROM
         product_line
         ) ps ON bsk.sku_group1 = ps.product_line_id

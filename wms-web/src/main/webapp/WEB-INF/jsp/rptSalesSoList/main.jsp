@@ -34,7 +34,7 @@ $(function() {
 		rownumbers:true,
 		singleSelect:true,
 		columns : [[
-			{field: 'edittime', title: '出库日期', width: 145},
+			{field: 'edittime', title: '出库日期', width: 145,formatter: dateFormat2},
 			{field: 'customerIdRef', title: '货主', width: 145},
 			{field: 'orderTypeName', title: '订单类型', width: 80},
 			{field: 'orderno', title: 'SO编号', width: 120},
@@ -100,15 +100,11 @@ var doSearch = function(){
 		consigneeid: $('#consigneeid').val(),
 		cAddress4: $('#cAddress4Q').val(),
 		psName: $("#toolbar #productLineOrder").combobox('getText'),
-		edisendflag: $("#toolbar #edisendflag").combobox('getValue'), //回传标识
-		orderStatusName: $('#sostatus').combobox('getValue'),
-		sostatusTo: $('#sostatusTo').combobox('getValue'),
-		ordertime: $('#ordertime').datetimebox('getValue'),
-		ordertimeTo: $('#ordertimeTo').datetimebox('getValue'),
-		edittime: $('#edittime').datetimebox('getValue'),
-		edittimeTo: $('#edittimeTo').datetimebox('getValue'),
+		edittime: $('#edittime').datebox('getValue'),
+		edittimeTo: $('#edittimeTo').datebox('getValue'),
 		orderTypeName: $('#ordertype').combobox('getValue'),
-		releasestatus: $('#releasestatus').combobox('getValue'),
+		editwho : $('#editwho').val(),
+		notes:$('#notes').val()
 	});
 };
 
@@ -123,16 +119,12 @@ var doExport = function(){
 	param.put("consigneeid",$('#consigneeid').val());
 	param.put("cAddress4Q",$('#cAddress4Q').val());
 	param.put("productLineOrder",$('#productLineOrder').combobox('getValue'));
-	param.put("edisendflag",$('#edisendflag').combobox('getValue'));
-	param.put("sostatus",$('#sostatus').combobox('getValue'));
-	param.put("sostatusTo",$('#sostatusTo').combobox('getValue'));
 	param.put("ordertype",$('#ordertype').combobox('getValue'));
-	param.put("releasestatus",$('#releasestatus').combobox('getValue'));
-	param.put("ordertime",$('#ordertime').datebox('getValue'));//时间查询
-	param.put("ordertimeTo",$('#ordertimeTo').datebox('getValue'));//入库单号时间查询
-	param.put("edittime",$('#edittime').datebox('getValue'));//入库单号时间查询
-	param.put("edittimeTo",$('#edittimeTo').combobox('getValue'));//质量状态
+	param.put("edittime",$('#edittime').datebox('getValue'));
+	param.put("edittimeTo",$('#edittimeTo').datebox('getValue'));
 	param.put("token", token);
+	param.put("notes",$('#notes').val());
+	param.put("editwho",$('#editwho').val());
 	ajaxDownloadFile(sy.bp()+ "/statisticalAnalysisController.do?exportSalesSoListDataToExcel",param);
 	$.messager.show({
 		msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
@@ -157,15 +149,15 @@ var doExport = function(){
 						<tr>
 							<th>SO编号</th>
 							<td><input type='text' id='orderno' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>货主</th>
+							<th>货主代码</th>
 							<td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>客户单号</th>
+							<th>发货单号码</th>
 							<td><input type='text' id='soreference1' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>定向入库单号</th>
+							<th>来源订单号</th>
 							<td><input type='text' id='soreference2' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
-							<th>公司抬头</th>
+							<th>收货单位</th>
 							<td><input type='text' id='consigneeid' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>快递单号</th>
 							<td><input type='text' id='cAddress4Q' class='easyui-textbox' size='16' data-options=''/></td>
@@ -177,36 +169,6 @@ var doExport = function(){
 																										valueField: 'id',
 																										textField: 'value'"/>
 							</td>
-							<th>回传标识</th>
-							<td>
-								<input type='text' id='edisendflag' name="edisendflag" class='easyui-combobox' size='16'
-									   data-options="panelHeight:'auto',
-																															editable:false,
-																															valueField: 'id',
-																															textField: 'value',
-																															data: [
-																																{id: '1', value: '已回传'},
-																																{id: '0', value: '未回传'}
-																															]"/>
-							</td>
-
-						</tr>
-						<tr>
-							<th>订单状态</th>
-							<td><input type='text' id='sostatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
-																															editable: false,
-																															url:'<c:url value="/docOrderHeaderController.do?getOrderStatusCombobox"/>',
-																															valueField: 'id',
-																															textField: 'value'"/>
-							</td>
-
-							<th>至</th>
-							<td><input type='text' id='sostatusTo' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
-																															editable: false,
-																															url:'<c:url value="/docOrderHeaderController.do?getOrderStatusCombobox"/>',
-																															valueField: 'id',
-																															textField: 'value'"/>
-							</td>
 							<th>订单类型</th>
 							<td><input type='text' id='ordertype' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																																editable: false,
@@ -215,27 +177,15 @@ var doExport = function(){
 																																textField: 'value'
 																																"/>
 							</td>
-							<th>释放状态</th>
-							<td><input type='text' id='releasestatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
-																																	editable: false,
-																																	url:'<c:url value="/docOrderHeaderController.do?getReleasestatusCombobox"/>',
-																																	valueField: 'id',
-																																	textField: 'value'"/>
-							</td>
 						</tr>
 						<tr>
-							<th>订单创建时间</th>
-							<td><input type='text' id='ordertime' class='easyui-datetimebox' size='16' data-options=""/>
-							</td>
+							<th>出库日期</th>
+							<td><input type='text' id='edittime' class='easyui-datebox' size='16' data-options=""/></td>
 							<th>至</th>
-							<td><input type='text' id='ordertimeTo' class='easyui-datetimebox' size='16' data-options=""/>
+							<td><input type='text' id='edittimeTo' class='easyui-datebox' size='16' data-options=""/>
 							</td>
-							<th>订单发运时间</th>
-							<td><input type='text' id='edittime' class='easyui-datetimebox' size='16' data-options=""/></td>
-							<th>至</th>
-							<td><input type='text' id='edittimeTo' class='easyui-datetimebox' size='16' data-options=""/>
-							</td>
-
+							<th>备注</th><td><input type='text' id='notes' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>编辑人</th><td><input type='text' id='editwho' class='easyui-textbox' size='16' data-options=''/></td>
 						</tr>
 						<tr>
 							<td colspan="2">

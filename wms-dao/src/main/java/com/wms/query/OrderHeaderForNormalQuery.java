@@ -54,12 +54,29 @@ public class OrderHeaderForNormalQuery implements IQuery {
     //导出类型
     private String outtype;
     private String token;
-
+    private String notes;//备注
+    private String editwho;//编辑人
     private String cAddress4;//快递单号
     private String carriercontact;//运输公司
     private String edisendflag;//回传标识
     private String consigneeid;//收货单位 公司抬头
 
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getEditwho() {
+        return editwho;
+    }
+
+    public void setEditwho(String editwho) {
+        this.editwho = editwho;
+    }
 
     public Set<SfcCustomer> getCustomers() {
         return customers;
