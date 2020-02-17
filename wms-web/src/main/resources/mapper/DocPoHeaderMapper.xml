@@ -651,7 +651,7 @@
 	</select>
 <!--查询仓库编码-->
 <select id="getWarehouseCombobox"  resultType="com.wms.entity.DocPoHeader" parameterType="Object">
-    SELECT CUSTOMER_TYPE AS warehouseid,descr_c AS warehouseName
+    SELECT customerid AS warehouseid,descr_c AS warehouseName
     FROM bas_customer
     WHERE customer_type='WH'
 	</select>

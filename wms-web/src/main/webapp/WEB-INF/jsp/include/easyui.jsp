@@ -312,7 +312,6 @@
     }
 
     var sostatusFormatter = function (value,row,index) {
-		console.log(value);
         switch (value) {
 			case "00" : return "创建订单";
 			case "30" : return "部分分配";
@@ -367,6 +366,7 @@
 			case "TS" : return "投诉";
 			case "YP" : return "样品";
 			case "ZC" : return "正常";
+			case "LD" : return "临调";
 		}
 	}
 //验收状态

@@ -34,50 +34,19 @@ $(function() {
 		rownumbers:true,
 		singleSelect:true,
 		columns : [[
-			{field: 'loatt03',		        title: '入库日期',	    width: 131 },
-			{field: 'customerIdRef',		title: '货主',	    width: 131 },
-			{field: 'asnno',		        title: '单据号',	    width: 131 },
-			{field: 'asntypeName',		    title: '单据类型',	    width: 71 },
-			{field: 'asnreference1',		title: '客户单号1',	    width: 131 },
-			{field: 'asnreference2',		title: '客户单号2',		width: 101 },
-			{field: 'pname',		title: '产品线',		width: 101 },
-			{field: 'expectedqty',			title: '入库件数',		width: 101 },
-			{field: 'expectedqtyNum',		title: '入库数量',		width: 101 },
-			{field: 'notes',		        title: '备注',	        width: 250 },
+			{field: 'lotatt03',		        title: '入库日期',	    width: 100 },
+			{field: 'customerid',			title: '货主代码',	    width: 80 },
+			{field: 'asnno',		        title: '单据号',	   		width: 130 },
+			{field: 'asntypeName',		    title: '单据类型',	    width: 70 },
+			{field: 'asnreference1',		title: '客户单号1',	    width: 120 },
+			{field: 'asnreference2',		title: '客户单号2',		width: 100 },
+			{field: 'lineName',				title: '产品线',			width: 100 },
+			{field: 'expectedqty',			title: '入库件数',		width: 80 },
+			{field: 'expectedqtyEach',		title: '入库数量',		width: 80 },
+			{field: 'notes',		        title: '备注',	        width: 280 },
 			{field: 'editwho',		        title: '编辑人',	        width: 71 }
-/*			{field: 'documentNo',		title: '单据号',	width: 150 },
-			{field: 'asndate',		    title: '日期',	width: 100 },
-			{field: 'documentType',		title: '单据类型',	width: 100 },
-			{field: 'warehouse',		title: '仓库',	width: 150 },
-			{field: 'customerid',		title: '供货单位',	width: 150 },
-			{field: 'sku',		        title: '存货编码',	width: 150 },
-			{field: 'lotatt12',		    title: '存货名称',	width: 150 },
-			{field: 'descrc',		    title: '规格型号',	width: 100 },
-			{field: 'reservedfield02',	title: '产品描述',	width: 200 },
-			{field: 'asnqty',	        title: '入库件数',	width: 100 },
-			{field: 'asnqtyeach',		title: '入库数量',	width: 100 },
-			{field: 'uom',              title: '主计量单位',	width: 100 },
-			{field: 'lotatt04',		    title: '批号',	width: 130 },
-			{field: 'lotatt05',		    title: '序列号',	width: 130 },
-			{field: 'qty1',		        title: '换算率 ',	width: 70},
-			{field: 'purchaseOrderNumber',title: '采购订单号',	width: 130 },
-			{field: 'planPrice',		title: '计划价',	width: 200},
-			{field: 'notes',	        title: '备注',	width: 100},*/
-
-
 		]],
-		onDblClickCell: function(index,field,value){
-			ajaxBtn($('#menuId').val(), '<c:url value="/statisticalAnalysisController.do?getBtn"/>', ezuiMenu);
-		},
-		onRowContextMenu : function(event, rowIndex, rowData) {
-			event.preventDefault();
-			$(this).datagrid('unselectAll');
-			$(this).datagrid('selectRow', rowIndex);
-			ezuiMenu.menu('show', {
-				left : event.pageX,
-				top : event.pageY
-			});
-		},onLoadSuccess:function(data){
+		onLoadSuccess:function(data){
 			$(this).datagrid('unselectAll');
 		}
 	});

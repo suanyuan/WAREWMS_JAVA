@@ -72,7 +72,7 @@ $(function() {
 			{field: 'asnno',		        title: '入库单编号',	    width: 131 },
 			{field: 'asntypeName',		    title: '入库类型',	    width: 71 },
 			{field: 'asnstatusName',		title: '入库状态',	    width: 71 },
-            {field: 'sup',					title: '供应商',	    	width: 170 },
+            {field: 'gysName',				title: '供应商',	    	width: 185 },
             {field: 'asnreference1',		title: '客户单号1',	    width: 131 },
 			{field: 'asnreference2',		title: '客户单号2',		width: 101 },
 			{field: 'userdefine2',		    title: '上架单号',	    width: 101 },
@@ -88,22 +88,10 @@ $(function() {
 			{field: 'notes',		        title: '备注',	        width: 250 }
 
 		]],
-		onDblClickCell: function(index,field,value){
-			//edit();
-		},
         onDblClickRow: function(index,row){
             edit(row);
 			qlDetails(row);
         },
-		onRowContextMenu : function(event, rowIndex, rowData) {
-// 			event.preventDefault();
-// 			$(this).datagrid('unselectAll');
-// 			$(this).datagrid('selectRow', rowIndex);
-// 			ezuiMenu.menu('show', {
-// 				left : event.pageX,
-// 				top : event.pageY
-// 			});
-		},
         onCheckAll:function(rows){
 		  if(rows){
 		      for(var i=0;i<rows.length;i++){
@@ -115,13 +103,10 @@ $(function() {
             console.log("onCheck");
             if (index - 1){
                 afterCheckButtion(row);
-            };
+            }
 		},
 		onSelect: function(rowIndex, rowData) {
-		    console.log("onSelect");
-			//if (rowIndex - 1){
-                afterCheckButtion(rowData);
-			//};
+			afterCheckButtion(rowData);
 		},
 		onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/docAsnHeaderController.do?getBtn"/>', ezuiMenu);
@@ -133,10 +118,7 @@ $(function() {
 
             row = ezuiDatagrid.datagrid("getSelections");
             var a = row.length;
-            // alert(a);
             $('#nummm').html(a);
-
-
         }
 	});
 
@@ -1843,7 +1825,7 @@ function choseSelect_product_docAsnHeader(row){
 }
 
 function afterCheckButtion(rowData) {
-    console.log(rowData);
+
     if (rowData.asnstatus == '99' || rowData.asnstatus == '90') {
         $('#ezuiBtn_close').linkbutton('disable');
         $('#ezuiBtn_cancel').linkbutton('disable');
