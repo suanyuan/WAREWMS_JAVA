@@ -706,6 +706,9 @@
         if($("#gspProductRegisterId").val()==""){
             return;
         }
+
+
+
         var selectRows = ezuiDatagridDetail.datagrid("getSelections");
         if(selectRows){
             var arr = new Array();

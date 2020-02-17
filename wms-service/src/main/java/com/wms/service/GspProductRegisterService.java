@@ -448,10 +448,12 @@ public class GspProductRegisterService extends BaseService {
 
 				//删除关联
 				productRegisterRelationMybatisDao.deleteByProductAndregister(specId,gspProductRegisterId);
-				//TODO 报废已下发产品首营
+				//TODO 报废该解绑产品的已下发产品首营
 
-
-
+				List<String>  applyidList = firstBusinessApplyMybatisDao.selectBySpecsId(specId);
+				for(String applyId:applyidList){
+					dataPublishService.cancelData(applyId);
+				}
 
 			}
 			return Json.success("解除绑定成功");

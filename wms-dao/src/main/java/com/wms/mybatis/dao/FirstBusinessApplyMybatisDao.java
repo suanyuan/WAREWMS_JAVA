@@ -52,5 +52,5 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 	//通过产品代码  查询该产品的所有首营
 	List<String> queryListByProductCode(String productCode);
 
-
+	List<String> selectBySpecsId(String specsId);
 }
