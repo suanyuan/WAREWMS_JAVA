@@ -246,7 +246,7 @@ where 1=1
 			and a.orderno like concat('%', #{condition.orderno},'%')
 		</if>
 		<if test="condition.location != null and condition.location != ''" >
-			and a.locationlike concat('%', #{condition.location},'%')
+			and a.location like concat('%', #{condition.location},'%')
 		</if>
 		<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
 			and i.lotatt04 like concat('%', #{condition.lotatt04},'%')
@@ -477,7 +477,7 @@ where 1=1
 </select>
 <!-- 查询分配明细列表 -->
 <select id="queryByActDetailsList" resultMap="BaseResultMap"  parameterType="Object">
-	select a.*,i.lotatt12 lotatt12,bs.descr_e descre,bc.DESCR_C descrc
+	select a.*,i.lotatt12 lotatt12,i.lotatt04 lotatt04,i.lotatt05 lotatt05,bs.descr_e descre,bc.DESCR_C descrc
 	from act_allocation_details a
 	LEFT JOIN inv_lot_att i ON a.lotnum=i.lotnum
 	LEFT JOIN bas_sku bs ON bs.customerid=a.customerid and bs.sku=a.sku

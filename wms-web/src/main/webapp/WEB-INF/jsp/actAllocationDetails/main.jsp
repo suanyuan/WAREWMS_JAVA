@@ -43,15 +43,17 @@ $(function() {
 		columns : [[
 			{field: 'descrc',		title: '货主',	width: 200 },
 			{field: 'orderno',		title: '出库单号',	width: 130 },
-			{field: 'status',		title: '状态',	width: 70 , formatter: sostatusFormatter},
+			{field: 'status',		title: '状态',	width: 80 , formatter: sostatusFormatter, align: 'center'},
 			{field: 'location',		title: '库位',	width: 100 },
-			{field: 'qty',		title: '分配件数',	width: 70 },
+			{field: 'qty',		title: '分配件数',	width: 70 , align: 'center'},
 			{field: 'sku',		title: '产品代码',	width: 100 },
+            {field: 'lotatt04',		title: '生产批号',	width: 100 },
+            {field: 'lotatt05',		title: '序列号',	width: 100 },
 			{field: 'descre',		title: '规格型号',	width: 100 },
 			{field: 'lotatt12',		title: '商品名称',	width: 200 },
-			{field: 'addwho',		title: '创建人',	width: 100 },
+			{field: 'addwho',		title: '创建人',	width: 80 },
 			{field: 'addtime',		title: '创建时间',	width: 100 ,formatter: dateFormat2},
-			{field: 'editwho',		title: '编辑人',	width: 100 },
+			{field: 'editwho',		title: '编辑人',	width: 80 },
 			{field: 'edittime',		title: '编辑时间',	width: 100 ,formatter: dateFormat2}
 		]],
 		onDblClickCell: function(index,field,value){
