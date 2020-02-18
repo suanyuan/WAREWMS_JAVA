@@ -63,6 +63,9 @@
 	<result column="lotatt05" property="lotatt05"/>
 	<result column="lotatt06" property="lotatt06"/>
 	<result column="productLineName" property="productLineName"/>
+	<result column="descrc" property="descrc"/>
+	<result column="descre" property="descre"/>
+	<result column="lotatt12" property="lotatt12"/>
 </resultMap>
        
 <!-- act_allocation_details table all fields -->
@@ -233,7 +236,29 @@ where 1=1
 	</if>
 </trim>
 </sql>
-   
+<sql id="Example_Where_Clause1">
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="condition.customerid != null and condition.customerid != ''" >
+			and a.customerid like concat('%', #{condition.customerid},'%')
+		</if>
+		<if test="condition.orderno != null and condition.orderno != ''" >
+			and a.orderno like concat('%', #{condition.orderno},'%')
+		</if>
+		<if test="condition.location != null and condition.location != ''" >
+			and a.locationlike concat('%', #{condition.location},'%')
+		</if>
+		<if test="condition.lotatt04 != null and condition.lotatt04 != ''" >
+			and i.lotatt04 like concat('%', #{condition.lotatt04},'%')
+		</if>
+		<if test="condition.lotatt05 != null and condition.lotatt05 != ''" >
+			and i.lotatt05 like concat('%', #{condition.lotatt05},'%')
+		</if>
+		<if test="condition.sku != null and condition.sku != ''" >
+			and a.sku like concat('%', #{condition.sku},'%')
+		</if>
+	</trim>
+</sql>
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
@@ -440,6 +465,30 @@ where 1=1
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}
     </if>
+</select>
+<!-- 分配明细 列表总数 -->
+<select id="queryByActDetailsCount" resultType="java.lang.Integer"  parameterType="Object">
+	select COUNT(1)
+	from act_allocation_details a
+	LEFT JOIN inv_lot_att i ON a.lotnum=i.lotnum
+	LEFT JOIN bas_sku bs ON bs.customerid=a.customerid and bs.sku=a.sku
+	LEFT JOIN bas_customer bc ON bc.CUSTOMERID=a.customerid and bc.CUSTOMER_TYPE='OW'
+	<include refid="Example_Where_Clause1"/>
+</select>
+<!-- 查询分配明细列表 -->
+<select id="queryByActDetailsList" resultMap="BaseResultMap"  parameterType="Object">
+	select a.*,i.lotatt12 lotatt12,bs.descr_e descre,bc.DESCR_C descrc
+	from act_allocation_details a
+	LEFT JOIN inv_lot_att i ON a.lotnum=i.lotnum
+	LEFT JOIN bas_sku bs ON bs.customerid=a.customerid and bs.sku=a.sku
+	LEFT JOIN bas_customer bc ON bc.CUSTOMERID=a.customerid and bc.CUSTOMER_TYPE='OW'
+	<include refid="Example_Where_Clause1"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+		order by  ${orderByClause}
+	</if>
+	<if test="limitClause != null and limitClause != ''" >
+		${limitClause}
+	</if>
 </select>
 
     <!--<select id="queryByOrder" parameterType="java.util.Map" resultMap="BaseResultMap">-->

@@ -1,9 +1,7 @@
 package com.wms.utils.generator;
 
 
-
-import com.wms.entity.BasSkuLeak;
-import com.wms.entity.DocPkRecords;
+import com.wms.entity.ActAllocationDetails;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -39,7 +37,7 @@ public class CodeGenerator {
 	private static final Boolean IS_NEED_COMBOBOX = true;
 	
 	public static void main(String[] args) {
-		CodeGenerator generator = new CodeGenerator(new DocPkRecords());
+		CodeGenerator generator = new CodeGenerator(new ActAllocationDetails());
 		generator.genData();
 	}
 	

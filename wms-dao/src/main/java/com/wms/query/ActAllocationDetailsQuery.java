@@ -120,9 +120,10 @@ public class ActAllocationDetailsQuery implements IQuery {
 
     private String lotatt02;
 
-    private String lotatt04;
+    private String lotatt04;//生产批号
 
-    private String lotatt05;
+    private String lotatt05;//序列号
+
 
     public ActAllocationDetailsQuery() {
     }

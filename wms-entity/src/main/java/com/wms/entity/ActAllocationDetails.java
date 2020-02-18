@@ -122,5 +122,8 @@ public class ActAllocationDetails  implements Serializable {
 	private String lotatt05;
 	private String lotatt06;
 	private String productLineName; //产品线名称
+	private String descre;//规格型号
+	private String descrc;//货主名
+	private String lotatt12;//商品名称
 
 }

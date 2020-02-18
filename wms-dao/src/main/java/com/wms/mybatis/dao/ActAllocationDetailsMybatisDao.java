@@ -57,4 +57,7 @@ public interface ActAllocationDetailsMybatisDao extends BaseDao {
 	<T> List<T> queryByLocByOrderNo(MybatisCriteria criteria);
 
 	Integer queryByLocByOrderNoCount(MybatisCriteria criteria);
+
+	<T> List<T> queryByActDetailsList(MybatisCriteria criteria);
+	int queryByActDetailsCount(MybatisCriteria criteria);
 }
