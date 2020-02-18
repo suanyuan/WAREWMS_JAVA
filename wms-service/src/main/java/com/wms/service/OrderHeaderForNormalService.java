@@ -144,10 +144,6 @@ public class OrderHeaderForNormalService extends BaseService {
             orderHeaderForNormalVO = new OrderHeaderForNormalVO();
             BeanUtils.copyProperties(orderHeaderForNormal, orderHeaderForNormalVO);
 
-            BasCustomer customer = basCustomerService.selectCustomerById(orderHeaderForNormalVO.getConsigneeid(), Constant.CODE_CUS_TYP_CO);
-            if (customer != null) {
-                orderHeaderForNormalVO.setConsigneename(customer.getDescrC());
-            }
             orderHeaderForNormalVOList.add(orderHeaderForNormalVO);
         }
         datagrid.setTotal((long) orderHeaderForNormalMybatisDao.queryByCount(mybatisCriteria));
@@ -1645,10 +1641,12 @@ public class OrderHeaderForNormalService extends BaseService {
         }
         return comboboxList;
     }
+
+    @Deprecated
     public List<EasyuiCombobox> getRefOut() {
         MybatisCriteria criteria = new MybatisCriteria();
         OrderHeaderForNormalQuery query = new OrderHeaderForNormalQuery();
-        query.setOrderStatus("80");
+        query.setOrderStatus("99");
         criteria.setCondition(query);
         List<EasyuiCombobox> comboboxList = new ArrayList<>();
         List<OrderHeaderForNormal> list = orderHeaderForNormalMybatisDao.queryByList(criteria);

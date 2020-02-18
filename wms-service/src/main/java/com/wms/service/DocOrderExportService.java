@@ -166,9 +166,7 @@ public class DocOrderExportService {
                     if(bascodes!=null){
                         orderHeaderForNormal.setRoute(bascodes.getCodenameC());
                     }
-                    if(orderHeaderForNormals!=null){
-                        orderHeaderForNormalList.add(orderHeaderForNormal);
-                    }
+                    orderHeaderForNormalList.add(orderHeaderForNormal);
                 }
 
             }else{

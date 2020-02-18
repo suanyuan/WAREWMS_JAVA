@@ -35,40 +35,18 @@ $(function() {
 		singleSelect:true,
 		columns : [[
 			{field: 'edittime', title: '出库日期', width: 145,formatter: dateFormat2},
-			{field: 'customerIdRef', title: '货主', width: 145},
+			{field: 'customerName', title: '货主', width: 145},
 			{field: 'orderTypeName', title: '订单类型', width: 80},
 			{field: 'orderno', title: 'SO编号', width: 120},
-			{field: 'soOrderNum',		title: '发货单号码',	width: 150 },
-			{field: 'pname',		title: '产品线',		width: 101 },
+			{field: 'soreference1',		title: '发货单号码',	width: 150 },
+			{field: 'lineName',		title: '产品线',		width: 101 },
 			{field: 'qtyshipped',              title: '出库件数',	width: 100 },
 			{field: 'qtyshippedEach',		    title: '出库数量',	width: 100 },
 			{field: 'consigneeid',		title: '收货单位',	width: 150 },
-			{field: 'sourceOrder',		title: '来源订单号',	width: 150 },
+			{field: 'soreference2',		title: '来源订单号',	width: 150 },
 			{field: 'cAddress4', title: '快递单号', width: 120},
 			{field: 'notes', title: '备注', width: 150},
 			{field: 'editwho', title: '编辑人', width: 70}
-			/*{field: 'warehouseid',		title: '仓库编码',	width: 100 },
-			{field: 'soOrderNum',		title: '发货单号码',	width: 150 },
-
-			{field: 'soOrderNo',		title: '出库单号',	width: 150 },
-			{field: 'soDate',		    title: '出库日期',	width: 100 },
-			{field: 'soType',		    title: '出库类别',	width: 100 },
-			{field: 'warehouse',		title: '仓库',	width: 150 },
-			{field: 'customerid',		title: '客户名称',	width: 200 },
-			{field: 'sku',		        title: '存货编码',	width: 150 },
-			{field: 'lotatt12',	        title: '存货名称',	width: 200 },
-			{field: 'descrc',           title: '规格型号 ',	width: 150 },
-
-			{field: 'uom',		        title: '主计量单位',	width: 100 },
-			{field: 'lotatt04',         title: '批号',	width: 150 },
-			{field: 'lotatt05',         title: '序列号',	width: 150 },
-			{field: 'lotatt02',	        title: '失效日期',	width: 100},
-			{field: 'addwho',		    title: '制单人',	width: 100},
-			{field: 'reviewWho',		title: '审核人',	width: 100},
-			{field: 'trackingNumber',   title: '快递单号码',	width: 200},*/
-			// {field: 'qty1',		        title: '换算率 ',	width: 70},
-
-
 		]],
 		onDblClickCell: function(index,field,value){
 
@@ -99,10 +77,10 @@ var doSearch = function(){
 		soreference2: $('#soreference2').val(),
 		consigneeid: $('#consigneeid').val(),
 		cAddress4: $('#cAddress4Q').val(),
-		psName: $("#toolbar #productLineOrder").combobox('getText'),
+		productLineId: $("#toolbar #productLineOrder").combobox('getValue'),
 		edittime: $('#edittime').datebox('getValue'),
 		edittimeTo: $('#edittimeTo').datebox('getValue'),
-		orderTypeName: $('#ordertype').combobox('getValue'),
+		ordertype: $('#ordertype').combobox('getValue'),
 		editwho : $('#editwho').val(),
 		notes:$('#notes').val()
 	});

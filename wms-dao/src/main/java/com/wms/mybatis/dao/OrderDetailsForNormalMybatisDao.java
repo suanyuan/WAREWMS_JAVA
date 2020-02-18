@@ -26,7 +26,6 @@ public interface OrderDetailsForNormalMybatisDao extends BaseDao {
      */
     <T> List<T> queryByOrderNo(String orderno);
     <T> List<T> queryByOrderNo1(String orderno);
-    <T> List<T> queryByOrderNo2(String orderno);
 
     /**
      * 查询出库单中是否有需要记录序列号的产品
@@ -38,7 +37,7 @@ public interface OrderDetailsForNormalMybatisDao extends BaseDao {
      */
     int sumSerialNumRecordRequired(@Param("orderno") String orderno);
 
-    <T> List<T> queryBySumList(String orderno);//总查询分页
+//    <T> List<T> queryBySumList(String orderno);//总查询分页
 
     <T> T queryBySum(String orderno);
 }

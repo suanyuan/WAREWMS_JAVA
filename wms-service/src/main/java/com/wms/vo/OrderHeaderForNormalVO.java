@@ -476,8 +476,7 @@ public class OrderHeaderForNormalVO {
     private String customerIdRef;
     private Double qtyshipped;//件数
     private Double qtyshippedEach;//数量
-    private String sourceOrder;            //来源订单号
-    private String soOrderNum;             //发货单号码
-    private String pname;//产品线
+    private String lineName;//产品线
     private String extime;
+    private String customerName;//货主名称
 }

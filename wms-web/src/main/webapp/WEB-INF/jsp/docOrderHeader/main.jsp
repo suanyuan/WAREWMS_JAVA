@@ -90,9 +90,9 @@
                     {field: 'orderTypeName', title: '订单类型', width: 80},
                     {field: 'orderStatusName', title: '订单状态', width: 80},
                     {field: 'soreference1', title: '客户单号', width: 100},
-                    {field: 'soreference2', title: '定向入库单号', width: 120},
                     {field: 'cAddress4', title: '快递单号', width: 120},
-                    {field: 'notes', title: '备注', width: 150},
+                    {field: 'notes', title: '备注', width: 100},
+                    {field: 'lineName', title: '产品线', width: 120},
                     {field: 'edisendflag', title: '回传标识', width: 70, formatter: edisendflag},
                     {field: 'consigneeid', title: '公司抬头', width: 200},
                     {field: 'cAddress1', title: '收货地址', width: 250},
@@ -101,29 +101,17 @@
                     {field: 'addwho', title: '创建人', width: 70},
                     {field: 'edittime', title: '编辑时间', width: 145},
                     {field: 'editwho', title: '编辑人', width: 70},
+                    {field: 'soreference2', title: '定向入库单号', width: 120},
                     {field: 'courierComplaint', title: '快递投诉内容', width: 150},
                     {field: 'udfprintflag2', title: '拣货单打印次数', width: 120, align: 'center'},
                     {field: 'udfprintflag3', title: '随货单打印次数', width: 120, align: 'center'}
                 ]],
-                onDblClickCell: function (index, field, value) {
-                    //edit();
-
-                },
                 onDblClickRow: function (index, row) {
                     edit(row);
                     qlOrderDetails(row);
 
                 },
-                /* 鼠标右键 */
-                onRowContextMenu: function (event, rowIndex, rowData) {
-                    /* event.preventDefault();
-			$(this).datagrid('unselectAll');
-			$(this).datagrid('selectRow', rowIndex);
-			ezuiMenu.menu('show', {
-				left : event.pageX,
-				top : event.pageY
-			}); */
-                }, onLoadSuccess: function (data) {
+                onLoadSuccess: function (data) {
                     ajaxBtn($('#menuId').val(), '<c:url value="/docOrderHeaderController.do?getBtn"/>', ezuiMenu);
                     $(this).datagrid('unselectAll');
                     $(this).datagrid('clearChecked');
@@ -519,22 +507,17 @@
             $("#ordertype").combobox('clear');
             $("#releasestatus").combobox('clear');
             $("#edisendflag").combobox('clear');
-
             $('#soreference2').textbox('clear');
-            /* $("#cc1").combobox('clear');
-    $("#cc2").combobox('clear');
-    $("#cc3").combobox('clear');*/
             $("#cAddress1").textbox('clear');
             $("#consigneeid").textbox('clear');
             $("#cAddress4Q").textbox('clear');
-            //$("#cTel1").textbox('clear');
             $("#cAddress4").textbox('clear');
             $("#carrierContact").textbox('clear');
-
             $("#ordertime").datetimebox('clear');
             $("#ordertimeTo").datetimebox('clear');
+            $("#edittime").datetimebox('clear');
+            $("#edittimeTo").datetimebox('clear');
             $("#toolbar #productLineOrder").combobox('clear');  //清空option选项
-            // $("#sostatusCheck").attr("checked",false);
         };
 
         /* 获取起始日期 */
@@ -1242,19 +1225,19 @@
                 soreference2: $('#soreference2').val(),
                 //收货单位
                 consigneeid: $('#consigneeid').val(),
-                psName: $("#toolbar #productLineOrder").combobox('getText'),
+                productLineId: $("#toolbar #productLineOrder").combobox('getValue'),
                 edisendflag: $("#toolbar #edisendflag").combobox('getValue'), //回传标识
                 //收货电话
                 //  cTel1 : $('#cTel1').val(),
                 //订单状态
                 cAddress1: $('#cAddress1').val(),
-                orderStatusName: $('#sostatus').combobox('getValue'),
+                sostatus: $('#sostatus').combobox('getValue'),
                 sostatusTo: $('#sostatusTo').combobox('getValue'),
                 ordertime: $('#ordertime').datetimebox('getValue'),
                 ordertimeTo: $('#ordertimeTo').datetimebox('getValue'),
                 edittime: $('#edittime').datetimebox('getValue'),
                 edittimeTo: $('#edittimeTo').datetimebox('getValue'),
-                orderTypeName: $('#ordertype').combobox('getValue'),
+                ordertype: $('#ordertype').combobox('getValue'),
                 releasestatus: $('#releasestatus').combobox('getValue'),
                 sostatusCheck: $('#sostatusCheck').is(':checked') == true ? "Y" : "N",
                 cAddress4: $('#cAddress4Q').val(),
@@ -1378,7 +1361,6 @@
                         title: "<spring:message code='common.message.prompt'/>"
                     });
                 }
-                ;
             } else {
                 $.messager.show({
                     msg: '<spring:message code="common.message.selectRecord"/>',
@@ -1387,44 +1369,6 @@
             }
 
         }
-
-        <%--var doExportGoodsList1 = function(){--%>
-        <%--	var row = ezuiDatagrid.datagrid('getSelected');--%>
-        <%--	var orderno="";--%>
-        <%--	if(row) {--%>
-        <%--		if (navigator.cookieEnabled) {--%>
-        <%--			$('#ezuiBtn_export_goods_list').linkbutton('disable');--%>
-        <%--			//--导出Excel--%>
-        <%--			// window.open(sy.bp() + "/docOrderHeaderController.do?exportOrderNoToExcel&orderno="+order);--%>
-        <%--			var token = new Date().getTime();--%>
-        <%--			var param = new HashMap();--%>
-        <%--			param.put("token", token);--%>
-        <%--			orderno = row.orderno;--%>
-        <%--			var formId = ajaxDownloadFile(sy.bp()+ "/docOrderHeaderController.do?exportOrderNoToExcel&orderno=" + orderno);--%>
-        <%--			downloadCheckTimer = window.setInterval(function () {--%>
-        <%--				window.clearInterval(downloadCheckTimer);--%>
-        <%--				// $('#' + formId).remove();--%>
-        <%--				$('#ezuiBtn_export_goods_list').linkbutton('enable');--%>
-        <%--				$.messager.progress('close');--%>
-        <%--				$.messager.show({--%>
-        <%--					msg: "<spring:message code='common.message.export.success'/>",--%>
-        <%--					title: "<spring:message code='common.message.prompt'/>"--%>
-        <%--				});--%>
-        <%--			}, 1000);--%>
-
-        <%--		} else {--%>
-        <%--			$.messager.show({--%>
-        <%--				msg: "<spring:message code='common.navigator.cookieEnabled.false'/>",--%>
-        <%--				title: "<spring:message code='common.message.prompt'/>"--%>
-        <%--			});--%>
-        <%--		}--%>
-        <%--		;--%>
-        <%--	}else{--%>
-        <%--		$.messager.show({--%>
-        <%--			msg : '<spring:message code="common.message.selectRecord"/>', title : '<spring:message code="common.message.prompt"/>'--%>
-        <%--		});--%>
-        <%--	}--%>
-        <%--};--%>
         /* 导出随货end */
 
         /* 导入start */
@@ -2723,10 +2667,11 @@
                         <th>产品线</th>
                         <td>
                             <input id="productLineOrder" name="productLineOrder" size='16' type="text"
-                                   class='easyui-combobox' data-options="
-																										url:'<c:url value="/productLineController.do?getCombobox"/>',
-																										valueField: 'id',
-																										textField: 'value'"/>
+                                   class='easyui-combobox' data-options="panelHeight: '300px',
+																															editable: false,
+																															url:'<c:url value="/productLineController.do?getCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/>
                         </td>
                         <th>回传标识</th>
                         <td>
@@ -2781,7 +2726,7 @@
                         <th>至</th>
                         <td><input type='text' id='ordertimeTo' class='easyui-datetimebox' size='16' data-options=""/>
                         </td>
-                        <th>订单发运时间</th>
+                        <th>订单编辑时间</th>
                         <td><input type='text' id='edittime' class='easyui-datetimebox' size='16' data-options=""/></td>
                         <th>至</th>
                         <td><input type='text' id='edittimeTo' class='easyui-datetimebox' size='16' data-options=""/>
