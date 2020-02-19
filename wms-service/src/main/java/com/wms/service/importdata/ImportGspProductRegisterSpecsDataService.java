@@ -222,8 +222,8 @@ public class ImportGspProductRegisterSpecsDataService {
 				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNoIsUse(dataArray.getProductRegisterId());
 
 
-				if(dataArray.getProductRegisterId()!=null&&dataArray.getProductRegisterId()!=""){
-				//有注册证
+				if(gspProductRegister!=null){
+					//有注册证
 					//excel内部判重
 					for(GspProductRegisterSpecsVO  a: importData){
 						if(dataArray.getProductCode().equals(a.getProductCode()) &&dataArray.getProductRegisterId().equals(a.getProductRegisterId()) ){
@@ -239,8 +239,8 @@ public class ImportGspProductRegisterSpecsDataService {
 					}else{
 						throw new Exception();
 					}
-				}else {
-				//无注册证   非医疗器械
+				}else if("否".equals(dataArray.getMedicalDeviceMark())){
+					//无注册证   非医疗器械
 					//excel内部判重
 					for(GspProductRegisterSpecsVO  a: importData){
 						if(dataArray.getProductCode().equals(a.getProductCode())  ){
@@ -258,6 +258,8 @@ public class ImportGspProductRegisterSpecsDataService {
 					}
 
 				}
+
+
 
 
 
