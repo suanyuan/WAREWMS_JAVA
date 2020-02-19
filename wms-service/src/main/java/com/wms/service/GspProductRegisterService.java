@@ -439,22 +439,26 @@ public class GspProductRegisterService extends BaseService {
 			for(String str : arr){
 				System.out.println(str);
 
-				//失效产品 清空注册证id
-				GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
-				gspProductRegisterSpecs.setSpecsId(str);
-				gspProductRegisterSpecs.setProductRegisterId("");
-				gspProductRegisterSpecs.setIsUse("0");
-				gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
+//				//失效产品 清空注册证id
+//				GspProductRegisterSpecs gspProductRegisterSpecs = new GspProductRegisterSpecs();
+//				gspProductRegisterSpecs.setSpecsId(str);
+//				gspProductRegisterSpecs.setProductRegisterId("");
+//				gspProductRegisterSpecs.setIsUse("0");
+//				gspProductRegisterSpecsMybatisDao.updateBySelective(gspProductRegisterSpecs);
 
 				//删除关联
-				productRegisterRelationMybatisDao.deleteByProductAndregister(specId,gspProductRegisterId);
+				productRegisterRelationMybatisDao.deleteByProductAndregister(str,gspProductRegisterId);
 				//TODO 报废该解绑产品的已下发产品首营
 
-				List<String>  applyidList = firstBusinessApplyMybatisDao.selectBySpecsId(specId);
-				for(String applyId:applyidList){
-					dataPublishService.cancelData(applyId);
-				}
+				List<String>  applyidList = firstBusinessApplyMybatisDao.selectBySpecsId(str);
+				if(applyidList.size()>0 &&applyidList!=null){
+                    for(String applyId:applyidList){
+                        dataPublishService.cancelData(applyId);
+                    }
+                }
 
+
+                gspProductRegisterSpecsMybatisDao.delete(str);
 			}
 			return Json.success("解除绑定成功");
 		}catch (Exception e){

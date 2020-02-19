@@ -33,7 +33,7 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
     public <T> T selectByProductCode(Object id);
     public <T> T selectByProductCodeAndProductRegister(@Param("productCode") String productCode, @Param("productRegisterId") String productRegisterId);
 
-
+    public <T> T ImportSelectByProductCode(Object id);
 
 
 

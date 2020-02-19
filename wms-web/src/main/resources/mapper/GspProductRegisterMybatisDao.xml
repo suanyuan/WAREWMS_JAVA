@@ -402,8 +402,17 @@
     <select id="queryByNo" parameterType="java.util.Map" resultMap="ExtendResultMap">
         select
         <include refid="Base_Column_List"/>
-        from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR} and is_use = 1
-    </select>
+        from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR}
+		order BY create_date desc LIMIT 1
+
+	</select>
+
+	<select id="queryByNoIsUse" parameterType="java.util.Map" resultMap="ExtendResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from gsp_product_register where product_register_no = #{registerNo, jdbcType=VARCHAR}
+		order BY create_date desc LIMIT 1
+	</select>
 
 <!--根据productNameMain查单条-->
 	<select id="queryByproductNameMain" parameterType="java.util.Map" resultMap="BaseResultMap">

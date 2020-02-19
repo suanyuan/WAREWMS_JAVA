@@ -400,10 +400,14 @@ public class GspProductRegisterSpecsService extends BaseService {
 
 	public Json deleteGspProductRegisterSpecs(String id) {
 		Json json = new Json();
-		//GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.findById(id);
-		if(id != null){
+		GspProductRegisterSpecs gspProductRegisterSpecs = gspProductRegisterSpecsMybatisDao.queryById(id);
+		if(gspProductRegisterSpecs != null){
 			gspProductRegisterSpecsMybatisDao.delete(id);
+			productRegisterRelationMybatisDao.deleteByProductAndregister(id,gspProductRegisterSpecs.getProductRegisterId());
+
 		}
+
+
 		json.setSuccess(true);
 		return json;
 	}

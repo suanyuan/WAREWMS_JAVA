@@ -180,7 +180,7 @@ public class ImportGspProductRegisterSpecsDataService {
 
 
 			try {
-				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNoIsUse(dataArray.getProductRegisterId());
 				if(gspProductRegister!=null){
 					importDataVO.setProductRegisterId(gspProductRegister.getProductRegisterId());
 //						productRegisterRelationMybatisDao.
@@ -219,7 +219,7 @@ public class ImportGspProductRegisterSpecsDataService {
 			try {
 				boolean flag1 = false;
 
-				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+				GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNoIsUse(dataArray.getProductRegisterId());
 
 
 				if(dataArray.getProductRegisterId()!=null&&dataArray.getProductRegisterId()!=""){
@@ -248,7 +248,7 @@ public class ImportGspProductRegisterSpecsDataService {
 						}
 					}
 					//数据库判重
-					GspProductRegisterSpecs gspProductRegisterSpecs2 = gspProductRegisterSpecsMybatisDao.selectByProductCode(dataArray.getProductCode());
+					GspProductRegisterSpecs gspProductRegisterSpecs2 = gspProductRegisterSpecsMybatisDao.ImportSelectByProductCode(dataArray.getProductCode());
 					if(gspProductRegisterSpecs2==null){
 						importDataVO.setProductCode(dataArray.getProductCode());
 					}else if("0".equals(gspProductRegisterSpecs2.getIsUse())){
@@ -277,7 +277,7 @@ public class ImportGspProductRegisterSpecsDataService {
 			try {
 				if("0".equals(dataArray.getProductName()) || dataArray.getProductName()==""||dataArray.getProductName()==null){
 					//自动带入
-					GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+					GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNoIsUse(dataArray.getProductRegisterId());
 					if(gspProductRegister==null){
 						if("是".equals(dataArray.getMedicalDeviceMark())){
 							throw new Exception();
@@ -299,7 +299,7 @@ public class ImportGspProductRegisterSpecsDataService {
 			try {
 				if("0".equals(dataArray.getProductionAddress()) || dataArray.getProductionAddress()==""||dataArray.getProductionAddress()==null){
 					//自动带入
-					GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+					GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryByNoIsUse(dataArray.getProductRegisterId());
 					if(gspProductRegister==null){
 						if("是".equals(dataArray.getMedicalDeviceMark())){
 							throw new Exception();
@@ -622,7 +622,7 @@ public class ImportGspProductRegisterSpecsDataService {
                 if(dataArray.getProductRegisterId()!=null && dataArray.getProductRegisterId()!="" &&dataArray.getProductRegisterId()!="无" ){
                     importDataVO.setLicenseOrRecordNo(dataArray.getLicenseOrRecordNo());
                 }else{
-                    GspProductRegister gpr  = gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+                    GspProductRegister gpr  = gspProductRegisterMybatisDao.queryByNoIsUse(dataArray.getProductRegisterId());
                     if(gpr==null){
                     	if("是".equals(dataArray.getMedicalDeviceMark())){
 							throw new Exception();
@@ -724,7 +724,7 @@ public class ImportGspProductRegisterSpecsDataService {
 					importDataVO.setEnterpriseName(dataArray.getProductEnterpriseName());
 				}else {
 					//如果注册号有生产企业就带入
-					GspProductRegister gspProductRegister =	gspProductRegisterMybatisDao.queryByNo(dataArray.getProductRegisterId());
+					GspProductRegister gspProductRegister =	gspProductRegisterMybatisDao.queryByNoIsUse(dataArray.getProductRegisterId());
 					if(gspProductRegister!=null){
 						if(gspProductRegister.getEnterpriseId() != null && !gspProductRegister.getEnterpriseId().equals("")){
 							GspEnterpriseInfo gspEnterpriseInfo1 =gspEnterpriseInfoMybatisDao.queryByEnterpriseId(gspProductRegister.getEnterpriseId());
@@ -880,10 +880,12 @@ public class ImportGspProductRegisterSpecsDataService {
 //		if(importDataList.size()==0){
 //			flag = true;
 //		}
+		if(resultMsg.length()>0){
 
-		for(GspProductRegisterSpecsVO importDataVO : importDataList){
-			gspProductRegisterSpecs = new GspProductRegisterSpecs();
-			BeanUtils.copyProperties(importDataVO, gspProductRegisterSpecs);
+		}else{
+			for(GspProductRegisterSpecsVO importDataVO : importDataList){
+				gspProductRegisterSpecs = new GspProductRegisterSpecs();
+				BeanUtils.copyProperties(importDataVO, gspProductRegisterSpecs);
 //			//获取SO编号
 //			Map<String ,Object> map=new HashMap<String, Object>();
 //			map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
@@ -925,10 +927,14 @@ public class ImportGspProductRegisterSpecsDataService {
 //					rowResult.append("execel的Sheet表名应为:产品基础信息").append(" ");
 //					resultMsg.append(rowResult);
 //				}else if(!flag){
-					resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
+				resultMsg.append("序号：").append(importDataVO.getSeq()).append("资料导入成功").append(" ");
 //
 //				}
 			}
+		}
+
+
+
 //			else {
 //				resultMsg.append("序号：").append(importDataVO.getSeq()).append("SO号获取失败").append(" ");
 //			}

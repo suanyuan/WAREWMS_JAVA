@@ -315,10 +315,20 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 
     <!-- 根据productCode查询 产品注册证规格 -->
     <select id="selectByProductCode" resultMap="BaseResultMap" parameterType="Object">
-	select t1.*,t2.product_register_no,t2.product_name_main
-	from gsp_product_register_specs t1 left join gsp_product_register t2
-	ON t1.product_register_id = t2.product_register_id where t1.product_code = #{productCode} and t1.is_use = 1
-</select>
+        select t1.*,t2.product_register_no,t2.product_name_main
+        from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id where t1.product_code = #{productCode}
+        order BY t1.create_date desc LIMIT 1
+    </select>
+
+    <!-- 非医疗器械 根据productCode查询 产品注册证规格 -->
+    <select id="ImportSelectByProductCode" resultMap="BaseResultMap" parameterType="Object">
+        select t1.*,t2.product_register_no,t2.product_name_main
+        from gsp_product_register_specs t1 left join gsp_product_register t2
+        ON t1.product_register_id = t2.product_register_id where t1.product_code = #{productCode}
+        and t1.medical_device_mark = '0'
+        order BY t1.create_date desc LIMIT 1
+    </select>
 
     <!-- 根据productCode和注册证id 查询 产品 -->
     <select id="selectByProductCodeAndProductRegister" resultMap="BaseResultMap" parameterType="Object">
@@ -326,7 +336,8 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
         from gsp_product_register_specs t1 left join gsp_product_register t2
         ON t1.product_register_id = t2.product_register_id
         where t1.product_code = #{productCode} and t1.product_register_id = #{productRegisterId}
-         and t1.is_use = 1
+        order BY t1.create_date desc LIMIT 1
+
     </select>
 
     <!-- 根据id查询 产品注册证规格关联产品注册证 -->
@@ -336,7 +347,7 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 	ON t1.product_register_id = t2.product_register_id where specs_id = #{specsId}
 </select>
 
-    <!--通过规格找产品代码-->
+    <!--  根据specsid查询 最新有效的该产品   没用了-->
     <select id="selectNewBySpecsId" resultMap="BaseResultMap" parameterType="Object">
         select * from gsp_product_register_specs where product_code =
         (select product_code from gsp_product_register_specs where specs_id = #{specsId})
@@ -345,7 +356,9 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 
     <!-- 根据规格查询 有效的产品 -->
     <select id="selectBySpecsName" resultMap="BaseResultMap" parameterType="Object">
-        select * from gsp_product_register_specs where specs_name = #{specsName} and is_use='1'
+        select * from gsp_product_register_specs where specs_name = #{specsName}
+        order BY t1.create_date desc LIMIT 1
+
     </select>
 
 
@@ -356,12 +369,13 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
 	product_enterprise_name,wight,LicenseOrRecordNo,bar_code,t1.production_address,alternat_name1,is_doublec,
 	alternat_name2,is_certificate,alternat_name3,attache_card_category,alternat_name4,t4.codename_c cold_hain_mark,alternat_name5,
 	sterilization_markers,maintenance_cycle
-	from (select * from gsp_product_register_specs where is_use ='1') t1
+	from (select * from gsp_product_register_specs ) t1
 	LEFT JOIN gsp_product_register t2 ON t1.product_register_id = t2.product_register_id
 	LEFT JOIN (select * from bas_codes where codeid = 'UOM') t3 on t1.unit = t3.code
 	LEFT JOIN (select * from bas_codes where codeid = 'LL_TYP') t4 on t1.cold_hain_mark = t4.code
-
 	where specs_id = #{specsId}
+	order BY t1.create_date desc LIMIT 1
+
     </select>
 
 

@@ -14,12 +14,18 @@ import java.util.List;
 public interface GspProductRegisterMybatisDao extends BaseDao {
 
     /**
-     * 通过注册证号查询
+     * 通过注册证号查询有效的注册证
      * @param registerNo 注册证编号
      * @return ~
      */
     PdaGspProductRegister queryByNo(@Param("registerNo") String registerNo);
 
+    /**
+     * 通过注册证号查询  无关有效
+     * @param registerNo 注册证编号
+     * @return ~
+     */
+    PdaGspProductRegister  queryByNoIsUse(@Param("registerNo") String registerNo);
 
     /**
      * 通过注册证名称查询
