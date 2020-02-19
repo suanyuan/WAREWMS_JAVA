@@ -316,7 +316,20 @@ public class DataPublishService extends BaseService {
                 skuForm.setPutawayrule(no);//申请单号
                 skuForm.setCustomerid(customerId.getCustomerid());
 
+                BasSkuQuery skuQuery = new BasSkuQuery();
+                skuQuery.setCustomerid(skuForm.getCustomerid());
+                skuQuery.setSku(skuForm.getSku());
+                BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
 
+                if(basSku!=null){
+                    System.out.println();
+                    BasSkuHistory basSkuHistory = new BasSkuHistory();
+                    BeanUtils.copyProperties(basSku,basSkuHistory);
+                    basSkuHistory.setActiveFlag(Constant.IS_USE_NO);
+                    basSkuHistory.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+//                  basSkuHistory.setAddtime();
+                    basSkuHistoryMybatisDao.add(basSkuHistory);
+                }
 
                 //skuForm
                 basSkuService.addBasSku(skuForm);
@@ -477,19 +490,19 @@ public class DataPublishService extends BaseService {
                 skuForm.setSku(specObj.getProductCode());
                 skuForm.setCustomerid(firstBusinessApply.getClientId());
 
-                BasSkuQuery skuQuery = new BasSkuQuery();
-                skuQuery.setCustomerid(skuForm.getCustomerid());
-                skuQuery.setSku(skuForm.getSku());
-                BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
-
-                if(basSku!=null){
-                    BasSkuHistory basSkuHistory = new BasSkuHistory();
-                    BeanUtils.copyProperties(basSku,basSkuHistory);
-                    basSkuHistory.setActiveFlag(Constant.IS_USE_NO);
-                    basSkuHistory.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
-//                  basSkuHistory.setAddtime();
-                    basSkuHistoryMybatisDao.add(basSkuHistory);
-                }
+//                BasSkuQuery skuQuery = new BasSkuQuery();
+//                skuQuery.setCustomerid(skuForm.getCustomerid());
+//                skuQuery.setSku(skuForm.getSku());
+//                BasSku basSku = basSkuMybatisDao.queryById(skuQuery);
+//
+//                if(basSku!=null){
+//                    BasSkuHistory basSkuHistory = new BasSkuHistory();
+//                    BeanUtils.copyProperties(basSku,basSkuHistory);
+//                    basSkuHistory.setActiveFlag(Constant.IS_USE_NO);
+//                    basSkuHistory.setFirstop(Constant.CODE_CATALOG_FIRSTSTATE_USELESS);
+////                  basSkuHistory.setAddtime();
+//                    basSkuHistoryMybatisDao.add(basSkuHistory);
+//                }
 
                 //skuForm
                 basSkuService.editBasSku(skuForm);
