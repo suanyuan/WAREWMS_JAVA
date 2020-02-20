@@ -130,6 +130,34 @@ public class ImportSerialNumDataService {
                 rowResult.append("[序列号]，未输入").append(" ");
             }
 
+            try {
+                if(StringUtils.isEmpty(dataArray.getSerialNum())||StringUtils.isEmpty(dataArray.getBatchNum())){
+
+                }else{
+                    MybatisCriteria criteria = new MybatisCriteria();
+                    DocSerialNumRecord d = new DocSerialNumRecord();
+                    d.setSerialNum(dataArray.getSerialNum());
+                    d.setBatchNum(dataArray.getBatchNum());
+                    criteria.setCondition(d);
+                    List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(criteria);
+                    if(docSerialNumRecordList!=null&&docSerialNumRecordList.size()>0){
+                        throw new Exception();
+
+                    }
+
+
+                }
+
+            } catch (Exception e) {
+                rowResult.append("[序列号和批号]，已经存在同序列号和批号的数据").append(" ");
+            }
+
+
+
+
+
+
+
             if (rowResult.length() > 0) {
                 if (rowResult.lastIndexOf("，") > -1) {
                     rowResult.deleteCharAt(rowResult.lastIndexOf("，"));
@@ -158,27 +186,34 @@ public class ImportSerialNumDataService {
 
     private void save(List<DocSerialNumRecord> importDataList, StringBuilder resultMsg, String asnno) {
 
-        //导入之前清除之前的导入记录
-        docSerialNumRecordMybatisDao.clearRecordByOrderno(asnno);
 
-        DocSerialNumRecord docSerialNumRecord;
-        DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
-        for (DocSerialNumRecord importDataVO : importDataList) {
-            docSerialNumRecord = new DocSerialNumRecord();
-            BeanUtils.copyProperties(importDataVO, docSerialNumRecord);
-            //赋值
-            docSerialNumRecord.setCustomerid(docAsnHeader.getCustomerid());
-            docSerialNumRecord.setCartonNo(1);
-            docSerialNumRecord.setSoreference(docAsnHeader.getAsnreference1());
-            docSerialNumRecord.setOrderNo(asnno);
-            docSerialNumRecord.setBatchNum(importDataVO.getBatchNum());
-            docSerialNumRecord.setSerialNum(importDataVO.getSerialNum());
-            docSerialNumRecord.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
-            docSerialNumRecord.setUserdefine1("IN");
-            //保存订单主信息
+        if(resultMsg.length()>0){
 
-            docSerialNumRecordMybatisDao.add(docSerialNumRecord);
+        }else{
+            //导入之前清除之前的导入记录
+            docSerialNumRecordMybatisDao.clearRecordByOrderno(asnno);
+
+
+            DocSerialNumRecord docSerialNumRecord;
+            DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
+            for (DocSerialNumRecord importDataVO : importDataList) {
+                docSerialNumRecord = new DocSerialNumRecord();
+                BeanUtils.copyProperties(importDataVO, docSerialNumRecord);
+                //赋值
+                docSerialNumRecord.setCustomerid(docAsnHeader.getCustomerid());
+                docSerialNumRecord.setCartonNo(1);
+                docSerialNumRecord.setSoreference(docAsnHeader.getAsnreference1());
+                docSerialNumRecord.setOrderNo(asnno);
+                docSerialNumRecord.setBatchNum(importDataVO.getBatchNum());
+                docSerialNumRecord.setSerialNum(importDataVO.getSerialNum());
+                docSerialNumRecord.setAddwho(SfcUserLoginUtil.getLoginUser().getId());
+                docSerialNumRecord.setUserdefine1("IN");
+                //保存订单主信息
+
+                docSerialNumRecordMybatisDao.add(docSerialNumRecord);
+            }
+            resultMsg.append("导入成功，共导入").append(importDataList.size()).append("条");
         }
-        resultMsg.append("导入成功，共导入").append(importDataList.size()).append("条");
+
     }
 }
