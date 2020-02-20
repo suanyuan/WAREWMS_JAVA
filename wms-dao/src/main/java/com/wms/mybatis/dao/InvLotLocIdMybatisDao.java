@@ -101,4 +101,9 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * 根据库位查出所有库存和批次属性
      */
     List<InvLotLocId> queryAllInvLotLocByLocationid(String locationid);
+
+    /**
+     * 查询入库单中还停留在收货暂存库的库存
+     */
+    List<InvLotLocId> queryStageInventory(@Param("asnno") String asnno);
 }

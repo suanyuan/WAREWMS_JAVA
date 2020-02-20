@@ -4,8 +4,10 @@ import com.wms.constant.Constant;
 import com.wms.entity.*;
 import com.wms.mybatis.dao.*;
 import com.wms.query.DocAsnDetailQuery;
+import com.wms.query.InvLotLocIdQuery;
 import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.StringUtil;
+import com.wms.vo.InvLotLocIdVO;
 import com.wms.vo.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,12 @@ public class DocAsnUtilService {
     private DocSerialNumRecordMybatisDao docSerialNumRecordMybatisDao;
     @Autowired
     private ProductLineMybatisDao productLineMybatisDao;
+    @Autowired
+    private InvLotMybatisDao invLotMybatisDao;
+    @Autowired
+    private InvLotLocIdMybatisDao invLotLocIdMybatisDao;
+    @Autowired
+    private ActTransactionLogMybatisDao actTransactionLogMybatisDao;
 
     /**
      * 在关闭订单之前进行判断
@@ -172,4 +180,16 @@ public class DocAsnUtilService {
         if (resultMsg.length() > 0) return Json.error(resultMsg.toString());
         return Json.success("");
     }
+
+    /**
+     * todo 关单之后删除此入库单还在收货暂存库上的库存，部分收货的场景
+     */
+//    public Json clearStageInventory(String asnno) {
+//
+//        List<InvLotLocId> invLotLocIdList = invLotLocIdMybatisDao.queryStageInventory(asnno);
+//        for (InvLotLocId invLotLocId : invLotLocIdList) {
+//
+//            invLotLocIdMybatisDao.delete(invLotLocId);
+//        }
+//    }
 }

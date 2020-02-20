@@ -223,9 +223,8 @@ public class DocAsnHeaderService extends BaseService {
                         String result = map.get("result").toString();
                         message.append("[").append(asnno).append("]");
                         if (result.substring(0, 3).equals("000")) {
-                            message.append("关单成功").append(";").append(" ");
 
-                            //删除
+                            message.append("关单成功").append(";").append(" ");
                         } else {
                             count = 0;
                             message.append("关单失败：").append(result).append(";").append(" ");
