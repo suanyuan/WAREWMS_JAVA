@@ -131,25 +131,29 @@ public class ImportSerialNumDataService {
             }
 
             try {
+                boolean flag1 = false;
                 if(StringUtils.isEmpty(dataArray.getSerialNum())||StringUtils.isEmpty(dataArray.getBatchNum())){
 
                 }else{
-                    MybatisCriteria criteria = new MybatisCriteria();
-                    DocSerialNumRecord d = new DocSerialNumRecord();
-                    d.setSerialNum(dataArray.getSerialNum());
-                    d.setBatchNum(dataArray.getBatchNum());
-                    criteria.setCondition(d);
-                    List<DocSerialNumRecord> docSerialNumRecordList = docSerialNumRecordMybatisDao.queryByList(criteria);
-                    if(docSerialNumRecordList!=null&&docSerialNumRecordList.size()>0){
-                        throw new Exception();
-
+                    //excel内部判重
+                    String sku = dataArray.getSku();
+                    if(dataArray.getSku()==""){
+                        sku=null;
                     }
-
-
+                    for(DocSerialNumRecord  a: importData){
+                        if(dataArray.getSerialNum().equals(a.getSerialNum())
+                                &&dataArray.getBatchNum().equals(a.getBatchNum())
+                                &&sku==a.getSku()){
+                            flag1 = true;
+                        }
+                    }
+                    if(flag1){
+                        throw new Exception();
+                    }
                 }
 
             } catch (Exception e) {
-                rowResult.append("[序列号和批号]，已经存在同序列号和批号的数据").append(" ");
+                rowResult.append("[序列号,批号,sku]，excel存在同序列号,批号和sku的数据").append(" ");
             }
 
 
