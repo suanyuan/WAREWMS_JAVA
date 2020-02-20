@@ -7,9 +7,7 @@ import java.util.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.wms.constant.Constant;
-import com.wms.entity.FirstBusinessApply;
-import com.wms.entity.GspOperateDetail;
-import com.wms.entity.GspProductRegisterSpecs;
+import com.wms.entity.*;
 import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
 import com.wms.mybatis.entity.pda.PdaGspProductRegister;
@@ -26,7 +24,6 @@ import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wms.entity.GspProductRegister;
 import com.wms.vo.GspProductRegisterVO;
 import com.wms.vo.Json;
 import com.wms.easyui.EasyuiCombobox;
@@ -60,6 +57,9 @@ public class GspProductRegisterService extends BaseService {
 	@Autowired
 	private ProductRegisterRelationMybatisDao productRegisterRelationMybatisDao;
 
+
+    @Autowired
+    private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
 	/**
 	 * 查询分页数据
 	 * @param pager
@@ -145,6 +145,21 @@ public class GspProductRegisterService extends BaseService {
 		try{
 			GspProductRegister gspProductRegister = gspProductRegisterMybatisDao.queryById(gspProductRegisterForm.getProductRegisterId());
 
+			boolean isProductChange= false;
+			if(gspProductRegisterForm.getLicenseOrRecordNol().equals(gspProductRegister.getLicenseOrRecordNol())
+					&&gspProductRegisterForm.getEnterpriseId().equals(gspProductRegister.getEnterpriseId())
+					&&gspProductRegisterForm.getStorageConditions().equals(gspProductRegister.getStorageConditions())
+					&&gspProductRegisterForm.getProductionAddress().equals(gspProductRegister.getProductionAddress())
+			) {
+
+			}else{
+				isProductChange= true;
+			}
+
+
+
+
+
 			if(gspProductRegister == null){
 				return Json.error("查询不到对应的产品注册证信息");
 			}
@@ -161,6 +176,7 @@ public class GspProductRegisterService extends BaseService {
 //				return Json.error("产品注册证编号重复");
 //			}
 
+            boolean isXiafa =false;
 
 			if(gspProductRegisterForm.getOpType().equals("update")){
 				/////////新关系下没有换证逻辑存在了
@@ -248,9 +264,51 @@ public class GspProductRegisterService extends BaseService {
                         }
                     }
                 }
+
+
+
+
+				if(isProductChange){
+					//注册证带入产品的字段  有变动
+					//更新注册证下所有的产品
+					List<GspProductRegisterSpecs> pList = gspProductRegisterSpecsMybatisDao.selectByProductRegisterId(gspProductRegisterForm.getProductRegisterId());
+					for(GspProductRegisterSpecs prorduct:pList){
+						GspProductRegisterSpecs pInsert  = new GspProductRegisterSpecs();
+						BeanUtils.copyProperties(prorduct, pInsert);
+
+						pInsert.setProductRegisterId(prorduct.getProductRegisterId());
+
+						pInsert.setLicenseOrRecordNo(gspProductRegisterForm.getLicenseOrRecordNol());  //生产许可证号/备案号
+						GspEnterpriseInfo g = gspEnterpriseInfoMybatisDao.queryByEnterpriseId(gspProductRegisterForm.getEnterpriseId());
+						pInsert.setEnterpriseName(g.getEnterpriseName());       //生产企业名称
+						pInsert.setStorageCondition(gspProductRegisterForm.getStorageConditions());//储存条件
+						pInsert.setEditDate(new Date());
+						pInsert.setEditId(SfcUserLoginUtil.getLoginUser().getId());
+						gspProductRegisterSpecsMybatisDao.updateBySelective(pInsert);
+
+						List<String> ApplyIdlist =  firstBusinessApplyMybatisDao.selectBySpecsId(prorduct.getSpecsId());
+						if(ApplyIdlist.size()>0){
+							isXiafa = true;
+						}
+
+					}
+				}
+
+
+
+
+
             }
 
-			return Json.success("操作成功",gspProductRegister.getProductRegisterId());
+
+            //如果注册证下已经下发的产品   需要提示去产品首营申请做 发起新申请操作
+            if(isXiafa){
+                return Json.success("操作成功,但注册证下存在已经下发的产品，需要到产品首营申请发起新申请更新。",gspProductRegister.getProductRegisterId());
+
+            }else{
+                return Json.success("操作成功",gspProductRegister.getProductRegisterId());
+
+            }
 		}catch (Exception e){
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

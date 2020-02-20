@@ -273,7 +273,7 @@ where 1=1
 	<select id="selectBySpecsId" resultType="java.lang.String"  parameterType="Object">
 		select t1.apply_id from first_business_apply t1
 		LEFT JOIN first_business_product_apply t2 on t1.apply_id = t2.apply_id
-		where t2.specs_id = #{specsId}
+		where t2.specs_id = #{specsId} and t1.is_use ='1'
 	</select>
 
 

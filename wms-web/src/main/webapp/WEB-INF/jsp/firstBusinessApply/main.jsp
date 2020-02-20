@@ -71,7 +71,7 @@ $(function() {
 			// });
 		},onLoadSuccess:function(data){
 			ajaxBtn($('#menuId').val(), '<c:url value="/firstBusinessApplyController.do?getBtn"/>', ezuiMenu);
-			$(this).datagrid('unselectAll');
+			// $(this).datagrid('unselectAll');
 		}, onClickRow: function (index, row) {
 
             row = ezuiDatagrid1.datagrid("getSelections");
