@@ -10,6 +10,7 @@ import com.wms.query.DocAsnHeaderQuery;
 import com.wms.result.AsnDetailResult;
 import com.wms.service.DocAsnExportService;
 import com.wms.service.DocAsnHeaderService;
+import com.wms.service.DocAsnUtilService;
 import com.wms.service.DocPaService;
 import com.wms.utils.ResourceUtil;
 import com.wms.utils.annotation.Login;
@@ -48,6 +49,8 @@ public class DocAsnHeaderController {
 	private DocAsnExportService docAsnExportService;
 	@Autowired
 	private DocPaService docPaService;
+	@Autowired
+	private DocAsnUtilService docAsnUtilService;
 
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
@@ -129,7 +132,7 @@ public class DocAsnHeaderController {
     @RequestMapping(params = "closeCheck", method = RequestMethod.GET)
     @ResponseBody
     public Json closeCheck(String asnnos) {
-        Json json = docAsnHeaderService.checkCloseAsn(asnnos);
+        Json json = docAsnUtilService.checkCloseAsn(asnnos);
         if(json == null){
             json = new Json();
             json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));

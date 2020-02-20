@@ -63,21 +63,14 @@ public class ImportSerialNumDataService {
                 e.printStackTrace();
             }
 
-            //判断导入条数和预期件数是否一致
-            DocAsnDetail docAsnDetail = docAsnDetailsMybatisDao.queryBySum(asnno);
             if (GTNList == null || GTNList.size() == 0) {
 
                 resultMsg.append("导入内容为空，请填写相应数据");
-            } else if (GTNList.size() == docAsnDetail.getExpectedqty().intValue()) {
+            } else {
 
                 List<DocSerialNumRecord> importDataList = this.listToBean(GTNList, resultMsg);
                 this.save(importDataList, resultMsg, asnno);// 转成订单资料存入资料库
                 isSuccess = true;
-            } else {
-
-                resultMsg.append("导入失败，件数不匹配。").append(" ");
-                resultMsg.append("预期收货件数:").append(docAsnDetail.getExpectedqty().intValue()).append(" ");
-                resultMsg.append("Excel条数:").append(GTNList.size()).append(" ");
             }
         } catch (IOException e1) {
 

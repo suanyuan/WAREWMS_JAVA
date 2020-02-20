@@ -14,7 +14,7 @@ import java.util.List;
 public interface ProductLineMybatisDao extends BaseDao {
     public <T> List<T> queryByPage(MybatisCriteria criteria);//总查询分页
 
-    public <T> T queryByDocAsn(@Param("customerid") String customerid, @Param("sku") String sku);//总查询分页
+    ProductLine queryByDocAsn(@Param("customerid") String customerid, @Param("sku") String sku);//总查询分页
     public <T> List<T> queryByName(String bame);
     public  void insert(ProductLine t);
 

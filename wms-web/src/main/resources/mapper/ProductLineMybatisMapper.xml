@@ -135,7 +135,7 @@ where 1=1
 </select>
 
 <select id="queryByDocAsn"  resultMap="BaseResultMap" parameterType="Object">
-	select  * from product_line p
+	select  p.* from product_line p
 	LEFT JOIN bas_sku t1 on p.product_line_id = t1.sku_group1 AND P.customerid=t1.customerid
 	where t1.customerid = #{customerid}  and t1.sku = #{sku}
 </select>

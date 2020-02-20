@@ -176,17 +176,18 @@ public class DocPaDetailsService extends BaseService {
         docPaDetailVO.setAlertflag(0);//默认不提醒
         if (similarDetailList.size() == 0) {
 
-            ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
-            ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
-            //骨科的产品线推荐库位
-            if (productLine.getName().equals("Trauma")) {
-
-                BasLocation basLocation = basLocationService.queryEmptyLocation(1);
-                docPaDetailVO.setUserdefine1(null == basLocation ? "" : basLocation.getLocationid());
-            } else {
+            //todo 暂时关闭推荐库位
+//            ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+//            ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+//            //骨科的产品线推荐库位
+//            if (productLine.getName().equals("Trauma")) {
+//
+//                BasLocation basLocation = basLocationService.queryEmptyLocation(1);
+//                docPaDetailVO.setUserdefine1(null == basLocation ? "" : basLocation.getLocationid());
+//            } else {
 
                 docPaDetailVO.setUserdefine1("");
-            }
+//            }
         }else {
 
             DocPaDetails similarDetail = similarDetailList.get(0);

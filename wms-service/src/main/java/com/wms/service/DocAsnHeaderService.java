@@ -59,8 +59,6 @@ public class DocAsnHeaderService extends BaseService {
     @Autowired
     private DocPaService docPaService;
     @Autowired
-    private DocAsnCertificateMybatisDao docAsnCertificateMybatisDao;
-    @Autowired
     private BasSkuService basSkuService;
     @Autowired
     private DocAsnDetailService docAsnDetailService;
@@ -77,13 +75,9 @@ public class DocAsnHeaderService extends BaseService {
     @Autowired
     private BasSkuMybatisDao basSkuMybatisDao;
     @Autowired
-    private SfcUserMybatisDao sfcUserMybatisDao;
-    @Autowired
     private SfcRoleMybatisDao sfcRoleMybatisDao;
     @Autowired
     private InvLotAttMybatisDao invLotAttMybatisDao;
-    @Autowired
-    private ProductLineMybatisDao productLineMybatisDao;
 
 
     @Autowired
@@ -114,19 +108,7 @@ public class DocAsnHeaderService extends BaseService {
 
     /**
      * 判断客户单号是否重复
-     *
-     * @return
      */
-	/* boolean checkIsRept(String customerNo){
-		DocAsnHeaderQuery query = new DocAsnHeaderQuery();
-		MybatisCriteria criteria = new MybatisCriteria();
-		criteria.setCondition(query);
-		List<DocAsnHeader> list = docAsnHeaderMybatisDao.queryByList(criteria);
-		if(list != null && list.size()>0){
-			return true;
-		}
-		return false;
-	}*/
     public Json addDocAsnHeader(DocAsnHeaderForm docAsnHeaderForm) throws Exception {
 
         Json json = new Json();
@@ -214,103 +196,7 @@ public class DocAsnHeaderService extends BaseService {
         return json;
     }
 
-    /**
-     * 检查入库单号下面是否有没有导入的质量合格证
-     */
-    private Json checkAsnCertification(String asnno) {
 
-        if (StringUtil.isEmpty(asnno)) return Json.error("未传入入库单号");
-
-        Json json = new Json();
-        json.setSuccess(true);
-        List<DocAsnDetail> docAsnDetailList = docAsnDetailsMybatisDao.queryByAsnNo(asnno);
-        StringBuilder message = new StringBuilder();
-        for (DocAsnDetail docAsnDetail : docAsnDetailList) {
-
-            BasSku basSku = basSkuService.getSkuInfo(docAsnDetail.getCustomerid(), docAsnDetail.getSku());
-            if (null == basSku) {//没有产品信息，一般不可能
-
-                json.setSuccess(false);
-                message.append(" ").
-                        append("[单号]:").append(docAsnDetail.getAsnno()).
-                        append(" [明细行号]:").append(docAsnDetail.getAsnlineno()).
-                        append(" [产品代码]:").append(docAsnDetail.getSku()).
-                        append(" 查无产品档案数据");
-            } else if (StringUtil.fixNull(basSku.getSkuGroup8()).equals("1")) {//产品有质量合格证
-
-                if (StringUtil.isEmpty(docAsnDetail.getLotatt04())) {//质量合格证是有对应的生产批号的
-
-                    json.setSuccess(false);
-                    message.append(" ").
-                            append("[单号]:").append(docAsnDetail.getAsnno()).
-                            append(" [明细行号]:").append(docAsnDetail.getAsnlineno()).
-                            append(" [产品代码]:").append(docAsnDetail.getSku()).
-                            append(" 数据错误，此产品有质量合格证，但入库数据未包含生产批号，请联系管理员");
-                } else {
-
-                    DocAsnCertificate docAsnCertificate = docAsnCertificateMybatisDao.queryBylotatt04(docAsnDetail.getCustomerid(), docAsnDetail.getSku(), docAsnDetail.getLotatt04());
-                    if (docAsnCertificate == null) {
-
-                        json.setSuccess(false);
-                        message.append(" ").
-                                append("[单号]:").append(docAsnDetail.getAsnno()).
-                                append(" [明细行号]:").append(docAsnDetail.getAsnlineno()).
-                                append(" [产品代码]:").append(docAsnDetail.getSku()).
-                                append(" 生产批号(").append(docAsnDetail.getLotatt04()).
-                                append(")，未导入质量合格证;");
-                    }
-                }
-            }
-        }
-
-        json.setMsg(message.toString());
-        return json;
-    }
-
-    /**
-     * 在关闭订单之前，1,是否导入质量合格证 2，判断订单是否部分收货
-     */
-    public Json checkCloseAsn(String asnnos) {
-
-        Json json = new Json();
-        StringBuilder message = new StringBuilder();
-        if (StringUtil.isNotEmpty(asnnos)) {
-
-            String[] asnnoList = asnnos.split(",");
-            List<String> partReceivedAsns = new ArrayList<>();//部分收货入库的预入库单号
-            for (String asnno : asnnoList) {
-
-                //是否导入质量合格证
-                json = checkAsnCertification(asnno);
-                if (!json.isSuccess()) return json;
-
-                DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(asnno);
-                List<DocAsnDetail> unfinishedDetailList = docAsnDetailsMybatisDao.queryPartReceivedAsn(asnno);
-                if (unfinishedDetailList.size() > 0 && docAsnHeader.getAsnstatus().equals("70")) {//表示有部分收货入库的预期到货通知明细,前提是完全验收的单子
-                    partReceivedAsns.add(asnno);
-                }
-            }
-            if (partReceivedAsns.size() > 1 || (partReceivedAsns.size() == 1 && asnnoList.length > 1)) {//asnnos中有多个部分收货的需要单条操作
-
-                message.append("请逐条关闭部分收货入库的通知单;").append(partReceivedAsns.toString());
-                json.setSuccess(false);
-            } else if (partReceivedAsns.size() == 1) {
-
-                String partAsnno = partReceivedAsns.get(0);
-                message.append("[").append(partAsnno).append("] 此单部分收货入库，");
-                json.setSuccess(true);
-            } else {
-
-                json.setSuccess(true);
-            }
-            json.setMsg(message.toString());
-        } else {
-
-            json.setSuccess(false);
-            json.setMsg("关单失败！(无预入库单号传入)");
-        }
-        return json;
-    }
 
     public Json closeDocAsnHeader(String asnnos) {
         Json json = new Json();
@@ -338,6 +224,8 @@ public class DocAsnHeaderService extends BaseService {
                         message.append("[").append(asnno).append("]");
                         if (result.substring(0, 3).equals("000")) {
                             message.append("关单成功").append(";").append(" ");
+
+                            //删除
                         } else {
                             count = 0;
                             message.append("关单失败：").append(result).append(";").append(" ");
@@ -358,26 +246,6 @@ public class DocAsnHeaderService extends BaseService {
             json.setMsg("关单失败！(无预入库单号传入)");
         }
         return json;
-
-//		Map<String ,Object> map=new HashMap<String, Object>();
-//		map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-//		map.put("asnno", id);
-//		map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
-//		DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
-//		docAsnHeaderQuery.setAsnno(id);
-//		DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
-//		if(docAsnHeader != null){
-//			docAsnHeaderMybatisDao.close(map);
-//			String result = map.get("result").toString();
-//			if (result.substring(0,3).equals("000")) {
-//				json.setSuccess(true);
-//				json.setMsg("关单成功！");
-//			} else {
-//				json.setSuccess(false);
-//				json.setMsg("关单失败！"+result);
-//			}
-//		}
-//		return json;
     }
 
     public Json cancelDocAsnHeader(String asnnos) {
@@ -503,78 +371,8 @@ public class DocAsnHeaderService extends BaseService {
         String[] asnnoList = asnnos.split(",");
 //        List<String> asnnoList = Arrays.asList(asnnoList1);
         DocAsnDetail docAsnDetail =  docAsnDetailsMybatisDao.queryTotalReceivingNum(asnnoList);
-
-
-
-
-
-
-
         return Json.success("",docAsnDetail);
-
-//        return json;
     }
-
-
-
-
-
-
-//	public void exportPdf(HttpServletResponse response, String orderList) {
-//		StringBuilder sb = new StringBuilder();
-//		try (OutputStream os = response.getOutputStream()){
-//			sb.append("inline; filename=")
-//			  .append(URLEncoder.encode("测试用Pdf","UTF-8"))
-//			  .append(".pdf");
-//			response.setHeader("Content-disposition", sb.toString());sb.setLength(0);
-//			response.setContentType(ContentTypeEnum.pdf.getContentType());
-//			
-//			Document document = null;
-//			AcroFields form = null;
-//			PdfStamper stamper = null;
-//			PdfImportedPage page = null;
-//			ByteArrayOutputStream baos = null;
-//
-//			if (StringUtils.isNotEmpty(orderList)) {
-//				
-//				document = new Document(PDFUtil.getTemplate("dzmd_sfx.pdf").getPageSize(1));
-//				PdfCopy pdfCopy = new PdfCopy(document, os);
-//				document.open();
-//				
-//				String[] orderArray = orderList.split(",");
-//				for(String orderno : orderArray){
-//					DocAsnHeader order = docAsnHeaderMybatisDao.queryById(orderno);
-//					baos = new ByteArrayOutputStream();
-//					stamper = new PdfStamper(PDFUtil.getTemplate("dzmd_sfx.pdf"), baos);
-//					form = stamper.getAcroFields();
-//					
-//					form.setField("cod", "111");
-//					form.setField("mdcode", "222");
-//					form.setField("contact1_tel1", "0521-12345678");
-//					form.setField("address1", "望石路");
-//					form.setField("dqcode", "0521");
-//					form.setField("consigneeid", order.getConsigneename());
-//					form.setField("tel", order.getCTel1());
-//					form.setField("c_zip", order.getCZip());
-//					form.setField("c_address", order.getCAddress1());
-//					form.setField("address", "021");
-//					form.setField("deliveryno", order.getOrderno() + "0001");
-//					form.setField("orderno", order.getOrderno());
-//					form.replacePushbuttonField("packageBarcodeImg1", PDFUtil.genPdfButton(form, "packageBarcodeImg1", BarcodeGeneratorUtil.genBarcode(order.getOrderno() + "0001", 800)));
-//					form.replacePushbuttonField("packageBarcodeImg2", PDFUtil.genPdfButton(form, "packageBarcodeImg2", BarcodeGeneratorUtil.genBarcode(order.getOrderno() + "0001", 800)));
-//					form.replacePushbuttonField("packageBarcodeImg3", PDFUtil.genPdfButton(form, "packageBarcodeImg3", BarcodeGeneratorUtil.genBarcode(order.getOrderno(), 800)));
-//					
-//					stamper.setFormFlattening(true);
-//					stamper.close();
-//					page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
-//					pdfCopy.addPage(page);
-//				}
-//				document.close();
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} 
-//	}
 
     public List<EasyuiCombobox> getAsnTypeCombobox() {
         List<EasyuiCombobox> comboboxList = new ArrayList<EasyuiCombobox>();
