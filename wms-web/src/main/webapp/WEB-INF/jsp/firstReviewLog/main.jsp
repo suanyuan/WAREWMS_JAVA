@@ -71,7 +71,7 @@ $(function() {
             });
         }, onLoadSuccess: function (data) {
 			ajaxBtn($('#menuId').val(), '<c:url value="/firstReviewLogController.do?getBtn"/>', ezuiMenu);
-			$(this).datagrid('unselectAll');
+			// $(this).datagrid('unselectAll');
             // row = ezuiDatagrid.datagrid("getSelections");
             // var a = row.length;
             // alert(ezuiDatagrid.datagrid("getSelections"));

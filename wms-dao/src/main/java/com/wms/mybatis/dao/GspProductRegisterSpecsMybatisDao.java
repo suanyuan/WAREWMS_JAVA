@@ -52,4 +52,7 @@ public interface GspProductRegisterSpecsMybatisDao extends BaseDao {
 
     //通过规格找产品代码
     public <T> T selectBySpecsName(Object id);
+
+    //通过注册证查询产品
+    public <T> List<T> selectByProductRegisterId(Object id);
 }

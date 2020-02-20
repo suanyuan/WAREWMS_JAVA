@@ -451,6 +451,20 @@ delete 	 from gsp_product_register_specs where specs_id = #{specsId}
             and product_code like CONCAT('%',#{condition.productCode},'%')
         </if>
     </select>
+
+
+
+
+
+
+    <!-- 通过注册证id查询 产品 -->
+    <select id="selectByProductRegisterId" resultMap="BaseResultMap" parameterType="Object">
+
+        select * from gsp_product_register_specs where product_register_id = #{productRegisterId}
+
+    </select>
+
+
     <!-- 已下发供应商 的 查询产品注册证规格列表 -->
     <select id="queryProductSUPByList" resultMap="BaseResultMap" parameterType="Object">
         select

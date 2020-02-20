@@ -53,4 +53,6 @@ public interface FirstBusinessApplyMybatisDao extends BaseDao {
 	List<String> queryListByProductCode(String productCode);
 
 	List<String> selectBySpecsId(String specsId);
+
+
 }
