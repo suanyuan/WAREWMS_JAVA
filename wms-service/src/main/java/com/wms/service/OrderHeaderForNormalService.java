@@ -480,6 +480,61 @@ public class OrderHeaderForNormalService extends BaseService {
             return Json.error("查无出库单数据");
         }
     }
+    /**
+     * 批量处理确认拣货
+     */
+    public Json batchPicked(String ordernos) {
+
+        if (ordernos.length() == 0) return Json.error("请选择订单进行操作！");
+        Json json = new Json();
+        json.setSuccess(true);
+        StringBuilder resultMsg = new StringBuilder();
+
+        String[] ordernolist = ordernos.split(",");
+        for (String orderno : ordernolist) {
+
+            if (StringUtil.isNotEmpty(orderno)) {
+
+                json = Picked(orderno);
+                resultMsg.append("出库单号：").append(orderno).append("，").append(json.getMsg()).append("\n");
+            }
+        }
+        json.setMsg(resultMsg.toString());
+        return json;
+    }
+    /**
+     * 确认拣货
+     */
+    private Json Picked(String orderNo) {
+        Json json=new Json();
+        OrderHeaderForNormalQuery orderHeaderForNormalQuery = new OrderHeaderForNormalQuery();
+        orderHeaderForNormalQuery.setOrderno(orderNo);
+        OrderHeaderForNormal orderHeaderForNormal = orderHeaderForNormalMybatisDao.queryById(orderHeaderForNormalQuery);
+        if (orderHeaderForNormal != null) {
+                if(Integer.valueOf(orderHeaderForNormal.getSostatus())<=40){
+                    //修改单据状态为60 完全拣货
+                    OrderHeaderForNormal normal=new OrderHeaderForNormal();
+                    normal.setOrderno(orderNo);
+                    normal.setSostatus("60");
+                    normal.setEdittime(new Date());
+                    normal.setEditwho(SfcUserLoginUtil.getLoginUser().getId());
+                    orderHeaderForNormalMybatisDao.updateBySelective(normal);
+                    json.setSuccess(false);
+                    json.setMsg("确认拣货成功!");
+                }else if(orderHeaderForNormal.getSostatus().equals(Constant.CODE_SO_STS_PART_PICKED)){
+                    json.setSuccess(false);
+                    json.setMsg("当前单据已开始PDA拣货，不可PC拣货!");
+                }
+                else{
+                    json.setSuccess(false);
+                    json.setMsg("当前单据状态不可确认拣货!");
+                }
+        } else {
+
+            return Json.error("查无此订单数据");
+        }
+        return json;
+    }
 
     /**
      * 批量处理取消拣货

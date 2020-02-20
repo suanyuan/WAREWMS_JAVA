@@ -138,7 +138,17 @@ public class DocOrderHeaderController {
         }
         return json;
     }
-
+    @Login
+    @RequestMapping(params = "picked")
+    @ResponseBody
+    public Json picked(String ordernos) {
+        Json json = orderHeaderForNormalService.batchPicked(ordernos);
+        if (json == null) {
+            json = new Json();
+            json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
+        }
+        return json;
+    }
     @Login
     @RequestMapping(params = "cancelPicked")
     @ResponseBody

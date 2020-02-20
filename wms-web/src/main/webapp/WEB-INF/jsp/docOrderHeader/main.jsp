@@ -855,6 +855,45 @@
             });
         };
 
+        /*确认拣货*/
+        var picked = function () {
+          $.messager.confirm('<spring:message code="common.message.confirm"/>', '是否继续进行确认拣货操作', function (confirm) {
+           if (confirm) {
+            $.messager.progress({
+                text: '<spring:message code="common.message.data.processing"/>', interval: 100
+            });
+            var operateResult = '';
+            var checkedItems = $('#ezuiDatagrid').datagrid('getSelections');
+            var ordernos = '';
+            $.each(checkedItems, function (index, item) {
+                ordernos += item.orderno + ',';
+            });
+
+            $.ajax({
+                async: true,
+                url: 'docOrderHeaderController.do?picked',
+                data: {ordernos: ordernos},
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (result) {
+
+                    $.messager.progress('close');
+                    try {
+                        operateResult = result.msg;
+                        clearDatagridSelection();
+                    } catch (e) {
+                        operateResult = '<spring:message code="common.message.data.delete.failed"/>';
+                    } finally {
+                        $('#ezuiOperateResultDataForm #operateResult').textbox('setValue', operateResult);
+                        $('#ezuiOperateResultDataDialog').panel({title: "批量操作：确认拣货"});
+                        ezuiOperateResultDataDialog.dialog('open');
+                        ezuiDatagrid.datagrid('reload');
+                    }
+                }
+            });
+           }
+          });
+        };
         /* 取消拣货按钮 */
         var cancelPicked = function () {
 
@@ -2775,6 +2814,8 @@
                 <a onclick='deAllocation();' id='ezuiBtn_cancelAllocation' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'><spring:message
                         code='common.button.cancelAllocation'/></a>
+                <a onclick='picked();' id='ezuiBtn_picked' class='easyui-linkbutton'
+                   data-options='plain:true,iconCls:"icon-save"' href='javascript:void(0);'>确认拣货</a>
                 <a onclick='cancelPicked();' id='ezuiBtn_cancelPicked' class='easyui-linkbutton'
                    data-options='plain:true,iconCls:"icon-undo"' href='javascript:void(0);'>取消拣货</a>
                 <a onclick='packing();' id='ezuiBtn_packing' class='easyui-linkbutton'
