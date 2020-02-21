@@ -48,6 +48,7 @@
 	<result column="reservedfield02" property="reservedfield02"/>
 <!--	bas_package-->
 	<result column="qty1" property="qty1"/>
+	<result column="unit" property="unit"/>
 
 </resultMap>
        
@@ -324,9 +325,10 @@ where 1=1
 <select id="queryByPageList" resultMap="BaseResultMap"  parameterType="Object">
 
 	select
-	<include refid="Base_Column_List"/>
-	from view_inv_location
-	<include refid="Example_Where_Clause"/>
+	i.*,uom.codename_c unit
+	from view_inv_location i
+	left join (select * from bas_codes where codeid = 'UOM') uom on uom.code = i.defaultreceivinguom
+	<include refid="Example_Where_Clause1"/>
     order by fmcustomerid,fmsku,fmlocation
     <if test="limitClause != null and limitClause != ''" >
        ${limitClause}

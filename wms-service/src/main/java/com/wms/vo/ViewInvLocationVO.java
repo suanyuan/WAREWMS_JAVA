@@ -93,6 +93,7 @@ public class ViewInvLocationVO {
 	private String productRegisterNo;
 	private String name;
 
+	private String unit;
 	//总计
 	private BigDecimal fmqtySum;
 	private BigDecimal fmqtyEachSum;
@@ -100,6 +101,15 @@ public class ViewInvLocationVO {
 	private BigDecimal qtyallocatedEachSum;
 	private BigDecimal qtyavailedSum;
 	private BigDecimal qtyavailedEachSum;
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
 	public BigDecimal getFmqtySum() {
 		return fmqtySum;
 	}
