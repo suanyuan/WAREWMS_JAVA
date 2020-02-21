@@ -318,8 +318,8 @@
             case "40" : return "分配完成";
 			case "50" : return "部分拣货";
             case "60" : return "拣货完成";
-            case "62" : return "部分装箱";
-			case "63" : return "完全装箱";
+            case "62" : return "部分复核";
+			case "63" : return "完全复核";
 			case "70" : return "部分发运";
             case "80" : return "完全发运";
             case "90" : return "订单取消";

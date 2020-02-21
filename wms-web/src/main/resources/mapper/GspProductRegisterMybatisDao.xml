@@ -349,7 +349,7 @@
 	<select id="queryBysku"  resultMap="BaseResultMap" parameterType="Object">
 		select t1.* from gsp_product_register t1
 		LEFT JOIN product_register_relation t2 on t2.product_register_id = t1.product_register_id
-		where t2.product_code = #{sku}
+		where t2.product_code = #{sku} and t2.active_flag = 1
 		<if test="orderBy != null and orderBy != ''">
 			ORDER BY ${orderBy}
 		</if>
