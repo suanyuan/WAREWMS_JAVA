@@ -81,7 +81,7 @@ $(function() {
             {field: 'descr',		title: '包装规格',	width: 100},
 
             {field: 'skuGroup4',		title: '储存条件',	width: 100},
-            {field: 'defaultreceivinguom',		title: '单位',	width: 100,formatter:unitFormatter},
+            {field: 'unit',		title: '单位',	width: 100},
             {field: 'reservedfield10',		title: '养护周期（天）',	width: 100,formatter:day},
             {field: 'skuGroup7',		title: '双证',	width: 100,formatter:yesOrNoFormatter},
             {field: 'skuGroup8',		title: '质量合格证',	width: 100,formatter:yesOrNoFormatter},

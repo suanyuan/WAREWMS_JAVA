@@ -88,7 +88,7 @@ public class ViewInvLocation implements Serializable {
 //	bas_package
 
 	private BigDecimal qty1;//转换率
-
+	private String unit; //单位  中文
 	//总计
 	private BigDecimal fmqtySum;
 	private BigDecimal fmqtyEachSum;
@@ -97,6 +97,14 @@ public class ViewInvLocation implements Serializable {
 	private BigDecimal qtyavailedSum;
 	private BigDecimal qtyavailedEachSum;
 
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 
 	public String getReservedfield02() {
 		return reservedfield02;

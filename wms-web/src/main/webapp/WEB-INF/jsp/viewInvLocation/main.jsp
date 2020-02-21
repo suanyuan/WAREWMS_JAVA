@@ -74,7 +74,7 @@
                     {field: 'lotatt06', title: '注册证号', width: 170},//加个字段
                     {field: 'qtyholded', title: '冻结件数', width: 100,hidden:true},
                     {field: 'qtyholdedEach', title: '冻结数量', width: 100,hidden:true},
-                    {field: 'defaultreceivinguom', title: '单位', width: 100,formatter:unitFormatter},
+                    {field: 'unit', title: '单位', width: 100},
                     {field: 'reservedfield02', title: '产品描述', width: 200},
                     {field: 'lotatt09', title: '样品属性', width: 100,formatter:YP_TYPstatusFormatter},
                     {field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
