@@ -201,6 +201,15 @@ where 1=1
 	<if test="condition.fmlocation != null and condition.fmlocation != ''" >
 	    and i.fmlocation like  concat('%',#{condition.fmlocation},'%')
 	</if>
+	<if test="condition.locationid == 'STAGE01'" >
+		and i.fmlocation =  'STAGE01'
+	</if>
+	<if test="condition.locationid == 'SORTATION01'" >
+		and i.fmlocation =  'SORTATION01'
+	</if>
+	<if test="condition.locationid != 'STAGE01' and condition.locationid != 'SORTATION01' and condition.locationid != '' and condition.locationid != null " >
+		and i.fmlocation !=  'STAGE01' and fmlocation != 'SORTATION01'
+	</if>
 	<if test="condition.fmqty != null and condition.fmqty != ''" >
 	    and i.fmqty =  #{condition.fmqty}
 	</if>
