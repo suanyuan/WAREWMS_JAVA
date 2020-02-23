@@ -176,14 +176,18 @@ public class OrderHeaderForNormalService extends BaseService {
             actAllocationDetailsVOList.add(vo);
         }
         for (ActAllocationDetails act : actAllocationDetails) {
+
             vo = new ActAllocationDetailsVO();
             BeanUtils.copyProperties(act, vo);
             BasSku basSku = basSkuService.getSkuInfo(act.getCustomerid(), act.getSku());
-            BasPackageQuery packQuery = new BasPackageQuery();
-            packQuery.setPackid(basSku.getPackid());
-            BasPackage basPackage = basPackageService.queryBasPackBy(packQuery);
-            vo.setSkuName(basSku.getReservedfield01());
-            vo.setPickName(basPackage.getDescr());
+            if (null != basSku) {
+
+                BasPackageQuery packQuery = new BasPackageQuery();
+                packQuery.setPackid(basSku.getPackid());
+                BasPackage basPackage = basPackageService.queryBasPackBy(packQuery);
+                vo.setSkuName(basSku.getReservedfield01());
+                vo.setPickName(basPackage.getDescr());
+            }
 
             if(actAllocationDetailslSum != null){
                 vo.setQtysum(actAllocationDetailslSum.getQty());//qty 分配数
