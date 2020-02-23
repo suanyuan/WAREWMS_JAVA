@@ -572,7 +572,7 @@ public class DocQcDetailsService extends BaseService {
                 if (currentQcDetail.getLotnum().equals(lotatt_history.getLotnum()) &&
                         currentQcDetail.getCustomerid().equals(qcDetails.getCustomerid()) &&
                         currentQcDetail.getSku().equals(qcDetails.getSku()) &&
-//                currentQcDetail.getPalineno().equals(qcDetails.getPalineno()) &&
+                        currentQcDetail.getPalineno().equals(qcDetails.getPalineno()) &&
                         currentQcDetail.getUserdefine1().equals(qcDetails.getUserdefine1())) {//其实这个适用于在批量验收的时候，验收数量没有满足预期验收数，需要把普通验收后的两条记录合并成一条
 
                     // 获取普通验收通过的验收明细
