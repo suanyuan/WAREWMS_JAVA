@@ -691,10 +691,11 @@
                     </tr>
                     <tr>
                         <th>产品线</th>
-                        <td><input type='text' id='name' class='easyui-combobox' size='16' data-options="
-																										url:'<c:url value="/productLineController.do?getCombobox"/>',
-																										valueField: 'id',
-																										textField: 'value'"/></td>
+                        <td><input type='text' id='name' class='easyui-combobox' size='16' data-options="panelHeight: '300px',
+																															editable: false,
+																															url:'<c:url value="/productLineController.do?getCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/></td>
                         <th>产品名称</th>
                         <td><input type='text' id='skudescrc' class='easyui-textbox' size='16' data-options=''/></td>
 
