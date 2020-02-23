@@ -848,7 +848,7 @@ where 1=1
 </select>
 <!-- 查询订单明细列表 -->
 <select id="queryByPageList" resultMap="ExtendResultMap"  parameterType="Object">
-   select aa.*,p.qty1  from
+   select aa.*,p.qty1, s.descr_c as descrc from
     (select
     <include refid="Base_Column_List"/>
     from doc_order_details

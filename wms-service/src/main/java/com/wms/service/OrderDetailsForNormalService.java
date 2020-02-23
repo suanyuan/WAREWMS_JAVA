@@ -50,7 +50,8 @@ public class OrderDetailsForNormalService extends BaseService {
 	private BasSkuMybatisDao basSkuMybatisDao;
 
 	public EasyuiDatagrid<OrderDetailsForNormalVO> getPagedDatagrid(EasyuiDatagridPager pager, OrderDetailsForNormalQuery query) {
-		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<OrderDetailsForNormalVO>();
+
+		EasyuiDatagrid<OrderDetailsForNormalVO> datagrid = new EasyuiDatagrid<>();
 		MybatisCriteria mybatisCriteria = new MybatisCriteria();
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
@@ -62,9 +63,17 @@ public class OrderDetailsForNormalService extends BaseService {
 			orderDetailsForNormalSum = orderDetailsForNormalMybatisDao.queryBySum(query.getOrderno());
         }
 		double zero = 0;
-		OrderDetailsForNormalVO orderDetailsForNormalVO = null;
-		List<OrderDetailsForNormalVO> orderDetailsForNormalVOList = new ArrayList<OrderDetailsForNormalVO>();
-		if(orderDetailsForNormalList.size()==0){
+		OrderDetailsForNormalVO orderDetailsForNormalVO;
+		List<OrderDetailsForNormalVO> orderDetailsForNormalVOList = new ArrayList<>();
+
+		for (OrderDetailsForNormal orderDetailsForNormal : orderDetailsForNormalList) {
+
+			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
+			BeanUtils.copyProperties(orderDetailsForNormal, orderDetailsForNormalVO);
+			orderDetailsForNormalVOList.add(orderDetailsForNormalVO);
+		}
+
+		if(orderDetailsForNormalVOList.size()==0){
 			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
 			orderDetailsForNormalVO.setQtyorderedSum(zero);//qtyordered 订货件数
 			orderDetailsForNormalVO.setQtyallocatedSum(zero);//allocated 分配件数
@@ -75,28 +84,27 @@ public class OrderDetailsForNormalService extends BaseService {
 			orderDetailsForNormalVO.setQtypickedEachSum(zero);//pickedEach 拣货数量
 			orderDetailsForNormalVO.setQtyshippedEachSum(zero);//shippedEach 发货数量
 			orderDetailsForNormalVOList.add(orderDetailsForNormalVO);
-		}
-		for (OrderDetailsForNormal orderDetailsForNormal : orderDetailsForNormalList) {
-			orderDetailsForNormalVO = new OrderDetailsForNormalVO();
-			BeanUtils.copyProperties(orderDetailsForNormal, orderDetailsForNormalVO);
+		} else {
 
-			Map<String, Object> param2 = new HashMap<>();
-			param2.put("customerid", orderDetailsForNormal.getCustomerid());
-			param2.put("sku", orderDetailsForNormal.getSku());
-			BasSku basSku1 = basSkuMybatisDao.queryById(param2);
-			orderDetailsForNormalVO.setSkuName(basSku1.getReservedfield01()); //产品名
-			orderDetailsForNormalVO.setDescrc(basSku1.getDescrC());//规格
 			if(orderDetailsForNormalSum!=null){
-				orderDetailsForNormalVO.setQtyorderedSum(orderDetailsForNormalSum.getQtyordered());//qtyordered 订货件数
-				orderDetailsForNormalVO.setQtyallocatedSum(orderDetailsForNormalSum.getQtyallocated());//allocated 分配件数
-				orderDetailsForNormalVO.setQtypickedSum(orderDetailsForNormalSum.getQtypicked());//picked 拣货件数
-				orderDetailsForNormalVO.setQtyshippedSum(orderDetailsForNormalSum.getQtyshipped());//shipped 发货件数
-				orderDetailsForNormalVO.setQtyorderedEachSum(orderDetailsForNormalSum.getQtyorderedEach());//qtyorderedEach 订货数量
-				orderDetailsForNormalVO.setQtyallocatedEachSum(orderDetailsForNormalSum.getQtyallocatedEach());//allocatedEach 分配数量
-				orderDetailsForNormalVO.setQtypickedEachSum(orderDetailsForNormalSum.getQtypickedEach());//pickedEach 拣货数量
-				orderDetailsForNormalVO.setQtyshippedEachSum(orderDetailsForNormalSum.getQtyshippedEach());//shippedEach 发货数量
+
+				//qtyordered 订货件数
+				orderDetailsForNormalVOList.get(0).setQtyorderedSum(orderDetailsForNormalSum.getQtyordered());
+				//allocated 分配件数
+				orderDetailsForNormalVOList.get(0).setQtyallocatedSum(orderDetailsForNormalSum.getQtyallocated());
+				//picked 拣货件数
+				orderDetailsForNormalVOList.get(0).setQtypickedSum(orderDetailsForNormalSum.getQtypicked());
+				//shipped 发货件数
+				orderDetailsForNormalVOList.get(0).setQtyshippedSum(orderDetailsForNormalSum.getQtyshipped());
+				//qtyorderedEach 订货数量
+				orderDetailsForNormalVOList.get(0).setQtyorderedEachSum(orderDetailsForNormalSum.getQtyorderedEach());
+				//allocatedEach 分配数量
+				orderDetailsForNormalVOList.get(0).setQtyallocatedEachSum(orderDetailsForNormalSum.getQtyallocatedEach());
+				//pickedEach 拣货数量
+				orderDetailsForNormalVOList.get(0).setQtypickedEachSum(orderDetailsForNormalSum.getQtypickedEach());
+				//shippedEach 发货数量
+				orderDetailsForNormalVOList.get(0).setQtyshippedEachSum(orderDetailsForNormalSum.getQtyshippedEach());
 			}
-			orderDetailsForNormalVOList.add(orderDetailsForNormalVO);
 		}
 
 		datagrid.setTotal((long) orderDetailsForNormalMybatisDao.queryByCount(mybatisCriteria));
