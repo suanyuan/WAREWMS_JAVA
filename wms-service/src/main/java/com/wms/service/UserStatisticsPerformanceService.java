@@ -196,7 +196,7 @@ public class UserStatisticsPerformanceService extends BaseService {
 			List<UserStatisticsPerformance> userStatisticsPerformanceList = userStatisticsPerformanceDao.performanceStatisticsList(query);
 			if (userStatisticsPerformanceList.size() > 0) {
 				for (UserStatisticsPerformance performance : userStatisticsPerformanceList) {
-					performance.setPerfDate(sdf.format(new Date()));//当前时间
+					performance.setPerfDate(sdf.format(dBefore));//统计日期
 					userStatisticsPerformanceDao.add(performance);
 				}
 			}
