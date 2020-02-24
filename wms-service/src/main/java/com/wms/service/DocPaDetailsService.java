@@ -124,7 +124,7 @@ public class DocPaDetailsService extends BaseService {
         /*
         2，判断获取上架扫码数据是否齐全
          */
-        Json scanJson = commonService.matchPaDetail(query, commonVO);
+        Json scanJson = commonService.matchPaDetail(query);
         if (!scanJson.isSuccess()) {
 
             resultJson.setSuccess(false);
@@ -236,44 +236,15 @@ public class DocPaDetailsService extends BaseService {
      */
     public PdaResult putawayGoods(PdaDocPaDetailForm form) {
 
-        //add by Gizmo 2019-10-26 日期校验
-        Json json = gspVerifyService.verifyPaDateValidation(form.getLotatt01(), form.getUserdefine2());
-        if (!json.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, json.getMsg());
-
         /*
-        111，处理BasSku获取问题，并返回准确的批号、序列号条件
+        判断上架方式 单次上架、扫描提交上架
          */
-        ScanResultForm scanResultForm = new ScanResultForm();
-        BeanUtils.copyProperties(form, scanResultForm);
-        scanResultForm.setLotatt04(form.getUserdefine3());
-        scanResultForm.setLotatt05(form.getUserdefine4());
-        CommonVO commonVO = commonService.adaptScanResult4SKU(scanResultForm);
+        DocPaDetails docPaDetails;
+        if (StringUtil.isNotEmpty(form.getPalineno())) {//扫描提交上架
 
-        if (!commonVO.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, commonVO.getMessage());
-
-        //SKU获取成功，设置准确的批属
-        BasSku basSku = commonVO.getBasSku();
-        form.setUserdefine3(commonVO.getBatchNum());
-        form.setUserdefine4(commonVO.getSerialNum());
-        form.setSku(basSku.getSku());
-
-        /*
-        222，判断获取上架扫码数据是否齐全
-         */
-        PdaDocPaDetailQuery pdaDocPaDetailQuery = new PdaDocPaDetailQuery();
-        pdaDocPaDetailQuery.setPano(form.getPano());
-        pdaDocPaDetailQuery.setSku(basSku.getSku());
-        pdaDocPaDetailQuery.setCustomerid(form.getCustomerid());
-        pdaDocPaDetailQuery.setLotatt04(form.getUserdefine3());
-        pdaDocPaDetailQuery.setLotatt05(form.getUserdefine4());
-        Json scanJson = commonService.judgePaScanResult(pdaDocPaDetailQuery, commonVO);
-        if (!scanJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg());
-
-        /*
-        333，获取上架明细
-         */
-        DocPaDetails docPaDetails = null;
-        if (StringUtil.isNotEmpty(form.getPalineno())) {
+            //add by Gizmo 2019-10-26 日期校验
+            Json json = gspVerifyService.verifyPaDateValidation(form.getLotatt01(), form.getUserdefine2());
+            if (!json.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, json.getMsg());
 
             docPaDetails = docPaDetailsMybatisDao.queryByLineNo(form.getPano(), Integer.parseInt(form.getPalineno()));
             /*
@@ -284,11 +255,41 @@ public class DocPaDetailsService extends BaseService {
 
                 return new PdaResult(PdaResult.CODE_FAILURE, "上架件数超出'待上件数(指导)'，请核对!");
             }
-        }else {
+        }else {//单次提交上架
+
+            /*
+            处理BasSku获取问题，并返回准确的批号、序列号条件
+             */
+            ScanResultForm scanResultForm = new ScanResultForm();
+            BeanUtils.copyProperties(form, scanResultForm);
+            scanResultForm.setLotatt04(form.getUserdefine3());
+            scanResultForm.setLotatt05(form.getUserdefine4());
+            CommonVO commonVO = commonService.adjustScanResult(scanResultForm);
+
+            /*
+            判断获取上架扫码数据是否齐全
+             */
+            PdaDocPaDetailQuery pdaDocPaDetailQuery = new PdaDocPaDetailQuery();
+            pdaDocPaDetailQuery.setPano(form.getPano());
+            if (commonVO.isSuccess()) pdaDocPaDetailQuery.setSku(commonVO.getBasSku().getSku());
+            pdaDocPaDetailQuery.setCustomerid(form.getCustomerid());
+            pdaDocPaDetailQuery.setLotatt04(commonVO.getBatchNum());
+            pdaDocPaDetailQuery.setLotatt05(commonVO.isSerialManagement() ? "" : commonVO.getSerialNum());
+            Json scanJson = commonService.matchPaDetail(pdaDocPaDetailQuery);
+            if (!scanJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, scanJson.getMsg());
 
             List<DocPaDetails> docPaDetailsList = (List<DocPaDetails>) scanJson.getObj();
             docPaDetails = docPaDetailsList.get(0);//默认取第一个进行上架操作,judgePaScanResult判空操作已有
             form.setUserdefine5(docPaDetails.getUserdefine5());//连续上架都是DJ过来的，需要考虑HG的
+
+            //产品档案判断
+            Json skuJson = commonService.fixBasSku(docPaDetails.getCustomerid(), docPaDetails.getSku());
+            if (!skuJson.isSuccess()) return new PdaResult(PdaResult.CODE_FAILURE, skuJson.getMsg());
+
+            //赋值 生产日期、效期
+            InvLotAtt invLotAtt = docPaDetails.getInvLotAtt();
+            form.setUserdefine2(invLotAtt.getLotatt02());
+            form.setLotatt01(invLotAtt.getLotatt01());
         }
 
         InvLotAtt invLotAtt = docPaDetails.getInvLotAtt();
@@ -304,21 +305,17 @@ public class DocPaDetailsService extends BaseService {
         String lotatt01 = form.getLotatt01();
         String editwho = form.getEditwho();
         BeanUtils.copyProperties(docPaDetails, form);
+
         form.setUserdefine1(locationid);
         form.setUserdefine2(userdefine2);
         form.setUserdefine5(userdefine5);
         form.setLotatt01(lotatt01);
-
         form.setAsnlineno(docPaDetails.getAsnlineno());
         form.setUserid(editwho);
         form.setLanguage("CN");
         form.setReturncode("");
-        try {
-            docPaDetailsMybatisDao.putawayGoods(form);
-        }catch (Exception e) {
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//回滚事务
-        }
+        //procedure spasn_putawaying_process
+        docPaDetailsMybatisDao.putawayGoods(form);
 
         if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {
 

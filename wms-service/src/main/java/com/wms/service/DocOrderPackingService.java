@@ -681,6 +681,14 @@ public class DocOrderPackingService extends BaseService {
 		BasSku basSku = (BasSku) skuJson.getObj();
 		pdaDocPackageVO.setBasSku(basSku);
 		query.setSku(basSku.getSku());
+		//如果上方没有查出basSku，此处要对序列号管理flag进行更新
+		if (!commonVO.isSuccess()) {
+
+			//产品线(BasSku.skuGroup1) - 序列号管理flag
+			ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+			ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+			commonVO.setSerialManagement(productLine != null && productLine.getSerialFlag() == 1);
+		}
 
         /*
         333,如果是强生产品线的，需要将序列号记录下来，在复核提交的时候保存起来
@@ -783,6 +791,14 @@ public class DocOrderPackingService extends BaseService {
 		BasSku basSku = (BasSku) skuJson.getObj();
 		pdaDocPackageVO.setBasSku(basSku);
 		query.setSku(basSku.getSku());
+		//如果上方没有查出basSku，此处要对序列号管理flag进行更新
+		if (!commonVO.isSuccess()) {
+
+			//产品线(BasSku.skuGroup1) - 序列号管理flag
+			ProductLineQuery productLineQuery = new ProductLineQuery(basSku.getSkuGroup1());
+			ProductLine productLine = productLineMybatisDao.queryById(productLineQuery);
+			commonVO.setSerialManagement(productLine != null && productLine.getSerialFlag() == 1);
+		}
 
         /*
         333,如果是记录序列号的产品线的，需要将序列号记录下来，在复核提交的时候保存起来

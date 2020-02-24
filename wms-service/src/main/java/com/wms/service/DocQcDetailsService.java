@@ -622,7 +622,7 @@ public class DocQcDetailsService extends BaseService {
             docPaDetails.setSku(currentQcDetail.getSku());
             docPaDetails.setUserdefine3(currentQcDetail.getUserdefine3());
             docPaDetails.setUserdefine5("DJ");
-            docPaDetails.setEditwho(form.getEditwho());
+//            docPaDetails.setEditwho(form.getEditwho());
             docPaDetails.setLotnumList(lotnumList);
             docPaDetailsMybatisDao.updateBatchQc(docPaDetails);
 

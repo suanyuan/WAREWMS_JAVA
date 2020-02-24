@@ -37,7 +37,7 @@ public interface BasSkuMybatisDao extends BaseDao {
     /**
      * 通过扫码结果查找，简略版 批号、序列号
      */
-    BasSku query4ScanInBasGtnLotatt(PdaBasSkuQuery query);
+    List<BasSku> query4ScanInBasGtnLotatt(PdaBasSkuQuery query);
 
     /**
      * 通过扫码结果查找，简略版 gtin
