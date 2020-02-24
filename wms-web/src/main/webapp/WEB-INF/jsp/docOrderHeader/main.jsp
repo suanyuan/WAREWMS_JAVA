@@ -94,7 +94,7 @@
                     {field: 'notes', title: '备注', width: 100},
                     {field: 'lineName', title: '产品线', width: 120},
                     {field: 'edisendflag', title: '回传标识', width: 70, formatter: edisendflag},
-                    {field: 'consigneeid', title: '公司抬头', width: 200},
+                    {field: 'consigneeid', title: '收货单位', width: 200},
                     {field: 'cAddress1', title: '收货地址', width: 250},
                     {field: 'cTel1', title: '联系方式', width: 100},
                     {field: 'addtime', title: '创建时间', width: 145},
@@ -2709,7 +2709,7 @@
                         <td><input type='text' id='soreference2' class='easyui-textbox' size='16' data-options=''/></td>
                     </tr>
                     <tr>
-                        <th>公司抬头</th>
+                        <th>收货单位</th>
                         <td><input type='text' id='consigneeid' class='easyui-textbox' size='16' data-options=''/></td>
                         <th>快递单号</th>
                         <td><input type='text' id='cAddress4Q' class='easyui-textbox' size='16' data-options=''/></td>

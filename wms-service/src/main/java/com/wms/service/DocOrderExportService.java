@@ -191,24 +191,6 @@ public class DocOrderExportService {
                             case "HG" :
                                 orderDetailsForNormal.setLotatt10("合格");
                                 break ;
-                            case "HG>BHG":
-                                orderDetailsForNormal.setLotatt10("合格>不合格");
-                                break ;
-                            case "HG>DCL":
-                                orderDetailsForNormal.setLotatt10("合格>待处理");
-                                break ;
-                            case "BHG>HG":
-                                orderDetailsForNormal.setLotatt10("不合格>合格");
-                                break ;
-                            case "BHG>DCL":
-                                orderDetailsForNormal.setLotatt10("不合格>待处理");
-                                break ;
-                            case "DCL>HG":
-                                orderDetailsForNormal.setLotatt10("待处理>合格");
-                                break ;
-                            case "DCL>BHG":
-                                orderDetailsForNormal.setLotatt10("待处理>不合格");
-                                break ;
                         }
                         orderDetailsForNormalListShow.add(orderDetailsForNormal);
                     }
@@ -233,7 +215,6 @@ public class DocOrderExportService {
                 //将list集合转化为excle
                 ExcelUtil.listToExcel(orderDetailsForNormalListShow, fieldMap, sheetName,-1,response,fileName);
             }
-            System.out.println("导出成功~~~~");
         } catch (ExcelException e) {
             e.printStackTrace();
         }
@@ -242,7 +223,6 @@ public class DocOrderExportService {
     public LinkedHashMap<String, String> getOutOrderInfo() {
 
         LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
-        superClassMap.put("consigneeid", "公司抬头");
         superClassMap.put("customerid", "客户编码");
         superClassMap.put("orderno", "SO编号");
         superClassMap.put("orderTypeName", "订单类型");
@@ -254,6 +234,7 @@ public class DocOrderExportService {
         superClassMap.put("notes", "备注");
         superClassMap.put("edisendflag", "回传标识");
         superClassMap.put("edisendtime", "创建时间");
+        superClassMap.put("consigneeid", "收货单位");
         superClassMap.put("cContact", "收货方");
         superClassMap.put("cAddress1", "收货地址");
         superClassMap.put("cTel1", "联系方式");
