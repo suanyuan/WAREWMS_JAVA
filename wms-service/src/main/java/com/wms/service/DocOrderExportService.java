@@ -52,7 +52,7 @@ public class DocOrderExportService {
     private BasCarrierLicenseMybatisDao basCarrierLicenseMybatisDao;
     @Autowired
     private GspEnterpriseInfoMybatisDao gspEnterpriseInfoMybatisDao;
-
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 打印order检查记录
      */
@@ -142,7 +142,6 @@ public class DocOrderExportService {
         response.setContentType(ContentTypeEnum.csv.getContentType());
 
         try{
-            String[] s = from.getOrderno().split(",");
             List<OrderHeaderForNormal> orderHeaderForNormalList = new ArrayList<OrderHeaderForNormal>();
             List<OrderDetailsForNormal> orderDetailsForNormalList = new ArrayList<OrderDetailsForNormal>();
             List<OrderDetailsForNormal> orderDetailsForNormalListShow = new ArrayList<OrderDetailsForNormal>();
@@ -152,8 +151,6 @@ public class DocOrderExportService {
             //1 为打印头档，否则为明细
             if(from.getOuttype().equals("1")){
                 MybatisCriteria mybatisCriteriaHeader = new MybatisCriteria();
-                mybatisCriteriaHeader.setCurrentPage(pager.getPage());
-                mybatisCriteriaHeader.setPageSize(pager.getRows());
                 mybatisCriteriaHeader.setCondition(BeanConvertUtil.bean2Map(from));
                 mybatisCriteriaHeader.setOrderByClause("orderno desc");
                 List<OrderHeaderForNormal> orderHeaderForNormals = orderHeaderForNormalMybatisDao.queryByList(mybatisCriteriaHeader);
@@ -166,18 +163,54 @@ public class DocOrderExportService {
                     if(bascodes!=null){
                         orderHeaderForNormal.setRoute(bascodes.getCodenameC());
                     }
+                    if(orderHeaderForNormal.getEdisendflag()=="0"){
+                        orderHeaderForNormal.setEdisendflag("未回传");
+                    }else{
+                        orderHeaderForNormal.setEdisendflag("已回传");
+                    }
+                    String dt = simpleDateFormat.format(orderHeaderForNormal.getOrdertime());
+                    orderHeaderForNormal.setEdisendtime(dt);
                     orderHeaderForNormalList.add(orderHeaderForNormal);
                 }
 
             }else{
-                for (String a:s) {
-                    from.setOrderno(a);
-                    mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(from));
-                    orderDetailsForNormalList = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
-                    if(orderDetailsForNormalList.size()>0){
-                        for (OrderDetailsForNormal orderDetailsForNormal:orderDetailsForNormalList) {
-                            orderDetailsForNormalListShow.add(orderDetailsForNormal);
+                mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(from));
+                orderDetailsForNormalList = orderDetailsForNormalMybatisDao.queryByPageList(mybatisCriteria);
+                if(orderDetailsForNormalList.size()>0){
+                    for (OrderDetailsForNormal orderDetailsForNormal:orderDetailsForNormalList) {
+                        switch (orderDetailsForNormal.getLotatt10()) {
+                            case "BHG" :
+                                orderDetailsForNormal.setLotatt10("不合格");
+                                break;
+                            case "DCL" :
+                                orderDetailsForNormal.setLotatt10("待处理");
+                                break ;
+                            case "DJ" :
+                                orderDetailsForNormal.setLotatt10("待检");
+                                break ;
+                            case "HG" :
+                                orderDetailsForNormal.setLotatt10("合格");
+                                break ;
+                            case "HG>BHG":
+                                orderDetailsForNormal.setLotatt10("合格>不合格");
+                                break ;
+                            case "HG>DCL":
+                                orderDetailsForNormal.setLotatt10("合格>待处理");
+                                break ;
+                            case "BHG>HG":
+                                orderDetailsForNormal.setLotatt10("不合格>合格");
+                                break ;
+                            case "BHG>DCL":
+                                orderDetailsForNormal.setLotatt10("不合格>待处理");
+                                break ;
+                            case "DCL>HG":
+                                orderDetailsForNormal.setLotatt10("待处理>合格");
+                                break ;
+                            case "DCL>BHG":
+                                orderDetailsForNormal.setLotatt10("待处理>不合格");
+                                break ;
                         }
+                        orderDetailsForNormalListShow.add(orderDetailsForNormal);
                     }
                 }
             }
@@ -209,6 +242,7 @@ public class DocOrderExportService {
     public LinkedHashMap<String, String> getOutOrderInfo() {
 
         LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+        superClassMap.put("consigneeid", "公司抬头");
         superClassMap.put("customerid", "客户编码");
         superClassMap.put("orderno", "SO编号");
         superClassMap.put("orderTypeName", "订单类型");
@@ -219,7 +253,7 @@ public class DocOrderExportService {
         superClassMap.put("cAddress4", "快递单号");
         superClassMap.put("notes", "备注");
         superClassMap.put("edisendflag", "回传标识");
-        superClassMap.put("ordertime", "创建时间");
+        superClassMap.put("edisendtime", "创建时间");
         superClassMap.put("cContact", "收货方");
         superClassMap.put("cAddress1", "收货地址");
         superClassMap.put("cTel1", "联系方式");
