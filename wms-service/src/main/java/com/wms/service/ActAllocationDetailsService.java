@@ -33,6 +33,7 @@ public class ActAllocationDetailsService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		mybatisCriteria.setOrderByClause("a.status asc");//优先显示分配
 		List<ActAllocationDetails> actAllocationDetailsList = actAllocationDetailsDao.queryByActDetailsList(mybatisCriteria);
 		ActAllocationDetailsVO actAllocationDetailsVO = null;
 		List<ActAllocationDetailsVO> actAllocationDetailsVOS = new ArrayList<ActAllocationDetailsVO>();
