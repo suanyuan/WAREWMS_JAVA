@@ -156,7 +156,7 @@ $(function() {
 	ezuiAcceptanceDialogS = $('#ezuiAcceptanceDialogS').dialog({
 		modal : true,
 		width:570,
-		height:300,
+		height:340,
 		title : '验收作业',
 		buttons : '#ezuiAcceptanceDialogSBtn',
 		onClose : function() {
