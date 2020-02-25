@@ -28,6 +28,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class BasCodesService {
 
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 
 
     public EasyuiDatagrid<BasCodesVO> getPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
@@ -428,7 +429,7 @@ public class BasCodesService {
         if(InvLotAttList!=null){
             for(InvLotAtt invLotAtt:InvLotAttList){
                 if(invLotAtt!=null){
-                    if(invLotAtt.getLotatt02()!=null){
+                    if(invLotAtt.getLotatt02()!=null&&!"".equals(invLotAtt.getLotatt02())){
                         java.util.Date endDate =sdf2.parse(invLotAtt.getLotatt02());
 
                         if(endDate.getTime()-now.getTime()>0){
