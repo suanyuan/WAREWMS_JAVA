@@ -23,4 +23,6 @@ public class PdaDocQcDetailQuery extends BaseLotatt {
     private String otherCode;
 
     private String version;
+
+    private Double palineno;
 }

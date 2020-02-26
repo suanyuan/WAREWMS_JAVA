@@ -526,7 +526,8 @@ where 1=1
         detail.*
         from doc_qc_details detail
         left join inv_lot_att lotatt on detail.lotnum = lotatt.lotnum
-        where detail.qcno = #{qcno, jdbcType=VARCHAR} and detail.customerid = #{customerid, jdbcType=VARCHAR} and detail.sku = #{sku, jdbcType=VARCHAR}
+        where detail.qcno = #{qcno, jdbcType=VARCHAR} and detail.customerid = #{customerid, jdbcType=VARCHAR}
+          and detail.sku = #{sku, jdbcType=VARCHAR} and detail.palineno = #{palineno}
 
         <if test="lotatt01 != null and lotatt01 != ''">
             and lotatt.lotatt01 = #{lotatt01, jdbcType=VARCHAR}

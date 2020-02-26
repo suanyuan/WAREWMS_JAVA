@@ -356,17 +356,8 @@ public class DocQcDetailsService extends BaseService {
 
         form.setLanguage("CN");
         form.setReturncode("");
+        docQcDetailsDao.submitDocQc(form);
 
-        try {
-
-            docQcDetailsDao.submitDocQc(form);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-
-            return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "验收系统错误");
-        }
         if (form.getReturncode().equals(Constant.PROCEDURE_OK)) {//判断是否验收成功
 
             if (form.getAllqcflag() == 1) {
@@ -581,6 +572,7 @@ public class DocQcDetailsService extends BaseService {
                     pdaDocQcDetailQuery.setCustomerid(qcDetails.getCustomerid());
                     pdaDocQcDetailQuery.setSku(qcDetails.getSku());
                     pdaDocQcDetailQuery.setLotatt01(form.getLotatt01());
+                    pdaDocQcDetailQuery.setPalineno(qcDetails.getPalineno());
                     pdaDocQcDetailQuery.setLocationid(qcDetails.getUserdefine1());
                     pdaDocQcDetailQuery.setLotatt04(qcDetails.getUserdefine3());
                     pdaDocQcDetailQuery.setLotatt05(qcDetails.getUserdefine4());
@@ -638,12 +630,9 @@ public class DocQcDetailsService extends BaseService {
             docQcHeaderMybatisDao.updateTaskStatus(statusForm);
 
             /* ********************************清除0库存******************************** */
-//            CleanInventory cleanInventory = new CleanInventory(form.getWarehouseid(), "CN", form.getEditwho());
-//            docQcDetailsDao.cleanInventory(cleanInventory);
 
         } catch (Exception e) {
 
-            e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
             if (StringUtils.isEmpty(e.getMessage())) {
