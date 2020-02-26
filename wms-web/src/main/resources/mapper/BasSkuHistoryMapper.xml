@@ -562,8 +562,11 @@ where 1=1
 			<if test="condition.firstop != null and condition.firstop != ''" >
 				and t1.firstop  like  '%${condition.firstop}%'
 			</if>
+			<!--<if test="condition.packid != null and condition.packid != ''" >-->
+				<!--and t1.packid  like  '%${condition.packid}%'-->
+			<!--</if>-->
 			<if test="condition.packid != null and condition.packid != ''" >
-				and t1.packid  like  '%${condition.packid}%'
+				and t4.descr  like  '%${condition.packid}%'
 			</if>
 			<if test="condition.reservedfield01 != null and condition.reservedfield01 != ''" >
 				and t1.reservedfield01  like  '%${condition.reservedfield01}%'
@@ -999,7 +1002,7 @@ where 1=1
 	(select t1.*
 	from bas_sku_history t1 left join bas_customer t2 on t1.sku_group6 = t2.CUSTOMERID
 	left JOIN product_line t3 on t1.sku_group1 = t3.product_line_id
-
+	left join bas_package t4 on t1.packid = t4.packid
 	<include refid="Example_Where_Clause_ByPage"/>) as a
 	LEFT JOIN bas_customer e on a.customerid = e.CUSTOMERID
 	LEFT JOIN (select DISTINCT(customerid),t1.descr_c from bas_customer t1 UNION
@@ -1018,7 +1021,7 @@ where 1=1
 	(select t1.*
 	from bas_sku_history t1 left join bas_customer t2 on t1.sku_group6 = t2.CUSTOMERID
 	left JOIN product_line t3 on t1.sku_group1 = t3.product_line_id
-
+	left join bas_package t4 on t1.packid = t4.packid
 	<include refid="Example_Where_Clause_ByPage"/>) as a
 	LEFT JOIN bas_customer e on a.customerid = e.CUSTOMERID
 	LEFT JOIN (select DISTINCT(customerid),t1.descr_c from bas_customer t1 UNION

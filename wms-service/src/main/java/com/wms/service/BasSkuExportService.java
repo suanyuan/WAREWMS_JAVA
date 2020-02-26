@@ -119,12 +119,12 @@ public class BasSkuExportService {
 		response.setContentType(ContentTypeEnum.csv.getContentType());
 		
 		BasSkuForm basSkuForm = new BasSkuForm();
-		
-		basSkuForm.setCustomerid(form.getCustomerid());
-		basSkuForm.setSku(form.getSku());
-		basSkuForm.setActiveFlag(form.getActiveFlag());
-//		basSkuForm.setEditwho();
-		BeanUtils.copyProperties(form, basSkuForm);
+//
+//		basSkuForm.setCustomerid(form.getCustomerid());
+//		basSkuForm.setSku(form.getSku());
+//		basSkuForm.setActiveFlag(form.getActiveFlag());
+////		basSkuForm.setEditwho();
+//		BeanUtils.copyProperties(form, basSkuForm);
 		try {  
 	        // 获取前台传来的数据
 	        //String cutomerid = form.getCustomerid();  
@@ -132,7 +132,7 @@ public class BasSkuExportService {
 	        //String cutomeridId = new String(cutomerid.getBytes("iso-8859-1"), "utf-8");  
 	        //String skuId = new String(sku.getBytes("iso-8859-1"), "utf-8");  
 	        BasSkuQuery query = new BasSkuQuery();
-			BeanUtils.copyProperties(basSkuForm, query);
+			BeanUtils.copyProperties(form, query);
 			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
@@ -319,10 +319,10 @@ public class BasSkuExportService {
 		response.setContentType(ContentTypeEnum.csv.getContentType());
 
 		BasSkuForm basSkuForm = new BasSkuForm();
-
-		basSkuForm.setCustomerid(form.getCustomerid());
-		basSkuForm.setSku(form.getSku());
-		basSkuForm.setActiveFlag(form.getActiveFlag());
+//
+//		basSkuForm.setCustomerid(form.getCustomerid());
+//		basSkuForm.setSku(form.getSku());
+//		basSkuForm.setActiveFlag(form.getActiveFlag());
 
 		try {
 			// 获取前台传来的数据
@@ -331,7 +331,7 @@ public class BasSkuExportService {
 			//String cutomeridId = new String(cutomerid.getBytes("iso-8859-1"), "utf-8");
 			//String skuId = new String(sku.getBytes("iso-8859-1"), "utf-8");
 			BasSkuQuery query = new BasSkuQuery();
-			BeanUtils.copyProperties(basSkuForm, query);
+			BeanUtils.copyProperties(form, query);
 			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));

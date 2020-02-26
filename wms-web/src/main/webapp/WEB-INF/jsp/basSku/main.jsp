@@ -684,8 +684,8 @@ var doExport = function(){
 		param.put("customerid", $('#customerid').val());
 		param.put("sku", $('#sku').val());
 		param.put("activeFlag", $('#activeFlagQ').combobox('getValue'));
-        param.put("addTimeEnd ", $('#addTimeEnd').datebox("getValue"));
-        param.put("addTimeStart ", $('#addTimeEnd').datebox("getValue"));
+        param.put("addTimeEnd", $('#addTimeEnd').datebox("getValue"));
+        param.put("addTimeStart", $('#addTimeStart').datebox("getValue"));
         param.put("edittimeStart", $('#edittimeStart').datebox("getValue"));
         param.put("edittimeEnd", $('#edittimeEnd').datebox("getValue"));
         param.put("addwho", $('#addwho').val());
@@ -698,7 +698,7 @@ var doExport = function(){
         param.put("reservedfield02", $('#reservedfield02').val());
         param.put("reservedfield03", $('#reservedfield03').val());
         param.put("reservedfield14", $('#reservedfield14').val());
-        param.put("skuGroup1", $('#sku_group1').val());
+        param.put("skuGroup1", $('#sku_group1').combobox('getValue'));
         param.put("skuGroup2", $('#sku_group2').val());
         param.put("skuGroup6", $('#sku_group6Q').val());
         param.put("isUse", $('#isUse').val());
