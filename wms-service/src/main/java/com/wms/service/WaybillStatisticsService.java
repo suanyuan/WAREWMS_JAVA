@@ -159,11 +159,18 @@ public class WaybillStatisticsService extends BaseService {
 								ws.setMonth(a+"");
 								ws.setDay(b+"");
 								WaybillStatistics s = waybillStatisticsMybatisDao.selectByTimeAndCarrier(ws);
-
-
 								waybillStatistics.setOrderNum(orderNum);
-								waybillStatistics.setId(s.getId());
-								waybillStatisticsMybatisDao.updateBySelective(waybillStatistics);
+
+								if(s==null){
+									//年，月，日，订单数量，承运商企业id，承运商简称
+									waybillStatistics.setCarrierName(gspEnterpriseInfo.getShorthandName());
+									waybillStatistics.setEnterpriseId(basCarrierLicense.getEnterpriseId());
+									waybillStatisticsMybatisDao.add(waybillStatistics);
+								}else{
+									waybillStatistics.setId(s.getId());
+									waybillStatisticsMybatisDao.updateBySelective(waybillStatistics);
+								}
+
 							}
 
 						}
