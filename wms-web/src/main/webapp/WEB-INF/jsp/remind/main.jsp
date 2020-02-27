@@ -210,19 +210,20 @@
                         title: '',
                         pageSize : 50,
                         pageList : [50, 100, 200],
+                        pagination:true,
                         fit: false,
                         border: false,
                         fitColumns : false,
                         nowrap: true,
                         striped: true,
-                        collapsible:true,
-                        height:400,
+                        collapsible:false,
                         queryParams:{
                             idList : idlist1,
                         },
-                        pagination:true,
+
                         rownumbers:true,
                         singleSelect:true,
+                        idField : 'enterpriseName',
                         columns : [[
                             {field: 'enterpriseName',		title: '货主',	width: 220 },
 
@@ -247,16 +248,16 @@
                         },
                         onLoadSuccess:function(data){
                             $(this).datagrid('unselectAll');
-                            $(this).datagrid("resize",{height:540});
+                            $(this).datagrid("resize",{height:450});
                         }
                     });
 
                     ezuiDialogInvlotloc = $('#ezuiDialogInvlotloc').dialog({
                         modal : true,
-                        fit:true,
+                        // fit:true,
                         title : '<spring:message code="common.dialog.title"/>',
-                        width: 1000,
-                        height:650,
+                        width: 1200,
+                        height:600,
                         cache: false,
                         onClose : function() {
                             ezuiFormClear(ezuiForm);
@@ -619,17 +620,17 @@
                         },
                         onLoadSuccess:function(data){
                             $(this).datagrid('unselectAll');
-                            $(this).datagrid("resize",{height:540});
+                            $(this).datagrid("resize",{height:450});
                         }
                     });
 
 
                     ezuiDialogBasSkuLeak = $('#ezuiDialogBasSkuLeak').dialog({
                         modal : true,
-                        fit:true,
+                        // fit:true,
                         title : '<spring:message code="common.dialog.title"/>',
-                        width:850,
-                        height:660,
+                        width:1150,
+                        height:600,
                         cache: false,
                         onClose : function() {
                             ezuiFormClear(ezuiForm);
