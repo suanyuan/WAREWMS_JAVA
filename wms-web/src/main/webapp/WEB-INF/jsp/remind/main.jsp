@@ -208,18 +208,19 @@
                         method:'POST',
                         toolbar : '',
                         title: '',
-                        // pageSize : 50,
-                        // pageList : [50, 100, 200],
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
                         fit: false,
                         border: false,
                         fitColumns : false,
                         nowrap: true,
                         striped: true,
                         collapsible:true,
+                        height:400,
                         queryParams:{
                             idList : idlist1,
                         },
-                        // pagination:true,
+                        pagination:true,
                         rownumbers:true,
                         singleSelect:true,
                         columns : [[
@@ -251,11 +252,11 @@
                     });
 
                     ezuiDialogInvlotloc = $('#ezuiDialogInvlotloc').dialog({
-                        modal : false,
+                        modal : true,
                         fit:true,
                         title : '<spring:message code="common.dialog.title"/>',
                         width: 1000,
-                        height:670,
+                        height:650,
                         cache: false,
                         onClose : function() {
                             ezuiFormClear(ezuiForm);
@@ -265,7 +266,7 @@
 
                 }else if(row.code==15||row.code==16||row.code==17||row.code==18||row.code==19||row.code==20
                     ||row.code==21||row.code==22){
-
+                    // 营业，经营，生产，医疗
 
                     ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
                         modal : true,
@@ -281,7 +282,7 @@
                         idList : idlist1,
                     });
                 }else if(row.code==23||row.code==24||row.code==25||row.code==26 ){
-
+                    //授权，合同
                     htAndSqDatagrid = $("#dataGridHtAndSq").datagrid({
                         url : sy.bp()+'/basCustomerController.do?showDatagrid',
                         method:'POST',
