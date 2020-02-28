@@ -1032,7 +1032,7 @@ where 1=1
 		LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
 		LEFT JOIN bas_package c ON a.packid=c.packid
 		left join product_line d on a.sku_group1 =  d.product_line_id
-		left join bas_codes iv on a.reservedfield04 = iv.code
+		left join (select * from bas_codes where codeid = 'CATALOG_CLASSIFY' ) iv on a.reservedfield04 = iv.code
 		left join (select * from bas_codes where codeid = 'UOM') uom on uom.code = a.defaultreceivinguom
 	</select>
 <!-- 查询商品档案分页列表 -->
@@ -1049,7 +1049,7 @@ where 1=1
 	LEFT JOIN bas_customer b ON a.sku_group6=b.customerid
 	LEFT JOIN bas_package c ON a.packid=c.packid
 	left join product_line d on a.sku_group1 =  d.product_line_id
-	left join bas_codes iv on a.reservedfield04 = iv.code
+	left join (select * from bas_codes where codeid = 'CATALOG_CLASSIFY' ) iv on a.reservedfield04 = iv.code
 	left join (select * from bas_codes where codeid = 'UOM') uom on uom.code = a.defaultreceivinguom
 
 	<if test="orderByClause != null and orderByClause != ''" >

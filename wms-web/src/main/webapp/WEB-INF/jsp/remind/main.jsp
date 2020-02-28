@@ -208,20 +208,22 @@
                         method:'POST',
                         toolbar : '',
                         title: '',
-                        // pageSize : 50,
-                        // pageList : [50, 100, 200],
+                        pageSize : 50,
+                        pageList : [50, 100, 200],
+                        pagination:true,
                         fit: false,
                         border: false,
                         fitColumns : false,
                         nowrap: true,
                         striped: true,
-                        collapsible:true,
+                        collapsible:false,
                         queryParams:{
                             idList : idlist1,
                         },
-                        // pagination:true,
+
                         rownumbers:true,
                         singleSelect:true,
+                        idField : 'enterpriseName',
                         columns : [[
                             {field: 'enterpriseName',		title: '货主',	width: 220 },
 
@@ -246,16 +248,16 @@
                         },
                         onLoadSuccess:function(data){
                             $(this).datagrid('unselectAll');
-                            $(this).datagrid("resize",{height:540});
+                            $(this).datagrid("resize",{height:450});
                         }
                     });
 
                     ezuiDialogInvlotloc = $('#ezuiDialogInvlotloc').dialog({
-                        modal : false,
-                        fit:true,
+                        modal : true,
+                        // fit:true,
                         title : '<spring:message code="common.dialog.title"/>',
-                        width: 1000,
-                        height:670,
+                        width: 1200,
+                        height:600,
                         cache: false,
                         onClose : function() {
                             ezuiFormClear(ezuiForm);
@@ -265,7 +267,7 @@
 
                 }else if(row.code==15||row.code==16||row.code==17||row.code==18||row.code==19||row.code==20
                     ||row.code==21||row.code==22){
-
+                    // 营业，经营，生产，医疗
 
                     ezuiDialogEnterprise = $('#ezuiDialogEnterprise').dialog({
                         modal : true,
@@ -281,7 +283,7 @@
                         idList : idlist1,
                     });
                 }else if(row.code==23||row.code==24||row.code==25||row.code==26 ){
-
+                    //授权，合同
                     htAndSqDatagrid = $("#dataGridHtAndSq").datagrid({
                         url : sy.bp()+'/basCustomerController.do?showDatagrid',
                         method:'POST',
@@ -618,17 +620,17 @@
                         },
                         onLoadSuccess:function(data){
                             $(this).datagrid('unselectAll');
-                            $(this).datagrid("resize",{height:540});
+                            $(this).datagrid("resize",{height:450});
                         }
                     });
 
 
                     ezuiDialogBasSkuLeak = $('#ezuiDialogBasSkuLeak').dialog({
                         modal : true,
-                        fit:true,
+                        // fit:true,
                         title : '<spring:message code="common.dialog.title"/>',
-                        width:850,
-                        height:660,
+                        width:1150,
+                        height:600,
                         cache: false,
                         onClose : function() {
                             ezuiFormClear(ezuiForm);

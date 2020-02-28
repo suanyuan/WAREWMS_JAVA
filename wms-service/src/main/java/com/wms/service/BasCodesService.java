@@ -866,6 +866,10 @@ public class BasCodesService {
 
     public EasyuiDatagrid<InvLotAtt> getInvLotLocPagedDatagrid(EasyuiDatagridPager pager, BasCodesQuery query) {
         EasyuiDatagrid<InvLotAtt> datagrid = new EasyuiDatagrid<InvLotAtt>();
+        MybatisCriteria criteria = new MybatisCriteria();
+        criteria.setCurrentPage(pager.getPage());//当前页
+        criteria.setPageSize(pager.getRows());   //一页条数
+
         if(query.getLocationid()==null)query.setLocationid("");
         if(query.getEnterpriseName()==null)query.setEnterpriseName("");
         if(query.getProductName()==null)query.setProductName("");
@@ -877,6 +881,7 @@ public class BasCodesService {
         if(query.getLotatt05()==null)query.setLotatt05("");
         List<InvLotAtt> invLotAttList = jsonToList(query.getIdList(),InvLotAtt.class);
         List<InvLotAtt> invLotAttList1 = new ArrayList<InvLotAtt>();
+        List<InvLotAtt> list= new ArrayList<InvLotAtt>();
         for(InvLotAtt InvLotAtt:invLotAttList){
             if(InvLotAtt.getLocationid().indexOf(query.getLocationid())==-1)continue;
             if(InvLotAtt.getEnterpriseName().indexOf(query.getEnterpriseName())==-1)continue;
@@ -889,8 +894,20 @@ public class BasCodesService {
             if(InvLotAtt.getLotatt05().indexOf(query.getLotatt05())==-1)continue;
             invLotAttList1.add(InvLotAtt);
         }
+//        int minRow = (this.currentPage - 1) * this.pageSize;
+//        int maxRow = this.currentPage * this.pageSize;
+        try{
+            list = invLotAttList1.subList((pager.getPage()-1)*pager.getRows(),(pager.getPage()-1)*pager.getRows()+ pager.getRows());
+        }catch (Exception e){
+            list = invLotAttList1.subList((pager.getPage()-1)*pager.getRows(),invLotAttList1.size());
+        }
+
+
+
+
+
         datagrid.setTotal((long)invLotAttList1.size());
-        datagrid.setRows(invLotAttList1);
+        datagrid.setRows(list);
         return datagrid;
     }
 
