@@ -15,6 +15,9 @@ var ezuiDetailsDatagrid;//二级datagrid
 var ezuiDatagrid;    //主页datagird
 var closegenerationPlanForm;       //关闭计划dialog form
 var closegenerationPlanDialog;     //关闭计划dialog
+
+var ezuiCustDataDialog;        //货主编码
+var ezuiCustDataDialogId;      //货主编码
 $(function() {
 	ezuiMenu = $('#ezuiMenu').menu();   //右键菜单
 	ezuiForm = $('#ezuiForm').form();   //一级dialog form
@@ -97,17 +100,18 @@ $(function() {
 		rownumbers: true,
 		singleSelect: true,
 		columns: [[
-			{field: 'lotnum', title: '批次', width: 100},
 			{field: 'locationid', title: '库位', width: 100},
-			{field: 'customerid', title: '货主', width: 71},
+			{field: 'customerName', title: '货主', width: 150},
 			{field: 'sku', title: '产品代码', width: 100},
+			{field: 'lotatt10', title: '质量状态', width: 100, formatter: ZL_TYPstatusFormatter},
 			{field: 'qty', title: '养护件数', width: 100},
 			{field: 'lotatt03', title: '入库时间', width: 100},
 			{field: 'lotatt03test', title: '预期养护时间', width: 100},
 			{field: 'reservedfield10', title: '养护周期', width: 100},
-			//	用于回传后台时间
 			{field: 'fromDate', title: '开始时间', width: 100,hidden:true},
+			//	用于回传后台时间
 			{field: 'toDate', title: '结束时间', width: 100,hidden:true},
+			{field: 'lotnum', title: '批次', width: 100},
 			// {field: 'qty1', title: '转化率', width: 100},
 		]],
 		onDblClickCell: function (index, field, value) {
@@ -129,6 +133,29 @@ $(function() {
 			ezuiFormClear(closegenerationPlanForm);
 		}
 	}).dialog('close');
+	//货主查询弹框初始化
+	ezuiCustDataDialog = $('#ezuiCustDataDialog').dialog({
+		modal: true,
+		title: '<spring:message code="common.dialog.title"/>',
+		buttons: '',
+		onOpen: function () {
+
+		},
+		onClose: function () {
+
+		}
+	}).dialog('close');
+	//查询条件货主字段初始化
+	$("#ezuiDialog #customerid").textbox({
+		icons: [{
+			iconCls: 'icon-search',
+			handler: function (e) {
+				$("#ezuiCustDataDialog #customerid").textbox('clear');
+				ezuiCustDataClick();
+				ezuiCustDataDialogSearch();
+			}
+		}]
+	});
 });
 //增加
 var add = function(){
@@ -420,12 +447,85 @@ var doDialogSearch = function(){
 	ezuiDetailsDatagrid.datagrid('load', {
 		fromdate : $('#fromdate').datebox('getValue'),
 		todate : $('#todate').datebox('getValue'),
+		customerid:$('#ezuiDialog #customerid').textbox('getValue'),
+		lotatt10:$('#ezuiDialog #lotatt10').combobox('getValue'),
+		locationid:$('#ezuiDialog #locationid').textbox('getValue')
 	});
 };
-var ezuiDialogzToolbarClear= function(){
-	$("#ezuiToolbar #fromdate").datebox('clear');
-	$("#ezuiToolbar #todate").datebox('clear');
+// var ezuiDialogzToolbarClear= function(){
+// 	$("#ezuiToolbar #fromdate").datebox('clear');
+// 	$("#ezuiToolbar #todate").datebox('clear');
+// };
+
+
+//货主查询弹框弹出start=========================
+var ezuiCustDataClick = function () {
+	ezuiCustDataDialogId = $('#ezuiCustDataDialogId').datagrid({
+		url: '<c:url value="/basCustomerController.do?showDatagrid"/>',
+		method: 'POST',
+		toolbar: '#ezuiCustToolbar',
+		title: '货主档案',
+		pageSize: 50,
+		pageList: [50, 100, 200],
+		fit: true,
+		border: false,
+		fitColumns: true,
+		nowrap: false,
+		striped: true,
+		collapsible: false,
+		pagination: true,
+		rownumbers: true,
+		singleSelect: true,
+		queryParams: {
+			activeFlag: '1',
+			customerType: 'OW'
+		},
+		idField: 'id',
+		columns: [[
+			{field: 'customerid', title: '客户代码', width: 15},
+			{field: 'descrC', title: '中文名称', width: 50},
+			{field: 'customerTypeName', title: '类型', width: 15},
+			{
+				field: 'activeFlag', title: '激活', width: 15, formatter: function (value, rowData, rowIndex) {
+					return rowData.activeFlag == '1' ? '是' : '否';
+				}
+			}
+		]],
+		onDblClickCell: function (index, field, value) {
+			selectCust();
+		},
+		onRowContextMenu: function (event, rowIndex, rowData) {
+		}, onLoadSuccess: function (data) {
+			$(this).datagrid('unselectAll');
+		}
+	});
+	$("#ezuiCustDataDialog #customerType").combobox('setValue', 'OW').combobox('setText', '货主');
+	$("#ezuiCustDataDialog #activeFlag").combobox('setValue', '1').combobox('setText', '是');
+	ezuiCustDataDialog.dialog('open');
 };
+
+//货主查询弹框查询按钮
+var ezuiCustDataDialogSearch = function () {
+	ezuiCustDataDialogId.datagrid('load', {
+		customerid: $("#ezuiCustDataDialog #customerid").textbox("getValue"),
+		customerType: $("#ezuiCustDataDialog #customerType").combobox('getValue'),
+		activeFlag: $("#ezuiCustDataDialog #activeFlag").combobox('getValue')
+	});
+};
+//货主查询弹框选择按钮
+var selectCust = function () {
+	processType = 'selectCust';
+	var row = ezuiCustDataDialogId.datagrid('getSelected');
+	if (row) {
+		$("#ezuiDialog #customerid").textbox('setValue', row.descrC);
+		ezuiCustDataDialog.dialog('close');
+	}
+};
+//货主查询弹框清空按钮
+var ezuiCustToolbarClear = function () {
+	$("#ezuiCustDataDialog #customerid").textbox('clear');
+};
+//货主查询弹框弹出end==========================
 </script>
 </head>
 <body>
@@ -525,6 +625,68 @@ var ezuiDialogzToolbarClear= function(){
 		<div onclick='add();' id='menu_add' data-options='plain:true,iconCls:"icon-add"'><spring:message code='common.button.add'/></div>
 		<div onclick='del();' id='menu_del' data-options='plain:true,iconCls:"icon-remove"'><spring:message code='common.button.delete'/></div>
 		<div onclick='edit();' id='menu_edit' data-options='plain:true,iconCls:"icon-edit"'><spring:message code='common.button.edit'/></div>
+	</div>
+
+
+	<!-- 货主选择弹框 -->
+	<div id='ezuiCustDataDialog' style="width:700px;height:480px;padding:10px 20px">
+		<div class='easyui-layout' data-options='fit:true,border:false'>
+			<div data-options="region:'center'">
+				<div id='ezuiCustToolbar' class='datagrid-toolbar' style="">
+					<fieldset>
+						<legend><spring:message code='common.button.query'/></legend>
+						<table>
+							<tr>
+								<th>客户：</th>
+								<td>
+									<input type='text' id='customerid' name="customerid" class='easyui-textbox' size='12'
+										   data-options='prompt:"请输入客户代码"'/></td>
+								<th>类型：</th>
+								<td>
+									<input type='text' id='customerType' name="customerType" class='easyui-combobox'
+										   size='8' data-options="disabled:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
+																															valueField: 'id',
+																															textField: 'value'"/>
+								</td>
+								<th>激活：</th>
+								<td>
+									<input type='text' id='activeFlag' name="activeFlag" class='easyui-combobox' size='8'
+										   data-options="disabled:true,
+																															panelHeight:'auto',
+																															editable:false,
+																															valueField: 'id',
+																															textField: 'value',
+																															data: [
+																																{id: 'Y', value: '是'},
+																																{id: 'N', value: '否'}
+																															]"/>
+								</td>
+								<td>
+									<a onclick='ezuiCustDataDialogSearch();' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+<%--									<a onclick='selectCust();' id='ezuiBtn_edit' class='easyui-linkbutton'--%>
+<%--									   data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>--%>
+									<a onclick='ezuiCustToolbarClear();' class='easyui-linkbutton'
+									   data-options='plain:true,iconCls:"icon-remove"'
+									   href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+					<div id='ezuiCustDialogBtn'></div>
+				</div>
+				<table id='ezuiCustDataDialogId'></table>
+			</div>
+		</div>
+	</div>
+	<div id='ezuiCustDialogBtn'>
+		<a onclick='commit();' id='ezuiBtn_commit' class='easyui-linkbutton' href='javascript:void(0);'><spring:message
+				code='common.button.commit'/></a>
+		<a onclick='ezuiDialogClose("#ezuiDialog");' class='easyui-linkbutton' href='javascript:void(0);'><spring:message
+				code='common.button.close'/></a>
 	</div>
 
 	<c:import url='/WEB-INF/jsp/docMtHeader/dialog.jsp'/>

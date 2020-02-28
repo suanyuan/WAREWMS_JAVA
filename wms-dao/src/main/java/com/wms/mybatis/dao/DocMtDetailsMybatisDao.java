@@ -40,13 +40,13 @@ public interface DocMtDetailsMybatisDao extends BaseDao {
      * 根据时间段查询养护时间 主单状态99 40
      * @return
      */
-    List<DocMtDetails>  getDocMtDetailsList();
+    List<DocMtDetails>  getDocMtDetailsList(DocMtHeaderQuery query);
 
     /**
      * 查询养护列表 主单状态00 30
      * @return
      */
-    List<DocMtDetails>  getDocMtDetailsListByStatus();
+    List<DocMtDetails>  getDocMtDetailsListByStatus(DocMtHeaderQuery query);
     /**
      * 细单号
      * @return

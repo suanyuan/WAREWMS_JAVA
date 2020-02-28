@@ -26,6 +26,35 @@ public class DocMtHeaderQuery implements IQuery {
 	private String edittime;
 	private String editwho;
 	private String warehouseid;
+	//生成养护计划查询
+
+	private String customerid;
+	private String locationid;
+	private String lotatt10;
+
+	public String getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
+
+	public String getLocationid() {
+		return locationid;
+	}
+
+	public void setLocationid(String locationid) {
+		this.locationid = locationid;
+	}
+
+	public String getLotatt10() {
+		return lotatt10;
+	}
+
+	public void setLotatt10(String lotatt10) {
+		this.lotatt10 = lotatt10;
+	}
 
 	public long getStorageFlag() {
 		return storageFlag;

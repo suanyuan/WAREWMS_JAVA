@@ -67,11 +67,11 @@ public class DocMtHeaderService extends BaseService {
         List<InvLotLocId> lotLocIdListA = new ArrayList<InvLotLocId>();//用于筛选的养护计划
         List<InvLotLocId> lotLocIdListFA = new ArrayList<InvLotLocId>();//返回前端的养护计划
 //1.查出in_lot_att_id 可以生成养护计划的所有sku
-        List<InvLotLocId> lotLocIdList = invLotLocIdMybatisDao.getLotLocIdistListByMaintenanceTime();
+        List<InvLotLocId> lotLocIdList = invLotLocIdMybatisDao.getLotLocIdistListByMaintenanceTime(query);
 //2.根据时间段查出_doc_mt_deatil 主单状态99 40  生成养护计划的sku
-        List<DocMtDetails> docMtDetailsListA = docMtDetailsMybatisDao.getDocMtDetailsList();
+        List<DocMtDetails> docMtDetailsListA = docMtDetailsMybatisDao.getDocMtDetailsList(query);
         //3.查出_doc_mt_deatil 主单状态00 30 不可生成养护计划的sku
-        List<DocMtDetails> docMtDetailsListD = docMtDetailsMybatisDao.getDocMtDetailsListByStatus();
+        List<DocMtDetails> docMtDetailsListD = docMtDetailsMybatisDao.getDocMtDetailsListByStatus(query);
         //遍历1 如果2中1.sku==2.sku 那么1中的养护日期将改为2的
         Boolean con;
         for (InvLotLocId invLotLocId : lotLocIdList) {
@@ -83,7 +83,8 @@ public class DocMtHeaderService extends BaseService {
             }
 //             先从2中获得养护计划
             for (DocMtDetails a : docMtDetailsListA) {
-                if (invLotLocId.getLotnum().equals(a.getLotnum()) && invLotLocId.getSku().equals(a.getSku()) && invLotLocId.getCustomerid().equals(a.getCustomerid())) {
+                if (invLotLocId.getLotnum().equals(a.getLotnum()) && invLotLocId.getSku().equals(a.getSku())
+                        && invLotLocId.getCustomerid().equals(a.getCustomerid())&& invLotLocId.getLocationid().equals(a.getLocationid())) {
                     long date = a.getConversedatetest().getTime();
                     if (fromdate <= date && todate >= date) {
                         invLotLocId.setLotatt03test(a.getConversedatetest());//变更养护时间
@@ -109,7 +110,8 @@ public class DocMtHeaderService extends BaseService {
         for (InvLotLocId invLotLocId : lotLocIdListA) {
             con = true;
             for (DocMtDetails d : docMtDetailsListD) {
-                if (invLotLocId.getLotnum().equals(d.getLotnum()) && invLotLocId.getSku().equals(d.getSku()) && invLotLocId.getCustomerid().equals(d.getCustomerid())) {
+                if (invLotLocId.getLotnum().equals(d.getLotnum()) && invLotLocId.getSku().equals(d.getSku())
+                        && invLotLocId.getCustomerid().equals(d.getCustomerid())&& invLotLocId.getLocationid().equals(d.getLocationid())) {
                     con = false;
                     break;
                 }

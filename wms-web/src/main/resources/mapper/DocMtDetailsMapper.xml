@@ -402,19 +402,52 @@ where 1=1
 </select>
 <!--查询养护列表 主单状态99 40-->
 <select id="getDocMtDetailsList" resultMap="BaseResultMap">
-	SELECT d.lotnum,d.customerid,d.sku,MAX(conversedate) conversedate,DATE_ADD(MAX(conversedate),INTERVAL  reservedfield10 DAY) conversedatetest,s.reservedfield10
+	SELECT d.lotnum,d.customerid,d.sku,d.locationid,MAX(d.conversedate) conversedate,DATE_ADD(MAX(d.conversedate),INTERVAL  reservedfield10 DAY) conversedatetest,s.reservedfield10
 	 FROM `doc_mt_details` d
 	INNER JOIN `doc_mt_header` h ON d.mtno=h.mtno
+	left join inv_lot_att a on a.lotnum=d.lotnum
 	INNER JOIN `bas_sku` s ON d.customerid=s.customerid AND d.sku=s.sku
-	WHERE mtstatus='99' OR mtstatus='40'
-	GROUP BY d.lotnum,d.customerid,d.sku
+	LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='OW'  AND ACTIVE_FLAG='1') ow on ow.customerid=d.customerid
+	WHERE (mtstatus='99' OR mtstatus='40')
+	<trim  suffixOverrides="," >
+		<if test="locationid != null and locationid != ''" >
+			and d.locationid like concat('%',#{locationid},'%')
+		</if>
+		<if test="customerid != null and customerid != ''" >
+			and ow.descr_c =  #{customerid}
+		</if>
+		<if test="lotatt10 != null and lotatt10 != ''" >
+			and a.lotatt10=  #{lotatt10}
+		</if>
+	</trim>
+	GROUP BY d.lotnum,d.customerid,d.sku,d.locationid
+	having  conversedatetest &gt;= #{fromdate} and conversedatetest &lt;= #{todate}
+
+
 </select>
 <!--查询养护列表 主单状态00 30-->
 <select id="getDocMtDetailsListByStatus" resultMap="BaseResultMap">
-	   SELECT lotnum,customerid,sku FROM `doc_mt_details` d
-        INNER JOIN `doc_mt_header` h ON d.mtno=h.mtno
-        WHERE mtstatus='30' OR mtstatus='00'
-        GROUP BY lotnum,customerid,sku
+	SELECT d.lotnum,d.customerid,d.sku,d.locationid,MAX(d.conversedate) conversedate,DATE_ADD(MAX(d.conversedate),INTERVAL  reservedfield10 DAY) conversedatetest,s.reservedfield10
+	FROM `doc_mt_details` d
+	INNER JOIN `doc_mt_header` h ON d.mtno=h.mtno
+	left join inv_lot_att a on a.lotnum=d.lotnum
+	INNER JOIN `bas_sku` s ON d.customerid=s.customerid AND d.sku=s.sku
+	LEFT JOIN (SELECT * FROM bas_customer WHERE customer_type='OW'  AND ACTIVE_FLAG='1') ow on ow.customerid=d.customerid
+	WHERE (mtstatus='00' OR mtstatus='30')
+	<trim  suffixOverrides="," >
+		<if test="locationid != null and locationid != ''" >
+			and d.locationid like concat('%',#{locationid},'%')
+		</if>
+		<if test="customerid != null and customerid != ''" >
+			and ow.descr_c =  #{customerid}
+		</if>
+		<if test="lotatt10 != null and lotatt10 != ''" >
+			and a.lotatt10=  #{lotatt10}
+		</if>
+	</trim>
+	GROUP BY d.lotnum,d.customerid,d.sku,d.locationid
+	having  conversedatetest &gt;= #{fromdate} and conversedatetest &lt;= #{todate}
+
 </select>
 <!--养护计划细行号-->
 <select id="getMtlinenoByMtno" resultType="java.lang.Long"  parameterType="Object">

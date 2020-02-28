@@ -18,6 +18,7 @@ public class InvLotLocId  implements Serializable {
 	private String traceid;
 
 	private String customerid;
+	private String customerName;
 
 	private String sku;
 

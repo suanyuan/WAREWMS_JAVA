@@ -20,10 +20,21 @@
                                 <input type='text' id='todate' class='easyui-datebox' size='16'
                                        data-options=''/>
                             </td>
-                            <td>
+                            <th>质量状态</th><td><input type='text' id='lotatt10' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+																																	editable: false,
+																																	url:'<c:url value="/commonController.do?qcState"/>',
+																																	valueField: 'id',
+																																     textField: 'value'"/></td>
+                         </tr>
+                        <tr>
+                            <th>货主</th>
+                            <td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+                            <th>库位</th>
+                            <td><input type='text' id='locationid' class='easyui-textbox' size='16' data-options=''/></td>
+                            <td colspan="2">
                                 <a onclick='doDialogSearch();' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
-                                <a onclick='ezuiDialogzToolbarClear();' class='easyui-linkbutton'
+                                <a onclick='ezuiToolbarClear("#ezuiToolbar");' class='easyui-linkbutton'
                                    data-options='plain:true,iconCls:"icon-remove"'
                                    href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
                             </td>
