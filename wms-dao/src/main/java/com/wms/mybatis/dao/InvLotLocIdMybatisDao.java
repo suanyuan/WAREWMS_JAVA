@@ -4,6 +4,7 @@ package com.wms.mybatis.dao;
 import com.wms.entity.InvLotLocId;
 import com.wms.entity.ViewInvLotatt;
 import com.wms.query.CouRequestDetailsQuery;
+import com.wms.query.DocMtHeaderQuery;
 import com.wms.query.pda.PdaInventoryQuery;
 import org.apache.ibatis.annotations.Param;
 
@@ -34,7 +35,7 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * 查出in_lot_att_id的list 养护计划
      * @return ~
      */
-    List<InvLotLocId> getLotLocIdistListByMaintenanceTime();
+    List<InvLotLocId> getLotLocIdistListByMaintenanceTime(DocMtHeaderQuery query);
     /**
      * 查出in_lot_att_id的list 盘点任务
      * @return ~
