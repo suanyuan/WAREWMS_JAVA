@@ -3,10 +3,7 @@ import com.wms.entity.GspEnterpriseInfo;
 import com.wms.mybatis.dao.CommonMybatisDao;
 import com.wms.mybatis.dao.DocAsnDetailsMybatisDao;
 import com.wms.mybatis.dao.DocAsnHeaderMybatisDao;
-import com.wms.service.CommonService;
-import com.wms.service.GspEnterpriseInfoService;
-import com.wms.service.GspOperateDetailService;
-import com.wms.service.GspVerifyService;
+import com.wms.service.*;
 import com.wms.tools.FieldUtil;
 import com.wms.utils.BeanUtils;
 import com.wms.utils.RedisUtil;
@@ -18,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -42,6 +40,7 @@ import java.util.Map;
         "classpath*:/applicationContext.xml"
 
 })
+@WebAppConfiguration
 public class GspServiceTest {
 
     @Autowired
@@ -59,6 +58,8 @@ public class GspServiceTest {
     @Autowired
     private GspVerifyService gspVerifyService;
 
+    @Autowired
+    private GspProductRegisterSpecsService gspProductRegisterSpecsService;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -90,6 +91,10 @@ public class GspServiceTest {
         gspBusinessLicenseForm.setEnterpriseId("asdas");
         System.out.println(BeanUtils.isEmptyFrom(gspBusinessLicenseForm));
     }
+
+
+
+
 
     @Test
     public void testSec(){
@@ -131,6 +136,26 @@ public class GspServiceTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void deleteGspProductRegisterSpecs() {
+        String specsid = "123123";
+        gspProductRegisterSpecsService.deleteGspProductRegisterSpecs("12312321");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
