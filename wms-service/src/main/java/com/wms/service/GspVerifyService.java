@@ -119,6 +119,7 @@ public class GspVerifyService {
         }
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
         try {
             Date prdDate = format.parse(lotatt01);
             Date expiryDate = format.parse(lotatt02);
@@ -560,7 +561,6 @@ public class GspVerifyService {
 //            Date start = dateFormat.parse("2019-08-11");
 //
 //            System.out.println(betweenOn("2019-08-11", start, "2006-09-11"));
-
 
         }catch (Exception e){
             e.printStackTrace();
