@@ -52,8 +52,8 @@ public class DocMtHeaderController {
     @Login
     @RequestMapping(params = "getGenerationInfo")
     @ResponseBody
-    public List<InvLotLocId> getGenerationInfo(DocMtHeaderQuery query) {
-        return docMtHeaderService.getGenerationInfo(query);
+    public EasyuiDatagrid<InvLotLocId>  getGenerationInfo(EasyuiDatagridPager pager,DocMtHeaderQuery query) {
+        return docMtHeaderService.getGenerationInfo(pager,query);
     }
 
     //生成养护信息 根据时间段

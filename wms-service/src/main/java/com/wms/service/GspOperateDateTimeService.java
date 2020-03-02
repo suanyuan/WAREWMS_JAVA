@@ -1,6 +1,7 @@
 package com.wms.service;
 
 
+import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.GspOperteLicenseTime;
 import com.wms.entity.InvLotLocId;
 import com.wms.mybatis.dao.GspOperateLicenseMybatisDao;
@@ -77,7 +78,9 @@ public class GspOperateDateTimeService {
         query.setTodate(dateFormat.format(newDate));
         InvLotLocId invLotLocIdDay;
         List<InvLotLocId> invLotLocIdListDay = new ArrayList<InvLotLocId>();
-        List<InvLotLocId> invLotLocIdList = docMtHeaderService.getGenerationInfo(query);
+        EasyuiDatagridPager pager=new EasyuiDatagridPager();
+        pager.setRows(0);
+        List<InvLotLocId> invLotLocIdList = docMtHeaderService.getGenerationInfo(pager,query).getRows();
         if (invLotLocIdList.size() > 0) {
             for (InvLotLocId invLotLocId : invLotLocIdList) {
                 invLotLocIdDay = new InvLotLocId();

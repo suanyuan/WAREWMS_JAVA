@@ -91,12 +91,15 @@ $(function() {
 		url: '<c:url value="/docMtHeaderController.do?getGenerationInfo"/>',
 		method: 'POST',
 		toolbar: '#ezuiToolbar',
+		pageSize : 50,
+		pageList : [50, 100, 200],
 		fit: true,
 		border: false,
 		fitColumns: false,
 		nowrap: false,
 		striped: true,
 		collapsible: false,
+		pagination:true,
 		rownumbers: true,
 		singleSelect: true,
 		columns: [[
@@ -332,12 +335,17 @@ var commitClosegenerationPlan = function(){
 //生成 时间段查询完养护计划之后
 var generationPlanT = function(){
 	url = '<c:url value="/docMtHeaderController.do?ToGenerationInfo"/>';
-	var rows=ezuiDetailsDatagrid.datagrid('getRows')
 	var data=new Object();
-	var fromDate=rows[0].fromDate;
-	var toDate=rows[0].toDate;
+	var fromDate=$("#ezuiDialog #fromdate").textbox('getValue');
+	var toDate=$("#ezuiDialog #todate").textbox('getValue');
+	var lotatt10=$("#ezuiDialog #lotatt10").combobox('getValue');
+	var customerid=$("#ezuiDialog #customerid").textbox('getValue');
+	var locationid=$("#ezuiDialog #locationid").textbox('getValue');
 	data.fromdate=fromDate;
 	data.todate=toDate;
+	data.lotatt10=lotatt10;
+	data.customerid=customerid;
+	data.locationid=locationid;
 
 	var msg='';
 	$.messager.progress({

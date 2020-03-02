@@ -35,7 +35,9 @@ public interface InvLotLocIdMybatisDao extends BaseDao {
      * 查出in_lot_att_id的list 养护计划
      * @return ~
      */
-    List<InvLotLocId> getLotLocIdistListByMaintenanceTime(DocMtHeaderQuery query);
+    List<InvLotLocId> getLotLocIdistListByMaintenanceTime(MybatisCriteria criteria);
+    public int getLotLocIdistListByMaintenanceTimeCount(MybatisCriteria criteria);
+
     /**
      * 查出in_lot_att_id的list 盘点任务
      * @return ~

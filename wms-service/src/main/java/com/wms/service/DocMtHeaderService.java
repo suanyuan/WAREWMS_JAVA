@@ -57,70 +57,81 @@ public class DocMtHeaderService extends BaseService {
     }
 
     //获得养护计划
-    public List<InvLotLocId> getGenerationInfo(DocMtHeaderQuery query) {
-//	   查询时间为空返回空数据
+    public EasyuiDatagrid<InvLotLocId>  getGenerationInfo(EasyuiDatagridPager pager,DocMtHeaderQuery query) {
+        EasyuiDatagrid<InvLotLocId> datagrid = new EasyuiDatagrid<InvLotLocId>();
+        List<InvLotLocId> lotLocIdList=new ArrayList<>();
+        //	   查询时间为空返回空数据
         if (query.getFromdate() == null || query.getTodate() == null || query.getFromdate().equals("") || query.getTodate().equals("")) {
-            return new ArrayList<InvLotLocId>();
+            datagrid.setTotal((long)0);
+            datagrid.setRows(lotLocIdList);
+            return datagrid;
         }
-        long fromdate = StringtoDate(query.getFromdate()).getTime(); //获得开始时间
-        long todate = StringtoDate(query.getTodate()).getTime();     //获得结束时间
-        List<InvLotLocId> lotLocIdListA = new ArrayList<InvLotLocId>();//用于筛选的养护计划
-        List<InvLotLocId> lotLocIdListFA = new ArrayList<InvLotLocId>();//返回前端的养护计划
+//        long fromdate = StringtoDate(query.getFromdate()).getTime(); //获得开始时间
+//        long todate = StringtoDate(query.getTodate()).getTime();     //获得结束时间
+//        List<InvLotLocId> lotLocIdListA = new ArrayList<InvLotLocId>();//用于筛选的养护计划
+//        List<InvLotLocId> lotLocIdListFA = new ArrayList<InvLotLocId>();//返回前端的养护计划
+        //用于分页条件
+        MybatisCriteria mybatisCriteria = new MybatisCriteria();
+        mybatisCriteria.setCurrentPage(pager.getPage());
+        mybatisCriteria.setPageSize(pager.getRows());
+        mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
 //1.查出in_lot_att_id 可以生成养护计划的所有sku
-        List<InvLotLocId> lotLocIdList = invLotLocIdMybatisDao.getLotLocIdistListByMaintenanceTime(query);
+          lotLocIdList = invLotLocIdMybatisDao.getLotLocIdistListByMaintenanceTime(mybatisCriteria);
 //2.根据时间段查出_doc_mt_deatil 主单状态99 40  生成养护计划的sku
-        List<DocMtDetails> docMtDetailsListA = docMtDetailsMybatisDao.getDocMtDetailsList(query);
+//        List<DocMtDetails> docMtDetailsListA = docMtDetailsMybatisDao.getDocMtDetailsList(query);
         //3.查出_doc_mt_deatil 主单状态00 30 不可生成养护计划的sku
-        List<DocMtDetails> docMtDetailsListD = docMtDetailsMybatisDao.getDocMtDetailsListByStatus(query);
+//        List<DocMtDetails> docMtDetailsListD = docMtDetailsMybatisDao.getDocMtDetailsListByStatus(query);
         //遍历1 如果2中1.sku==2.sku 那么1中的养护日期将改为2的
-        Boolean con;
-        for (InvLotLocId invLotLocId : lotLocIdList) {
-            con = true;
-            //判断可养护库存件数是否为0 为0跳出本次循环
-            invLotLocId.setQty(invLotLocId.getQty() - invLotLocId.getQtyallocated() - invLotLocId.getQtyonhold());//库存件数-分配件数-冻结件数
-            if (invLotLocId.getQty() <= 0) {
-                continue;
-            }
+//        Boolean con;
+//        for (InvLotLocId invLotLocId : lotLocIdList) {
+//            con = true;
+//            //判断可养护库存件数是否为0 为0跳出本次循环
+//            invLotLocId.setQty(invLotLocId.getQty() - invLotLocId.getQtyallocated() - invLotLocId.getQtyonhold());//库存件数-分配件数-冻结件数
+//            if (invLotLocId.getQty() <= 0) {
+//                continue;
+//            }
 //             先从2中获得养护计划
-            for (DocMtDetails a : docMtDetailsListA) {
-                if (invLotLocId.getLotnum().equals(a.getLotnum()) && invLotLocId.getSku().equals(a.getSku())
-                        && invLotLocId.getCustomerid().equals(a.getCustomerid())&& invLotLocId.getLocationid().equals(a.getLocationid())) {
-                    long date = a.getConversedatetest().getTime();
-                    if (fromdate <= date && todate >= date) {
-                        invLotLocId.setLotatt03test(a.getConversedatetest());//变更养护时间
-                        invLotLocId.setFromDate(StringtoDate(query.getFromdate()));
-                        invLotLocId.setToDate(StringtoDate(query.getTodate()));
-                        lotLocIdListA.add(invLotLocId);
-                    }
-                    con = false;
-                    break;
-                }
-            }
+//            for (DocMtDetails a : docMtDetailsListA) {
+//                if (invLotLocId.getLotnum().equals(a.getLotnum()) && invLotLocId.getSku().equals(a.getSku())
+//                        && invLotLocId.getCustomerid().equals(a.getCustomerid())&& invLotLocId.getLocationid().equals(a.getLocationid())) {
+//                    long date = a.getConversedatetest().getTime();
+//                    if (fromdate <= date && todate >= date) {
+//                        invLotLocId.setLotatt03test(a.getConversedatetest());//变更养护时间
+//                        invLotLocId.setFromDate(StringtoDate(query.getFromdate()));
+//                        invLotLocId.setToDate(StringtoDate(query.getTodate()));
+//                        lotLocIdListA.add(invLotLocId);
+//                    }
+//                    con = false;
+//                    break;
+//                }
+//            }
 //            如果2中没有 则判断1中时间段是否符合  如果符合 加入养护计划
-            if (con) {
-                long date = invLotLocId.getLotatt03test().getTime();
-                if (fromdate <= date && todate >= date) {
-                    invLotLocId.setFromDate(StringtoDate(query.getFromdate()));
-                    invLotLocId.setToDate(StringtoDate(query.getTodate()));
-                    lotLocIdListA.add(invLotLocId);
-                }
-            }
-        }
+//            if (con) {
+//                long date = invLotLocId.getLotatt03test().getTime();
+//                if (fromdate <= date && todate >= date) {
+//                    invLotLocId.setFromDate(StringtoDate(query.getFromdate()));
+//                    invLotLocId.setToDate(StringtoDate(query.getTodate()));
+//                    lotLocIdListA.add(invLotLocId);
+//                }
+//            }
+//          }
         //遍历3 3中有的1中将去除
-        for (InvLotLocId invLotLocId : lotLocIdListA) {
-            con = true;
-            for (DocMtDetails d : docMtDetailsListD) {
-                if (invLotLocId.getLotnum().equals(d.getLotnum()) && invLotLocId.getSku().equals(d.getSku())
-                        && invLotLocId.getCustomerid().equals(d.getCustomerid())&& invLotLocId.getLocationid().equals(d.getLocationid())) {
-                    con = false;
-                    break;
-                }
-            }
-            if (con) {
-                lotLocIdListFA.add(invLotLocId);
-            }
-        }
-        return lotLocIdListFA;
+//        for (InvLotLocId invLotLocId : lotLocIdListA) {
+//            con = true;
+//            for (DocMtDetails d : docMtDetailsListD) {
+//                if (invLotLocId.getLotnum().equals(d.getLotnum()) && invLotLocId.getSku().equals(d.getSku())
+//                        && invLotLocId.getCustomerid().equals(d.getCustomerid())&& invLotLocId.getLocationid().equals(d.getLocationid())) {
+//                    con = false;
+//                    break;
+//                }
+//            }
+//            if (con) {
+//                lotLocIdListFA.add(invLotLocId);
+//            }
+//        }
+        datagrid.setTotal((long) invLotLocIdMybatisDao.getLotLocIdistListByMaintenanceTimeCount(mybatisCriteria));
+        datagrid.setRows(lotLocIdList);
+        return datagrid;
     }
 
     //生成养护计划
@@ -150,7 +161,9 @@ public class DocMtHeaderService extends BaseService {
             }
 
 //循环加入细单
-            List<InvLotLocId> invLotLocIdList = getGenerationInfo(query);
+            EasyuiDatagridPager pager=new EasyuiDatagridPager();
+            pager.setRows(0);
+            List<InvLotLocId> invLotLocIdList = getGenerationInfo(pager,query).getRows();
             for (InvLotLocId invLotLocId : invLotLocIdList) {
                 DocMtDetails docMtDetails = new DocMtDetails();
                 docMtDetails.setMtno(resultNo);
