@@ -64,6 +64,12 @@ where 1=1
 	<if test="condition.isUse != null and condition.isUse != ''" >
 	    and is_use =  #{condition.isUse}
 	</if>
+
+	<if test="condition.riskAssessment != null and condition.riskAssessment != ''" >
+		and risk_assessment =  #{condition.riskAssessment}
+	</if>
+
+
 </trim>
 </sql>
    

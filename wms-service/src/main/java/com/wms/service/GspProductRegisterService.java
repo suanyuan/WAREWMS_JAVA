@@ -611,9 +611,9 @@ public class GspProductRegisterService extends BaseService {
 
 
 					if("1".equals(gspProductRegister.getIsUse())){
-						gspProductRegister.setIsUse("是");
+						gspProductRegister.setIsUse("有效");
 					}else if("0".equals(gspProductRegister.getIsUse())){
-						gspProductRegister.setIsUse("否");
+						gspProductRegister.setIsUse("失效");
 					}
 
 

@@ -414,7 +414,6 @@ var doSearch = function(){
         productRemark : $('#productRemark').val(),
         productModel : $('#productModel').val(),
         productionAddress : $('#productionAddress').val(),
-
         createDateEnd : $("#createDateEnd").datebox("getValue"),
         createDateStart : $("#createDateStart").datebox("getValue"),
         editDateStart : $("#editDateStart").datebox("getValue"),
@@ -424,10 +423,6 @@ var doSearch = function(){
 		// categories : $('#categories').val(),
 		// conversionRate : $('#conversionRate').val(),
 		// llong : $('#llong').val(),
-		// wide : $('#wide').val(),
-		// hight : $('#hight').val(),
-		// productLine : $('#productLine').val(),
-		// manageCategories : $('#manageCategories').val(),
 		enterpriseName : $('#enterpriseNameQ').val(),
 		// storageCondition : $('#storageCondition').val(),
 		// transportCondition : $('#transportCondition').val(),
@@ -517,7 +512,7 @@ var doExport = function(){
         var token = new Date().getTime();
         var param = new HashMap();
         param.put("token", token);
-        param.put("productRegisterNo", $('#productRegisterNo').val());
+        param.put("productRegisterNo", $('#productRegisterNoQuery').val());
         param.put("specsName",$('#specsName').val());
         param.put("productCode",$('#productCode').val());
         param.put("productName",$('#productName').val());

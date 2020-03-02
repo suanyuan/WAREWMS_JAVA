@@ -258,7 +258,7 @@ where 1=1
 
 	<!-- 查询所有 -->
 	<select id="queryAll"  resultMap="BaseResultMap" parameterType="Object">
-        SELECT t1.lotnum,t1.locationid,t2.sku,t3.specs_name,t3.product_name,t2.lotatt02,t2.lotatt01,t2.lotatt04,t2.lotatt05,t2.customerid,t4.`descr_c`
+        SELECT t1.lotnum,t1.locationid,t2.sku,t3.specs_name,t3.product_name,t2.lotatt02,t2.lotatt01,t2.lotatt04,t2.lotatt05,t2.customerid,t4.`descr_c` enterpriseName
 		FROM `inv_lot_loc_id` t1
 		LEFT JOIN `inv_lot_att` t2 ON t1.`lotnum`=t2.`lotnum`
 		LEFT JOIN (select * from gsp_product_register_specs where is_use='1') t3 on t1.sku = t3.product_code

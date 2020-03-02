@@ -5,10 +5,14 @@ import com.wms.constant.Constant;
 import com.wms.dto.GspEnterpriseBusinessDTO;
 import com.wms.dto.GspEnterpriseTypeDTO;
 import com.wms.entity.*;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.*;
 import com.wms.query.*;
+import com.wms.utils.BeanConvertUtil;
 import com.wms.utils.BeanUtils;
+import com.wms.utils.ExcelUtil;
 import com.wms.utils.RandomUtil;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.GspOperateDetailVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.*;
@@ -19,15 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 企业总业务处理
@@ -991,6 +993,9 @@ public class GspEnterpriceService extends BaseService {
             return true;
         }
     }
+
+
+
 
     /**
      * 查询企业身份信息

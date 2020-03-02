@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 public class GspEnterpriseInfoQuery implements IQuery {
-
+	private String token;
 	private String enterpriseNo;
 	private String shorthandName;
 	private String enterpriseName;

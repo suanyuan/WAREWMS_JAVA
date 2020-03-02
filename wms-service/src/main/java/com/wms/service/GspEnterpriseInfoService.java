@@ -7,11 +7,15 @@ import com.wms.easyui.EasyuiCombobox;
 import com.wms.easyui.EasyuiDatagrid;
 import com.wms.easyui.EasyuiDatagridPager;
 import com.wms.entity.GspEnterpriseInfo;
+import com.wms.entity.enumerator.ContentTypeEnum;
 import com.wms.mybatis.dao.GspEnterpriseInfoMybatisDao;
 import com.wms.mybatis.dao.MybatisCriteria;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.query.GspEnterpriseInfoQuery;
+import com.wms.utils.BeanConvertUtil;
+import com.wms.utils.ExcelUtil;
 import com.wms.utils.SfcUserLoginUtil;
+import com.wms.utils.exception.ExcelException;
 import com.wms.vo.GspEnterpriseInfoVO;
 import com.wms.vo.Json;
 import com.wms.vo.form.GspEnterpriseInfoForm;
@@ -21,7 +25,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -151,6 +161,91 @@ public class GspEnterpriseInfoService extends BaseService {
 		GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(id);
 		return gspEnterpriseInfo;
 	}
+
+	//导出
+	public void exportDataToExcel(HttpServletResponse response, GspEnterpriseInfoQuery form) throws IOException {
+		Cookie cookie = new Cookie("exportToken",form.getToken());
+		cookie.setMaxAge(60);
+		response.addCookie(cookie);
+		response.setContentType(ContentTypeEnum.csv.getContentType());
+		try {
+			MybatisCriteria mybatisCriteria = new MybatisCriteria();
+			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			// excel表格的表头，map
+			LinkedHashMap<String, String> fieldMap = getGspEnterpriseToFiledPublicQuestionBank();
+			// excel的sheetName
+			String sheetName = "企业信息";
+			// excel要导出的数据
+			List<GspEnterpriseInfo> searchBasCustomerList = gspEnterpriseInfoMybatisDao.queryByList(mybatisCriteria);
+			// 导出
+
+
+			if (searchBasCustomerList == null || searchBasCustomerList.size() == 0) {
+				System.out.println("企业信息为空");
+			}else {
+				for (GspEnterpriseInfo gspEnterpriseInfo: searchBasCustomerList) {
+
+
+					//时间格式转换
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd");
+					Date date=null;
+
+					if("1".equals(gspEnterpriseInfo.getIsUse())){
+						gspEnterpriseInfo.setIsUse("是");
+					}else if("0".equals(gspEnterpriseInfo.getIsUse())){
+						gspEnterpriseInfo.setIsUse("否");
+					}
+
+					//企业类型
+					if("GNSC".equals(gspEnterpriseInfo.getEnterpriseType())){
+						gspEnterpriseInfo.setEnterpriseType("生产");
+					}else if("GW".equals(gspEnterpriseInfo.getEnterpriseType())){
+						gspEnterpriseInfo.setEnterpriseType("国外企业");
+					}else if("JY".equals(gspEnterpriseInfo.getEnterpriseType())){
+						gspEnterpriseInfo.setEnterpriseType("经营");
+					}else if("kd".equals(gspEnterpriseInfo.getEnterpriseType())){
+						gspEnterpriseInfo.setEnterpriseType("快递/物流");
+					}else if("SCJY".equals(gspEnterpriseInfo.getEnterpriseType())){
+						gspEnterpriseInfo.setEnterpriseType("生产和经营");
+					}else if("YL".equals(gspEnterpriseInfo.getEnterpriseType())){
+						gspEnterpriseInfo.setEnterpriseType("医疗机构");
+					}else if("ZT".equals(gspEnterpriseInfo.getEnterpriseType())){
+						gspEnterpriseInfo.setEnterpriseType("主体");
+					}
+
+				}
+//                List<FirstReviewLog> searchBasCustomerFormList  = new ArrayList<FirstReviewLog>();
+
+				//将list集合转化为excle
+				ExcelUtil.listToExcel(searchBasCustomerList, fieldMap, sheetName, response);
+				System.out.println("导出成功~~~~");
+			}
+		} catch (ExcelException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 得到导出Excle时题型的英中文map
+	 *
+	 * @return 返回题型的属性map
+	 */
+	public LinkedHashMap<String, String> getGspEnterpriseToFiledPublicQuestionBank() {
+
+		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
+		superClassMap.put("isUse", "是否有效");
+		superClassMap.put("enterpriseNo", "企业代码");
+		superClassMap.put("shorthandName", "简称");
+		superClassMap.put("enterpriseName", "企业名称");
+		superClassMap.put("enterpriseType", "企业类型");
+		superClassMap.put("createDate", "创建时间");
+		superClassMap.put("createId", "创建人");
+		superClassMap.put("editDate", "编辑时间");
+		superClassMap.put("editId", "编辑人");
+
+		return superClassMap;
+	}
+
 
 	public List<EasyuiCombobox> getGspEnterpriseInfoCombobox() {
         MybatisCriteria criteria = new MybatisCriteria();

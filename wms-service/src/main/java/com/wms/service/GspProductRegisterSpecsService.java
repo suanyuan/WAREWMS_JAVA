@@ -316,9 +316,9 @@ public class GspProductRegisterSpecsService extends BaseService {
 					Date date=null;
 
 					if("1".equals(s.getIsUse())){
-						s.setIsUse("是");
+						s.setIsUse("有效");
 					}else if("0".equals(s.getIsUse())){
-						s.setIsUse("否");
+						s.setIsUse("失效");
 					}
 					if("1".equals(s.getIsCertificate())){
 						s.setIsCertificate("是");
@@ -368,19 +368,25 @@ public class GspProductRegisterSpecsService extends BaseService {
 
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 		superClassMap.put("isUse", "是否有效");
-		superClassMap.put("productCode", "产品代码");
 		superClassMap.put("productRegisterNo", "注册证编号");
+		superClassMap.put("productCode", "产品代码");
+
 		superClassMap.put("productName", "产品名称");
 		superClassMap.put("productRemark", "产品描述");
 		superClassMap.put("specsName", "规格");
 		superClassMap.put("productModel", "型号");
-		superClassMap.put("enterpriseName", "生产企业");
-		superClassMap.put("packingUnit", "包装规格");
-		superClassMap.put("storageCondition", "储存条件");
 		superClassMap.put("unit", "单位");
-		superClassMap.put("maintenanceCycle", "养护周期");
+		superClassMap.put("packingUnit", "包装规格");
+
+		superClassMap.put("storageCondition", "储存条件");
+		superClassMap.put("enterpriseName", "生产企业");
+
 		superClassMap.put("isDoublec", "双证");
 		superClassMap.put("isCertificate", "产品合格证");
+
+		superClassMap.put("maintenanceCycle", "养护周期");
+
+
 		superClassMap.put("createId", "创建人");
 		superClassMap.put("createDateDC", "创建时间");
 		superClassMap.put("editId", "编辑人");

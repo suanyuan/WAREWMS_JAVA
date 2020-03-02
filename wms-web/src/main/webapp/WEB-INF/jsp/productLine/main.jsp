@@ -163,6 +163,7 @@ var doSearch = function(){
         descrC : $('#descr').val(),
 		name : $('#name').val(),
 		expression : $("#expression").val(),
+        riskAssessment: $("#riskAssessment").combobox("getValue")
 	});
 };
 
@@ -225,6 +226,17 @@ var commit1 = function(){
 							<th>产品线名称：</th><td><input type='text' id='name' class='easyui-textbox' size='8' /></td>
 							<th>货主：</th><td><input type='text' id='descr' class='easyui-textbox' size='8' /></td>
 							<th>说明：</th><td><input type='text' id='expression' class='easyui-textbox' size='8' /></td>
+
+							<th>风险评估：</th><td><input type="text" id="riskAssessment"  name="isUse"  class="easyui-combobox" size='16' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '已通过', value: '已通过'},
+																																	{id: '未通过', value: '未通过'},
+																																	{id: '未评估', value: '未评估'},
+																																	{id: '无需评估', value: '无需评估'}
+																																]"/></td>
 							<td>
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>

@@ -860,7 +860,7 @@ public class BasCodesService {
 
 
         //承运商运单统计数据更新
-        waybillStatisticsService.wsUpdate();
+//        waybillStatisticsService.wsUpdate();
 
     }
 

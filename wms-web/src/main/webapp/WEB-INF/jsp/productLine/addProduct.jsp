@@ -98,7 +98,17 @@
 																										                                    textField: 'value',required:true"/></td>
             </tr>
             <th>风险评估</th>
-            <td><input type='text'  name ='riskAssessment'  id='riskAssessment' value="${productLine.riskAssessment}" class='easyui-textbox' size='16' data-options=''/></td>
+
+            <td><input type='text'  name ='riskAssessment'  id='riskAssessment' value="${productLine.riskAssessment}" class='easyui-combobox' size='16' data-options="panelHeight:'auto',
+																																	editable:false,
+																																	valueField: 'id',
+																																	textField: 'value',
+																																	data: [
+																																	{id: '已通过', value: '已通过'},
+																																	{id: '未通过', value: '未通过'},
+																																	{id: '未评估', value: '未评估'},
+																																	{id: '无需评估', value: '无需评估'}
+																																]"/></td>
             </tr>
         </table>
     </form>

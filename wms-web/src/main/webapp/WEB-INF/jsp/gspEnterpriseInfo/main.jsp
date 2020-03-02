@@ -658,6 +658,42 @@ function test(){
         }
     });
 }
+
+
+/* 导出start */
+var doExport = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_export').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        param.put("enterpriseNo", $('#enterpriseNo').val());
+        param.put("shorthandName",$('#shorthandName').val());
+        param.put("enterpriseName",$('#enterpriseName').val());
+        param.put("enterpriseType",$('#enterpriseTypeQuery').combobox("getValue"));
+        param.put("createDateBegin",$('#createDateBegin').datebox("getValue"));
+        param.put("createDateEnd",$('#createDateEnd').datebox("getValue"));
+        param.put("isUse",$('#isUse').combobox("getValue"));
+
+
+        //--导出Excel
+        var formId = ajaxDownloadFile(sy.bp()+"/gspEnterpriseInfoController.do?exportDataToExcel", param);
+        downloadCheckTimer = window.setInterval(function () {
+            window.clearInterval(downloadCheckTimer);
+            $('#'+formId).remove();
+            $('#ezuiBtn_export').linkbutton('enable');
+            $.messager.progress('close');
+            $.messager.show({
+                msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+            });
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    }
+};
+/* 导出end */
 </script>
 </head>
 <body>
@@ -685,7 +721,10 @@ function test(){
 							<td colspan="2">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
-								<%--<a onclick='test();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>测试</a>--%>
+
+								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
+							<%--<a onclick='test();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'>测试</a>--%>
 							</td>
 						</tr>
 					</table>

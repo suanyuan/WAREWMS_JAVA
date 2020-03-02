@@ -2,6 +2,7 @@ package com.wms.controller.gsp;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
@@ -33,6 +34,7 @@ public class GspEnterpriseInfoController {
 	private GspEnterpriseInfoService gspEnterpriseInfoService;
 
 	//企业信息主体业务
+
 	@Autowired
 	private GspEnterpriceService gspEnterpriceService;
 	@Autowired
@@ -85,6 +87,7 @@ public class GspEnterpriseInfoController {
 		return gspEnterpriseInfoService.getPagedDatagrid(pager, query);
 	}
 
+
 	@Login
 	@RequestMapping(params = "addEnterprise")
 	@ResponseBody
@@ -136,6 +139,14 @@ public class GspEnterpriseInfoController {
 			json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		}
 		return json;*/
+	}
+
+
+	//导出
+	@Login
+	@RequestMapping(params = "exportDataToExcel")
+	public void exportDataToExcel(HttpServletResponse response, GspEnterpriseInfoQuery form) throws Exception {
+		gspEnterpriseInfoService.exportDataToExcel(response, form);
 	}
 
 	@Login
