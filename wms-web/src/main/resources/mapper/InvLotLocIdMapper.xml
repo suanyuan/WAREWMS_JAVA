@@ -445,7 +445,8 @@
 		<if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
 			LEFT JOIN bas_gtn d ON a.sku = d.sku
 		</if>
-		WHERE 1 = 0
+		WHERE a.qty > 0 and (
+			1 = 0
 		<if test="(GTIN != null and GTIN != '') and (lotatt04 == null or lotatt04 == '') and (lotatt05 == null or lotatt05 == '')">
 			OR d.gtncode = #{GTIN}
 		</if>
@@ -464,6 +465,7 @@
 			OR c.alternate_sku5 = #{otherCode, jdbcType=VARCHAR}
 			OR c.sku = #{otherCode, jdbcType=VARCHAR}
 		</if>
+		)
 		ORDER BY a.customerid, a.sku, b.lotatt04, b.lotatt05, b.lotatt10
 		limit #{start}, #{pageSize}
 	</select>
@@ -473,7 +475,7 @@
         a.*
         from inv_lot_loc_id a
         left join inv_lot_att b on a.lotnum = b.lotnum
-        where locationid = #{locationid}
+        where locationid = #{locationid} and a.qty > 0
         order by a.customerid, a.sku, b.lotatt04, b.lotatt05, b.lotatt10
         limit #{start}, #{pageSize}
     </select>

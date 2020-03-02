@@ -144,7 +144,7 @@ public class DocPkRecordsService extends BaseService {
         PdaActAllocationDetailVO actAllocationDetailVO = new PdaActAllocationDetailVO();
 		try {
 
-			int pickQty = 1;//单次提交，件数为1
+			int pickQty = query.getQty();
 			BasSku basSku;
 			DocPkRecords docPkRecords;
 			ActAllocationDetails actAllocationDetails;
@@ -201,11 +201,21 @@ public class DocPkRecordsService extends BaseService {
 			docPkRecords = docPkRecordsMybatisDao.queryPickedRecord(pkRecordsQuery);
 			if (null == docPkRecords) {
 
+				if (pickQty > actAllocationDetails.getQty()) {
+					resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "当前提交超出分配明细件数(" + actAllocationDetails.getQty() + ")"));
+					return resultMap;
+				}
+
 				int maxPklineno = docPkRecordsMybatisDao.getMaxPklineno(actAllocationDetails.getOrderno());
 				docPkRecords = new DocPkRecords(actAllocationDetails, basSku, maxPklineno, basPackage, pickQty);
 				docPkRecords.setAddwho(query.getEditwho());
 				docPkRecordsMybatisDao.add(docPkRecords);
 			} else {
+
+				if ((docPkRecords.getPickedqty() + pickQty) > actAllocationDetails.getQty()) {
+					resultMap.put(Constant.RESULT, new PdaResult(PdaResult.CODE_FAILURE, "当前提交超出分配明细件数(" + actAllocationDetails.getQty() + ")"));
+					return resultMap;
+				}
 
 				docPkRecords.setPickedqty(docPkRecords.getPickedqty() + pickQty);
 				docPkRecords.setPickedqtyEach(docPkRecords.getPickedqtyEach() + pickQty * basPackage.getQty1().intValue());

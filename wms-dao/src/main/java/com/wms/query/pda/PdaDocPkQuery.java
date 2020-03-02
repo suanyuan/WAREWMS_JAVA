@@ -20,4 +20,6 @@ public class PdaDocPkQuery extends PdaBasSkuQuery {
     private String sku;
 
     private String locationid;
+
+    private int qty;
 }
