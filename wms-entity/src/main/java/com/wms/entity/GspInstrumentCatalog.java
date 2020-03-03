@@ -24,10 +24,12 @@ public class GspInstrumentCatalog  implements Serializable {
 	private String createId;
 
 	private java.util.Date cretaeDate;
+	private String cretaeDateDc;
 
 	private String editId;
 
 	private java.util.Date editDate;
+	private String editDateDc;
 
 	private String isUse;
 

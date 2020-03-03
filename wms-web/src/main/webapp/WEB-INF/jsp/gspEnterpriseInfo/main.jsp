@@ -197,8 +197,8 @@ var commit = function(){
             success : function(result) {
                 // $.messager.progress('close');
                 if(result.obj!=null){
-                    alert(result.obj.operateLicenseFlag+"="+result.obj.secondRecordFlag+"="
-                        +result.obj.prodLicenseFlag+"="+result.obj.firstRecordFlag+"="+result.obj.medicalRecordFlag);
+                    // alert(result.obj.operateLicenseFlag+"="+result.obj.secondRecordFlag+"="
+                    //     +result.obj.prodLicenseFlag+"="+result.obj.firstRecordFlag+"="+result.obj.medicalRecordFlag);
                     operateLicenseFlag = result.obj.operateLicenseFlag;
                     secondRecordFlag = result.obj.secondRecordFlag;
                     prodLicenseFlag = result.obj.prodLicenseFlag;

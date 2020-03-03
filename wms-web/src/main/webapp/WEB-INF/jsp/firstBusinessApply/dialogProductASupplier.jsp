@@ -270,8 +270,13 @@
             fit:true,
             pagination:true,
             singleSelect:false,
+            rowStyler:function(index,row){
+                if(row.isUse == "0" ){
+                    return 'color:red;';
+                }
+            },
             queryParams:{
-                isUse : '1',
+                // isUse : '1',
                 type:'CER',
                 // supplierId:$("#supplierId").val(),
             },
@@ -370,7 +375,7 @@
             "productRegisterNo":$("#ezuiDialogSpec_PAS #registerNo").val(),
             "specsName":$("#ezuiDialogSpec_PAS #specsName").val(),
 
-            "isUse":"1",
+            // "isUse":"1",
             // "supplierId" : $('#supplierId').val(),
             "type":"CER"
         })

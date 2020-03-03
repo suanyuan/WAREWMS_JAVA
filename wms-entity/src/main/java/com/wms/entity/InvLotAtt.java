@@ -55,4 +55,5 @@ public class InvLotAtt extends BaseLotatt  implements Serializable {
 	private String specsName;
 	private String enterpriseName;
     private String productName;
+    private String qty;
 }

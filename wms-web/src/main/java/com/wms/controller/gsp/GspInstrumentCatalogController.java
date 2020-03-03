@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.wms.service.GspOperateDetailService;
@@ -12,8 +13,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import com.wms.mybatis.entity.SfcUserLogin;
 import com.wms.service.GspInstrumentCatalogService;
@@ -85,6 +88,30 @@ public class GspInstrumentCatalogController {
 		}
 		json.setMsg(ResourceUtil.getProcessResultMsg(json.isSuccess()));
 		return json;
+	}
+
+
+	//下载导入模板
+	@Login
+	@RequestMapping(params = "exportTemplate", method = RequestMethod.POST)
+	public void exportTemplate(HttpServletResponse response, String token) throws Exception {
+		gspInstrumentCatalogService.exportTemplate(response, token);
+	}
+	//导入
+	@Login
+	@RequestMapping(params = "importExcelData")
+	@ResponseBody
+	public Json importExcelData(MultipartHttpServletRequest mhsr) throws Exception {
+		return gspInstrumentCatalogService.importExcelData(mhsr);
+	}
+
+
+
+	//导出
+	@Login
+	@RequestMapping(params = "exportDataToExcel")
+	public void exportDataToExcel(HttpServletResponse response, GspInstrumentCatalogQuery form) throws Exception {
+		gspInstrumentCatalogService.exportDataToExcel(response, form);
 	}
 
 	@Login

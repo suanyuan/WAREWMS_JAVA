@@ -210,7 +210,7 @@ public class BasSkuExportService {
 					}else if(Constant.CODE_CATALOG_CLASSIFY_THREE.equals(basSku.getReservedfield04())){
 						basSku.setReservedfield04("III");
 					}
-
+					basSku.getRiskAssessment();
 					//所有供应商
 //					String content = "";
 //					BasSku bs = new BasSku();
@@ -294,7 +294,7 @@ public class BasSkuExportService {
 		superClassMap.put("alternateSku5", "自附码5");//
 
 
-//		superClassMap.put("reservedfield04", "管理分类");
+		superClassMap.put("riskAssessment", "风险评估");
 //		superClassMap.put("reservedfield05", "分类目录");
 
 

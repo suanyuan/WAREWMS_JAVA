@@ -5,6 +5,7 @@ import com.wms.utils.serialzer.JsonDatetimeSerializer;
 
 public class GspInstrumentCatalogVO {
 
+	private Integer seq;
 	private String instrumentCatalogId;
 	private String instrumentCatalogNo;
 	private String instrumentCatalogName;
@@ -17,6 +18,14 @@ public class GspInstrumentCatalogVO {
 	private java.util.Date editDate;
 	private String isUse;
 
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
 	public String getInstrumentCatalogId() {
 		return instrumentCatalogId;
 	}

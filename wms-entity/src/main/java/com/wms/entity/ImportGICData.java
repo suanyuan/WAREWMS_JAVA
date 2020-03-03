@@ -1,9 +1,20 @@
-package com.wms.query;
+package com.wms.entity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.wms.utils.serialzer.JsonDatetimeSerializer;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.io.Serializable;
 
-public class GspInstrumentCatalogQuery implements IQuery {
+/**
+ * The persistent class for the BAS_SKU database table.
+ * 
+ */
+@Entity
+public class ImportGICData implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private String seq;
 
 	private String token;
 	private String instrumentCatalogId;
@@ -18,6 +29,17 @@ public class GspInstrumentCatalogQuery implements IQuery {
 	private String editDate;
 	private String isUse;
 	private String enterpriseId;
+
+	public ImportGICData() {
+
+	}
+	public String getSeq() {
+		return seq;
+	}
+
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
 
 	public String getToken() {
 		return token;

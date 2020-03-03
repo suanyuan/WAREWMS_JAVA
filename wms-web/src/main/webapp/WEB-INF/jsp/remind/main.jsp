@@ -229,6 +229,7 @@
 
                             {field: 'locationid',		title: '货位',	width: 220 },
                             {field: 'productName',		title: '产品名称',	width: 220 },
+                            {field: 'qty',		title: '数量',	width: 220 },
 
                             {field: 'sku',		title: '产品代码',	width: 200 },
                             {field: 'specsName',		title: '规格',	width: 200 },

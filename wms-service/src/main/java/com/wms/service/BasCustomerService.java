@@ -776,6 +776,20 @@ public class BasCustomerService extends BaseService {
                     GspSecondRecord GspSecondRecord = gspSecondRecordMybatisDao.selectCompareByEnterprisId(basCustomerVO.getEnterpriseId());
                     GspMedicalRecord GspMedicalRecord = gspMedicalRecordMybatisDao.selectCompareByEnterprisId(basCustomerVO.getEnterpriseId());
 
+					//首营状态
+                    if("40".equals(basCustomerVO.getBillclass())){
+						basCustomerVO.setBillclass("审核通过");
+					}else if("90".equals(basCustomerVO.getBillclass())){
+						basCustomerVO.setBillclass("已报废");
+
+					}
+
+					//收货单位对应货主
+
+
+					//供应商对应货主
+
+
 
                     if(BusinessLicense!=null){
                         basCustomerVO.setSocialCreditCode(BusinessLicense.getSocialCreditCode());
@@ -835,6 +849,33 @@ public class BasCustomerService extends BaseService {
                         basCustomerVO.setMedicalRegisterApproveDate("无");
                     }
 
+					//供应商对应 所有货主
+					if(Constant.CODE_CUS_TYP_VE.equals(basCustomerVO.getCustomerType())){
+						List<GspSupplier> supList = gspSupplierMybatisDao.queryListByEnterpriseId(basCustomerVO.getEnterpriseId());
+						String content = "";
+						for(GspSupplier sup:supList){
+							if(sup.getCustomerName()!=null){
+								content =content + sup.getCustomerName()+",";
+							}
+						}
+						basCustomerVO.setAllClient(content);
+					}else{
+						basCustomerVO.setAllClient("");
+					}
+					//收货单位 对应 所有货主
+					if(Constant.CODE_CUS_TYP_CO.equals(basCustomerVO.getCustomerType())){
+						List<GspReceiving> clientList = gspReceivingMybatisDao.querySHTGByEnterpriseId(basCustomerVO.getEnterpriseId());
+						String content = "";
+						for(GspReceiving sup:clientList){
+							if(sup.getClientId()!=null){
+								content =content + sup.getClientId()+",";
+							}
+						}
+						basCustomerVO.setReceivingAllClient(content);
+					}else{
+						basCustomerVO.setReceivingAllClient("");
+					}
+
 
 					if ("1".equals(basCustomerVO.getActiveFlag())) {
 						basCustomerVO.setActiveFlag("是");
@@ -893,11 +934,20 @@ public class BasCustomerService extends BaseService {
 
 		LinkedHashMap<String, String> superClassMap = new LinkedHashMap<String, String>();
 		superClassMap.put("activeFlag", "是否合作");
+		superClassMap.put("billclass", "首营状态");
+
 		superClassMap.put("customerType", "客户类型");
 		superClassMap.put("customerid", "客户代码");
 		superClassMap.put("descrC", "客户名称");
 		superClassMap.put("enterpriseNo", "企业代码");
 		superClassMap.put("shorthandName", "简称");
+
+		superClassMap.put("allClient", "供应商对应货主");
+		superClassMap.put("receivingAllClient", "收货单位对应货主");
+
+
+
+
 		superClassMap.put("socialCreditCode", "营业执照统一社会会信用代码");
         superClassMap.put("licenseNumber", "营业执照编号");
         superClassMap.put("businessStartDate", "营业执照开始时间");
