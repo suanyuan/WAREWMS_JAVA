@@ -635,17 +635,17 @@ public class DocQcDetailsService extends BaseService {
 
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
-            if (StringUtils.isEmpty(e.getMessage())) {
-
-                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败");
-            } else if (e.getMessage().equals("111")) {
-
-                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(库位批次库存错误)");
-            } else if (e.getMessage().equals("222")) {
-
-                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(批次库存错误)");
-            }
-            return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(系统错误:" + e.getMessage() + ")");
+//            if (StringUtils.isEmpty(e.getMessage())) {
+//
+//                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(系统错误1:" + e.getMessage() + ")");
+//            } else if (e.getMessage().equals("111")) {
+//
+//                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(库位批次库存错误)");
+//            } else if (e.getMessage().equals("222")) {
+//
+//                return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(批次库存错误)");
+//            }
+            return new PdaResult(PdaResult.CODE_FAILURE, PdaResult.PDA_FAILURE_IDENTIFIER + "当前数量验收成功，批量合格失败(系统错误:" + e.toString() + ")");
         }
         return new PdaResult(PdaResult.CODE_SUCCESS, "批量验收成功");
     }
