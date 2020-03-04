@@ -129,7 +129,103 @@ where 1=1
 	</if>
 </trim>
 </sql>
-   
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause_Type">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="condition.carrierLicenseId != null and condition.carrierLicenseId != ''" >
+				and carrier_license_id =  #{condition.carrierLicenseId}
+			</if>
+			<if test="condition.enterpriseId != null and condition.enterpriseId != ''" >
+				and enterprise_id =  #{condition.enterpriseId}
+			</if>
+			<if test="condition.roadNumber != null and condition.roadNumber != ''" >
+				and road_number like  '%${condition.roadNumber}%'
+			</if>
+			<if test="condition.roadNumberTerm != null and condition.roadNumberTerm != ''" >
+				and road_number_term =  #{condition.roadNumberTerm}
+			</if>
+			<if test="condition.roadAuthorityPermit != null and condition.roadAuthorityPermit != ''" >
+				and road_authority_permit =  #{condition.roadAuthorityPermit}
+			</if>
+			<if test="condition.roadBusinessScope != null and condition.roadBusinessScope != ''" >
+				and road_business_scope =  #{condition.roadBusinessScope}
+			</if>
+			<if test="condition.carrierNo != null and condition.carrierNo != ''" >
+				and carrier_no like  '%${condition.carrierNo}%'
+			</if>
+			<if test="condition.carrierDate != null and condition.carrierDate != ''" >
+				and carrier_date =  #{condition.carrierDate}
+			</if>
+			<if test="condition.carrierEndDate != null and condition.carrierEndDate != ''" >
+				and carrier_end_date =  #{condition.carrierEndDate}
+			</if>
+			<if test="condition.carrierAuthorityPermit != null and condition.carrierAuthorityPermit != ''" >
+				and carrier_authority_permit =  #{condition.carrierAuthorityPermit}
+			</if>
+			<if test="condition.carrierBusinessScope != null and condition.carrierBusinessScope != ''" >
+				and carrier_business_scope =  #{condition.carrierBusinessScope}
+			</if>
+			<if test="condition.createId != null and condition.createId != ''" >
+				and create_id =  #{condition.createId}
+			</if>
+			<if test="condition.createDate != null and condition.createDate != ''" >
+				and create_date =  #{condition.createDate}
+			</if>
+			<if test="condition.createDateBegin != null and condition.createDateBegin != ''" >
+				and create_date &gt;=  #{condition.createDateBegin}
+			</if>
+			<if test="condition.createDateEnd != null and condition.createDateEnd != ''" >
+				and create_date &lt;=  #{condition.createDateEnd}
+			</if>
+			<if test="condition.contractNo != null and condition.contractNo != ''" >
+				and contract_no =  #{condition.contractNo}
+			</if>
+			<if test="condition.contractUrl != null and condition.contractUrl != ''" >
+				and contract_url =  #{condition.contractUrl}
+			</if>
+			<if test="condition.clientContent != null and condition.clientContent != ''" >
+				and client_content =  #{condition.clientContent}
+			</if>
+			<if test="condition.clientStartDate != null and condition.clientStartDate != ''" >
+				and client_start_date =  #{condition.clientStartDate}
+			</if>
+			<if test="condition.clientEndDate != null and condition.clientEndDate != ''" >
+				and client_end_date =  #{condition.clientEndDate}
+			</if>
+			<if test="condition.clientTerm != null and condition.clientTerm != ''" >
+				and client_term =  #{condition.clientTerm}
+			</if>
+			<if test="condition.editDateBegin != null and condition.editDateBegin != ''" >
+				and edit_date &gt;=  #{condition.editDateBegin}
+			</if>
+			<if test="condition.editDateEnd != null and condition.editDateEnd != ''" >
+				and edit_date &lt;=  #{condition.editDateEnd}
+			</if>
+			<if test="condition.editId != null and condition.editId != ''" >
+				and edit_id =  #{condition.editId}
+			</if>
+			<if test="condition.editDate != null and condition.editDate != ''" >
+				and edit_date =  #{condition.editDate}
+			</if>
+			<if test="condition.activeFlag != null and condition.activeFlag != ''" >
+				and active_flag =  #{condition.activeFlag}
+			</if>
+
+
+			<if test="condition.idList != null and condition.idList != ''">
+				and enterprise_id in
+				<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+		</trim>
+	</sql>
+
+
+
 
 <!-- 插入记录 -->
 <insert id="add" parameterType="Object" >
@@ -244,7 +340,7 @@ where 1=1
 <!-- 承运商 列表总数-->
 <select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
 	select count(1) from bas_carrier_license 
-	<include refid="Example_Where_Clause"/>
+	<include refid="Example_Where_Clause_Type"/>
 </select>
   	
 <!-- 查询承运商列表 -->
@@ -252,7 +348,7 @@ where 1=1
 	select 
 	<include refid="Base_Column_List"/>
 	from bas_carrier_license 
-	<include refid="Example_Where_Clause"/>
+	<include refid="Example_Where_Clause_Type"/>
 	<if test="orderByClause != null and orderByClause != ''" >
        order by  ${orderByClause}
     </if>

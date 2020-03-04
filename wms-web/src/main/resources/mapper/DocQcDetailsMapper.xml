@@ -471,7 +471,7 @@ where 1=1
 <!-- 点击主页单号放大镜选择 -->
 <select id="queryByListSearchByQcNo" resultMap="BaseResultMap"  parameterType="Object">
 
-		SELECT a.lotatt14,d.qcno,h.qcstatus linestatus,d.customerid
+		SELECT a.lotatt14,h.pano,d.qcno,h.qcstatus linestatus,d.customerid
 		FROM doc_qc_details  d
 		LEFT JOIN `doc_qc_header` h ON d.qcno=h.qcno
 		LEFT JOIN `inv_lot_att` a ON d.`lotnum`=a.lotnum
@@ -480,7 +480,7 @@ where 1=1
 		LEFT JOIN `bas_customer` c ON s.`customerid`=c.`customerid`
 		left join  `bas_customer` cc on a.lotatt08=cc.customerid
 		<include refid="Example_Where_Clause1"/>
-        group by a.lotatt14,d.qcno,h.qcstatus,d.customerid
+        group by a.lotatt14,h.pano,d.qcno,h.qcstatus,d.customerid
 		order by  d.qcno desc
 		<if test="limitClause != null and limitClause != ''" >
 			${limitClause}

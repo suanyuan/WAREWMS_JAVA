@@ -337,6 +337,59 @@ var doSearch = function(){
 		activeFlag : $('#activeFlag').combobox("getValue"),
 	});
 };
+
+
+
+
+/* 导出start */
+var doExport = function(){
+    if(navigator.cookieEnabled){
+        $('#ezuiBtn_export').linkbutton('disable');
+        var token = new Date().getTime();
+        var param = new HashMap();
+        param.put("token", token);
+        param.put("carrierLicenseId", $('#carrierLicenseId').val());
+        param.put("enterpriseId",$('#enterpriseId').val());
+        param.put("roadNumber",$('#roadNumber').val());
+        param.put("roadNumberTerm",$('#roadNumberTerm').val());
+        param.put("roadAuthorityPermit", $('#roadAuthorityPermit').val());
+
+        param.put("roadBusinessScope", $('#roadBusinessScope').val());
+        param.put("carrierNo", $('#carrierNo').val());
+        param.put("carrierDate", $('#carrierDate').val());
+        param.put("carrierEndDate", $('#carrierEndDate').val());
+        param.put("clientTerm", $('#clientTerm').val());
+        param.put("carrierAuthorityPermit", $('#carrierAuthorityPermit').val());
+        param.put("carrierBusinessScope", $('#carrierBusinessScope').val());
+        param.put("createId", $('#createId').val());
+        param.put("createDateBegin", $('#createDateBegin').val());
+        param.put("createDateEnd", $('#createDateEnd').val());
+        param.put("editId", $('#editId').val());
+        param.put("editDateBegin", $('#editDateBegin').val());
+        param.put("editDateEnd", $('#editDateEnd').val());
+        param.put("activeFlag", $('#activeFlag').val());
+
+
+
+
+        //--导出Excel
+        var formId = ajaxDownloadFile(sy.bp()+"/basCarrierLicenseController.do?exportDataToExcel", param);
+        downloadCheckTimer = window.setInterval(function () {
+            window.clearInterval(downloadCheckTimer);
+            $('#'+formId).remove();
+            $('#ezuiBtn_export').linkbutton('enable');
+            $.messager.progress('close');
+            $.messager.show({
+                msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+            });
+        }, 1000);
+    }else{
+        $.messager.show({
+            msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+        });
+    }
+};
+/* 导出end */
 </script>
 </head>
 <body>
@@ -373,9 +426,11 @@ var doSearch = function(){
 							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
 						<%--<th>是否有效：</th><td><input type='text' id='activeFlag' class='easyui-textbox' size='4' data-options=''/></td>--%>
 
-							<td>
+							<td colspan="2">
 								<a onclick='doSearch(); 'id='ezuiBtn_select'  class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+								<a onclick='doExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+
 							</td>
 						</tr>
 					</table>

@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class BasCarrierLicenseQuery implements IQuery {
 
+	private String token;
 	private String carrierLicenseId;
 	private String roadNumber;
 	private String roadNumberTerm;
@@ -40,6 +41,15 @@ public class BasCarrierLicenseQuery implements IQuery {
 
 
 	private String idList;
+
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public String getIdList() {
 		return idList;

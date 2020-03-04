@@ -36,8 +36,15 @@ where 1=1
 	<if test="condition.calNumber != null and condition.calNumber != ''" >
 	    and cal_number =  #{condition.calNumber}
 	</if>
-	<if test="condition.calTerm != null and condition.calTerm != ''" >
-	    and cal_term =  #{condition.calTerm}
+	<!--<if test="condition.calTerm != null and condition.calTerm != ''" >-->
+	    <!--and cal_term =  #{condition.calTerm}-->
+	<!--</if>-->
+
+	<if test="condition.calTermStart != null and condition.calTermStart != ''" >
+		and STR_TO_DATE(cal_term,'%Y-%m-%d') &gt;=  #{condition.calTermStart}
+	</if>
+	<if test="condition.calTermEnd != null and condition.calTermEnd != ''" >
+		and STR_TO_DATE(cal_term,'%Y-%m-%d') &lt;=  #{condition.calTermEnd}
 	</if>
 	<if test="condition.calCardUrl != null and condition.calCardUrl != ''" >
 	    and cal_card_url =  #{condition.calCardUrl}

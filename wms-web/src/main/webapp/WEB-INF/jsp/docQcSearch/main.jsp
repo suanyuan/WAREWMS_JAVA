@@ -44,7 +44,7 @@ $(function() {
 			{field: 'qcno', title: '验收单号', width: 124},
             {field: 'lotatt03', title: '入库日期', width: 100},
 
-            // {field: 'pano',		title: '上架单号',	width: 124 },
+            {field: 'pano',		title: '上架单号',	width: 124 },
 			// {field: 'qclineno',		title: '验收行号',	width: 80 },
 			{field: 'linestatus', title: '行状态', width: 80, formatter: AcceptancestatusFormatter},
 			{field: 'lotatt10', title: '质量状态', width: 80, formatter: ZL_TYPstatusFormatter},
@@ -116,7 +116,10 @@ $(function() {
 			singleSelect: true,
 			columns: [[
 				{field: 'lotatt14', title: '入库单号', width: 80},
+                {field: 'pano', title: '上架单号', width: 80},
+
 				{field: 'qcno', title: '验收单号', width: 100},
+
 				{field: 'linestatus', title: '行状态', width: 100,formatter: AcceptancestatusFormatter},
 				{field: 'customerid', title: '货主代码', width: 100}
 			]],
@@ -241,7 +244,7 @@ var ezuiAccDataDialogSearch1 = function () {
 		qcno: $("#ezuiAccDataDialog #qcno").textbox("getValue"),
 		customerid: $("#ezuiAccDataDialog #customerid").textbox("getValue"),
 		// asnreference1: $("#ezuiAccDataDialog #asnreference1").textbox("getValue"),
-
+		pano:$("#ezuiAccDataDialog #pano").textbox("getValue"),
 	});
 };
 /* 单号选择弹框清空 */
@@ -249,7 +252,9 @@ var ezuiAccToolbarClear1 = function () {
 	$("#ezuiAccDataDialog #lotatt14").textbox('clear');
 	$("#ezuiAccDataDialog #qcno").textbox('clear');
 	$("#ezuiAccDataDialog #customerid").textbox('clear');
-	// $("#ezuiAccDataDialog #asnreference1").textbox('clear');
+    $("#ezuiAccDataDialog #pano").textbox('clear');
+
+    // $("#ezuiAccDataDialog #asnreference1").textbox('clear');
 };
 /* 单号选择 */
 var selectAcceptance1 = function () {
@@ -315,7 +320,8 @@ var doSearch = function() {
             lotatt03End: $('#lotatt03End').datebox('getValue'),      //入库日期
             lotatt14: $('#lotatt14').textbox('getValue'),      //入库单号
 
-		});
+            pano:$('#panoQ').val()							//上架单号
+        });
 }
 
 //货主查询弹框弹出start=========================
@@ -575,7 +581,8 @@ var doExport = function () {
 
 						</tr>
 						<tr>
-                            <th>入库单号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>入库单号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
+							<th>上架单号</th><td><input type='text' id='panoQ' class='easyui-textbox' size='16' data-options=''/></td>
 
                             <td colspan="2">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
@@ -683,14 +690,16 @@ var doExport = function () {
 							<tr>
 								<th>入库单号</th><td><input type='text' id='lotatt14' class='easyui-textbox' size='16' data-options=''/></td>
 								<th>验收单号</th><td><input type='text' id='qcno' class='easyui-textbox' size='16' data-options=''/></td>
-
-
-								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
 								<td colspan="2">
 									<a onclick='ezuiAccDataDialogSearch1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 									<a onclick='selectAcceptance1();' id='ezuiBtn_edit' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>选择</a>
 									<a onclick='ezuiAccToolbarClear1();' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								</td>
+							</tr>
+							<tr>
+								<th>上架单号</th><td><input type='text' id='pano' class='easyui-textbox' size='16' data-options=''/></td>
+								<th>货主代码</th><td><input type='text' id='customerid' class='easyui-textbox' size='16' data-options=''/></td>
+
 
 							</tr>
 						</table>

@@ -1,6 +1,7 @@
 package com.wms.controller;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
@@ -129,6 +130,15 @@ public class BasCarrierLicenseController {
 	@ResponseBody
 	public EasyuiDatagrid<BasCarrierLicenseVO> showDatagrid(EasyuiDatagridPager pager, BasCarrierLicenseQuery query) {
 		return basCarrierLicenseService.getPagedDatagrid(pager, query);
+	}
+
+
+
+	//导出
+	@Login
+	@RequestMapping(params = "exportDataToExcel")
+	public void exportDataToExcel(HttpServletResponse response, BasCarrierLicenseQuery form) throws Exception {
+		basCarrierLicenseService.exportDataToExcel(response, form);
 	}
 
 	/*@Login

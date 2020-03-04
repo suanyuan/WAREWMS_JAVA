@@ -53,6 +53,7 @@ public class BasSerialNumService extends BaseService {
 		mybatisCriteria.setCurrentPage(pager.getPage());
 		mybatisCriteria.setPageSize(pager.getRows());
 		mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
+		mybatisCriteria.setOrderByClause("addtime desc");
 		List<BasSerialNum> basSerialNumList = basSerialNumDao.queryByList(mybatisCriteria);
 		BasSerialNumVO basSerialNumVO = null;
 		List<BasSerialNumVO> basSerialNumVOList = new ArrayList<BasSerialNumVO>();

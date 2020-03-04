@@ -296,7 +296,9 @@ var doSearch = function(){
 		calId : $('#calId').val(),
 		calName : $('#calName').val(),
 		calNumber : $('#calNumber').val(),
-		calTerm : $('#calTerm').datebox('getValue'),
+		// calTerm : $('#calTerm').datebox('getValue'),
+        calTermStart:$('#calTermStart').datebox('getValue'),
+        calTermEnd:$('#calTermEnd').datebox('getValue'),
 		calCardUrl : $('#calCardUrl').val(),
 		createId : $('#createId').val(),
 		createDateStart : $('#createDateStart').datebox('getValue'),
@@ -389,8 +391,9 @@ var toImportData = function(){
 						<tr>
 							<th>名称</th><td><input type='text' id='calName' class='easyui-textbox' size='16' data-options=''/></td>
 							<th>编号</th><td><input type='text' id='calNumber' class='easyui-textbox' size='16' data-options=''/></td>
-							<th>校期</th><td><input type='text' id='calTerm' class='easyui-datebox' size='16' data-options=''/></td>
+							<th>效期起始时间</th><td><input type='text' id='calTermStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<%--<th>待输入名称4：</th><td><input type='text' id='calCardUrl' class='easyui-textbox' size='16' data-options=''/></td>--%>
+							<th>至</th><td><input type='text' id='calTermEnd' class='easyui-datebox' size='16' data-options=''/></td>
 
 							<th>创建日期</th><td><input type='text' id='createDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
@@ -401,7 +404,7 @@ var toImportData = function(){
 							<th>是否有效</th><td><input type='text' id='activeFlag' class='easyui-combobox' size='16' data-options=''/></td>
 							<th>修改日期</th><td><input type='text' id='editDateStart' class='easyui-datebox' size='16' data-options=''/></td>
 							<th>至</th><td><input type='text' id='editDateEnd' class='easyui-datebox' size='16' data-options=''/></td>
-							<td>
+							<td colspan="2">
 								<a onclick='doSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
 								<a onclick='ezuiToolbarClear("#toolbar");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
 								<a onclick='toImportData();' id='ezuiBtn_import' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-edit"' href='javascript:void(0);'>导入</a>

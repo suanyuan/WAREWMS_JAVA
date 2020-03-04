@@ -2421,7 +2421,7 @@ var downloadSerialNumTemplate = function(){
 
 						</tr>
 						<tr>
-							<th>单据状态</th><td><input type='text' id='asnstatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
+							<th>入库状态</th><td><input type='text' id='asnstatus' class='easyui-combobox' size='16' data-options="panelHeight: 'auto',
 																															editable: false,
 																															url:'<c:url value="/docAsnHeaderController.do?getAsnstatusCombobox"/>',
 																															valueField: 'id',

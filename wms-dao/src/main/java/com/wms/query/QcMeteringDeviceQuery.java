@@ -9,6 +9,10 @@ public class QcMeteringDeviceQuery implements IQuery {
 	private String calName;
 	private String calNumber;
 	private String calTerm;
+	private String calTermStart; //效期起始时间
+	private String calTermEnd;	//效期结束时间
+
+
 	private String calCardUrl;
 	private String createId;
 	private String createDate;
@@ -21,6 +25,23 @@ public class QcMeteringDeviceQuery implements IQuery {
 	private String activeFlag;
 
 	private String idList;
+
+
+	public String getCalTermStart() {
+		return calTermStart;
+	}
+
+	public void setCalTermStart(String calTermStart) {
+		this.calTermStart = calTermStart;
+	}
+
+	public String getCalTermEnd() {
+		return calTermEnd;
+	}
+
+	public void setCalTermEnd(String calTermEnd) {
+		this.calTermEnd = calTermEnd;
+	}
 
 	public String getIdList() {
 		return idList;
