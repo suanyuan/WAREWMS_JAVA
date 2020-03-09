@@ -215,19 +215,27 @@ public class DocAsnHeaderService extends BaseService {
                     DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
                     if (docAsnHeader != null) {
 
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
-                        map.put("asnno", asnno);
-                        map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
-                        docAsnHeaderMybatisDao.close(map);
-                        String result = map.get("result").toString();
-                        message.append("[").append(asnno).append("]");
-                        if (result.substring(0, 3).equals("000")) {
+                        if (docAsnHeader.getAsnstatus().equals(Constant.CODE_ASN_STS_QA)) {
 
-                            message.append("关单成功").append(";").append(" ");
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("warehouseid", SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
+                            map.put("asnno", asnno);
+                            map.put("userid", SfcUserLoginUtil.getLoginUser().getId());
+                            docAsnHeaderMybatisDao.close(map);
+                            String result = map.get("result").toString();
+                            message.append("[").append(asnno).append("]");
+                            if (result.substring(0, 3).equals("000")) {
+
+                                message.append("关单成功").append(";").append(" ");
+                            } else {
+
+                                count = 0;
+                                message.append("关单失败：").append(result).append(";").append(" ");
+                            }
                         } else {
+
                             count = 0;
-                            message.append("关单失败：").append(result).append(";").append(" ");
+                            message.append("关单失败：当前单据状态不可关单!");
                         }
                     }
                 }

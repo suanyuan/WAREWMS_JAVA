@@ -132,6 +132,15 @@ public class Constant {
     public static final String CODE_SO_STS_HOLD = "98";//等待释放
     public static final String CODE_SO_STS_CLOSED = "99";//订单完成
 
+    //入库单状态
+    public static final String CODE_ASN_STS_CREATED = "00";//创建订单
+    public static final String CODE_ASN_STS_PART_RECEIVED = "30";//部分收货
+    public static final String CODE_ASN_STS_RECEIVED = "40";//完全收货
+    public static final String CODE_ASN_STS_PART_QA = "60";//部分验收
+    public static final String CODE_ASN_STS_QA = "70";//完全验收
+    public static final String CODE_ASN_STS_CANCEL = "90";//收货取消
+    public static final String CODE_ASN_STS_CLOSED = "99";//ASN关闭
+
 
     //jasper导出格式
     public static final String JASPER_CSV = "csv";
