@@ -205,11 +205,11 @@ public class DocAsnHeaderService extends BaseService {
         if (StringUtil.isNotEmpty(asnnos)) {
 
             String[] asnnoList = asnnos.split(",");
-            int count = 1;
             for (String asnno : asnnoList) {
 
                 if (StringUtil.isNotEmpty(asnno)) {
 
+                    message.append("入库单号[").append(asnno).append("]:");
                     DocAsnHeaderQuery docAsnHeaderQuery = new DocAsnHeaderQuery();
                     docAsnHeaderQuery.setAsnno(asnno);
                     DocAsnHeader docAsnHeader = docAsnHeaderMybatisDao.queryById(docAsnHeaderQuery);
@@ -229,24 +229,21 @@ public class DocAsnHeaderService extends BaseService {
                                 message.append("关单成功").append(";").append(" ");
                             } else {
 
-                                count = 0;
-                                message.append("关单失败：").append(result).append(";").append(" ");
+                                message.append("关单失败：").append(result).append("!").append(" ");
                             }
                         } else {
 
-                            count = 0;
-                            message.append("关单失败：当前单据状态不可关单!");
+                            message.append("关单失败，当前单据状态不可关单!").append(" ");
                         }
+                    } else {
+
+                        message.append("关单失败，查无此入库单数据!").append(" ");
                     }
                 }
             }
-            if(count==1) {
-                json.setSuccess(true);
-                json.setMsg("全部关单成功!");
-            }else{
-                json.setSuccess(false);
-                json.setMsg(message.toString());
-            }
+
+            json.setSuccess(true);
+            json.setMsg(message.toString());
         } else {
 
             json.setSuccess(false);
