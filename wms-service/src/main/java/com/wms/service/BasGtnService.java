@@ -91,6 +91,12 @@ public class BasGtnService extends BaseService {
 //		System.out.println();
 //		List<Remind> remindList = .queryByList(criteria);
 		List<BasCodes> list =  basCodesMybatisDao.queryByList(criteria);
+//		for(BasCodes remind:list){
+//				//
+//				if("".equals(remind.getCodenameC())){
+//
+//				}
+//		}
 
 
 //		int total = basGtnMybatisDao.queryByCount(criteria);

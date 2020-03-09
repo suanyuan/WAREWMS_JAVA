@@ -69,6 +69,8 @@ public class BasCustomerHistoryService extends BaseService {
 			basCustomerVO = new BasCustomerVO();
 			BeanUtils.copyProperties(basCustomer, basCustomerVO);
 			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(basCustomer.getEnterpriseId());
+
+			
 			if (gspEnterpriseInfo != null) {
 				basCustomerVO.setEnterpriseName(gspEnterpriseInfo.getEnterpriseName());
 				basCustomerVO.setShorthandName(gspEnterpriseInfo.getShorthandName());

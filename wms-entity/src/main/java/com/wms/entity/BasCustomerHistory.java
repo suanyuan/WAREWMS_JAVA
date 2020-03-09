@@ -81,8 +81,8 @@ public class BasCustomerHistory implements Serializable {
   private String weightuom;
   private String asnref5tolot8;
   private String soref5tolot8;
-  private String billclassinv;
-  private String defaultreplenishrule;
+  private String billclassinv;          //供应商对应货主
+  private String defaultreplenishrule;  //收货单位对应货主
   private String routecode;
   private String easycode;
   private String snAsnCls;
@@ -160,4 +160,7 @@ public class BasCustomerHistory implements Serializable {
   private String isChineseLabel;
   private String receivingAddressId;
   private String asnref1tolot4;
+
+  private String supAllClient;
+  private String recvAllClient;
 }

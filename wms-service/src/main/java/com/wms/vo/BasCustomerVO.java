@@ -55,7 +55,7 @@ public class BasCustomerVO {
 	private java.lang.String defaultpackid;
 	private java.lang.String defaultputawayrule;
 	private java.lang.String defaultreceivinguom;
-	private java.lang.String defaultreplenishrule;
+	private java.lang.String defaultreplenishrule;//收货单位对应货主
 	private java.lang.String defaultreportuom;
 	private java.lang.String defaultshipmentuom;
 	private java.lang.String defaultskulotid;
@@ -124,6 +124,34 @@ public class BasCustomerVO {
 	private String medicalRegisterNo;    			//医疗机构登记号许可编号
 	private String medicalRegisterApproveDate;//医疗机构登记号发证日期
 
+	private String hEdi01;//供应商对应货主     历史用
+	private String hEdi02;//收货单位对应货主	 历史用
+	private String billclassinv;          //供应商对应货主
+
+
+	public String getBillclassinv() {
+		return billclassinv;
+	}
+
+	public void setBillclassinv(String billclassinv) {
+		this.billclassinv = billclassinv;
+	}
+
+	public String gethEdi01() {
+		return hEdi01;
+	}
+
+	public void sethEdi01(String hEdi01) {
+		this.hEdi01 = hEdi01;
+	}
+
+	public String gethEdi02() {
+		return hEdi02;
+	}
+
+	public void sethEdi02(String hEdi02) {
+		this.hEdi02 = hEdi02;
+	}
 
 	public String getBankaccount() {
 		return bankaccount;

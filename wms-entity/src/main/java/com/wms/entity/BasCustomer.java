@@ -185,10 +185,13 @@ public class BasCustomer  implements Serializable {
 	private String asnref5Tolot8;
 
 	private String soref5Tolot8;
+//
+//	private String billclassinv;
+//
+//	private String defaultreplenishrule;
 
-	private String billclassinv;
-
-	private String defaultreplenishrule;
+	private String billclassinv;          //供应商对应货主
+	private String defaultreplenishrule;  //收货单位对应货主
 
 	private String routecode;
 

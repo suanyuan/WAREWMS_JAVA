@@ -77,9 +77,8 @@ $(function() {
             {field: 'descrC',		title: '客户名称',	width: 250 },
             {field: 'enterpriseNo',		title: '企业代码 ',	width: 100 },
             {field: 'shorthandName',		title: '简称 ',	width: 100 },
-            // {field: 'enterpriseName',		title: '企业名称 ',	width: 250 },
-            // {field: 'allClient',		title: '供应商对应货主 ',	width: 250 },
-            // {field: 'receivingAllClient',		title: '收货单位对应货主 ',	width: 250 },
+            {field: 'billclassinv',		title: '供应商对应货主 ',	width: 250 },
+            {field: 'defaultreplenishrule',		title: '收货单位对应货主 ',	width: 250 },
 
 
             {field: 'contacts',		title: '联系人 ',	width: 80 },
