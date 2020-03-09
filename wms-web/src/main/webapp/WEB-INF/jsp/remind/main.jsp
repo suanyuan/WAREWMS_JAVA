@@ -158,7 +158,19 @@
                 }
             }).dialog('close');
             /* 控件初始化end */
+
+
+            //客户名称
+            $('#descrCQ').combobox({
+                // panelHeight: 'auto',
+                url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox',
+                valueField:'id',
+                textField:'value'
+            });
         });
+
+
+
         var add = function () {
             processType = 'add';
             $('#basGtnId').val(0);
@@ -298,9 +310,8 @@
                         striped: true,
                         queryParams:{
                             idList : idlist1,
-
                         },
-                        fit:true,
+                        fit:false,
                         collapsible:false,
                         pagination:true,
                         rownumbers:true,
@@ -369,7 +380,7 @@
                         },
                         onLoadSuccess:function(data){
                             $(this).datagrid('unselectAll');
-                            $(this).datagrid("resize",{height:540});
+                            $(this).datagrid("resize",{height:450});
                         }
                     });
 
@@ -916,6 +927,28 @@
                 lotatt05 : $('#lotatt05Q').val(),
             });
         }
+
+
+        //查询合同 ，授权 信息
+        function doSearchHtAndSq() {
+            var row = ezuiDatagrid.datagrid('getSelected');
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            htAndSqDatagrid.datagrid('load', {
+                idList:idlist1,
+                customerid : $('#customeridQ').val(),
+                customerType : $('#customerTypeQ').combobox('getValue'),
+                activeFlag : $('#activeFlagQ').combobox('getValue'),
+                descrC : $('#descrCQ').combobox('getValue'),
+                enterpriseNo :$('#enterpriseNoQ').val(),
+            });
+        }
+
+
+
         //查询未备案产品信息
         function doSearchBasSkuLeak() {
             // var row = ezuiDatagrid.datagrid('getSelected');
@@ -982,6 +1015,47 @@
         /* 导出end */
 
 
+        /* 导出授权和合同start */
+        var doHtAndSqExport = function(){
+            var row = ezuiDatagrid.datagrid('getSelected');
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            if(navigator.cookieEnabled){
+                $('#ezuiBtn_export').linkbutton('disable');
+                var token = new Date().getTime();
+                var param = new HashMap();
+                param.put("token", token);
+                param.put("idList", idlist1);
+
+                param.put("idList", idlist1);
+                param.put("customerid", $('#customeridQ').val());
+                param.put("customerType", $('#customerTypeQ').combobox('getValue'));
+                param.put("activeFlag",$('#activeFlagQ').combobox('getValue'));
+                param.put("descrC", $('#descrCQ').combobox('getValue'));
+                param.put("enterpriseNo", $('#enterpriseNoQ').val());
+
+
+                //--导出Excel
+                var formId = ajaxDownloadFile(sy.bp()+"/basCustomerController.do?exportBasCustomerDataToExcel", param);
+                downloadCheckTimer = window.setInterval(function () {
+                    window.clearInterval(downloadCheckTimer);
+                    $('#'+formId).remove();
+                    $('#ezuiBtn_export').linkbutton('enable');
+                    $.messager.progress('close');
+                    $.messager.show({
+                        msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+                    });
+                }, 1000);
+            }else{
+                $.messager.show({
+                    msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+                });
+            }
+        };
+        /* 导出end */
 
 
         /* 导出未备案产品start */
@@ -1146,21 +1220,41 @@
     </table>
 </div>
 
+<%--授权，合同--%>
 <div id='ezuiDialogHtAndSq' style='padding: 10px;display: none'>
     <div id='clientTB2' class='datagrid-toolbar' style=''>
-        <%--<fieldset >--%>
-        <%--<legend>企业信息</legend>--%>
-        <%--<table>--%>
-        <%--<tr>--%>
-        <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
-        <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
-        <%--<td>--%>
-        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-        <%--</td>--%>
-        <%--</tr>--%>
-        <%--</table>--%>
-        <%--</fieldset>--%>
+        <fieldset >
+            <legend>未备案产品</legend>
+            <table>
+                <tr>
+                    <th>客户代码</th><td><input type='text' id='customeridQ' class='easyui-textbox' size='16' style="width:145px;" data-options='' align="left"/></td>
+                    <th>企业代码</th><td><input type='text' id='enterpriseNoQ' class='easyui-textbox' size='16' style="width:145px;" data-options=''/></td>
+                    <th >客户类型</th><td><input type='text' id='customerTypeQ' class='easyui-combobox' size='16' style="width:145px;" data-options="panelHeight:'auto',
+																																	editable:false,
+																																	url:'<c:url value="/basCustomerController.do?getCustomerTypeCombobox"/>',
+																																	valueField: 'id',
+																																	textField: 'value'"/></td>
+                </tr>
+                <tr>
+                    <th >是否合作</th>
+                    <td>
+                        <select id="activeFlagQ" class="easyui-combobox"  style="width:145px;" data-options="panelHeight:'auto',">
+                            <option value=""></option>
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </td>
+                    <th>客户名称</th><td><input type='text' id='descrCQ' class='easyui-textbox' size='16' style="width:145px;" data-options=''/></td>
+
+                    <td colspan="2">
+                        <a onclick='doSearchHtAndSq()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
+                        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
+                        <a onclick='ezuiToolbarClear("#clientTB2");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+                        <a onclick='doHtAndSqExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
     </div>
     <table id="dataGridHtAndSq">
 
@@ -1225,7 +1319,7 @@
 
 
             <td colspan="2">
-            <a onclick='doSearchBasSkuLeak()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>
+            <a onclick='doSearchBasSkuLeak()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查询</a>
             <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
             <a onclick='ezuiToolbarClear("#clientTB5");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
             <a onclick='doBasSkuLeakExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>

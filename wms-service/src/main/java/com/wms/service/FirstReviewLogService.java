@@ -160,8 +160,9 @@ public class FirstReviewLogService extends BaseService {
 			return json;
 		}catch (Exception e){
 			e.printStackTrace();
+
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return Json.error("操作失败");
+			return Json.error("操作失败:"+e.toString());
 		}
 	}
 

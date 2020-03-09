@@ -169,6 +169,17 @@ public class BasCustomerService extends BaseService {
 
 			basCustomerVOList.add(basCustomerVO);
 		}
+
+		if(query.getIdList()!=null&&query.getIdList()!="" ){
+			//提醒用
+			try{
+				basCustomerVOList = basCustomerVOList.subList((pager.getPage()-1)*pager.getRows(),(pager.getPage()-1)*pager.getRows()+ pager.getRows());
+			}catch (Exception e){
+				basCustomerVOList = basCustomerVOList.subList((pager.getPage()-1)*pager.getRows(),basCustomerVOList.size());
+			}
+		}
+
+
 		Long total  = Long.parseLong(basCustomerList.size()+"");
 		datagrid.setTotal(total);
 		datagrid.setRows(basCustomerVOList);
@@ -380,19 +391,51 @@ public class BasCustomerService extends BaseService {
 			basCustomerQuery.setCustomerid(basCustomerForm.getCustomerid());
 //			basCustomerQuery.setEnterpriseId(basCustomerForm.getEnterpriseId());
 			BasCustomer basCustomerHistory = new BasCustomer();
-			if("Supplier".equals(flag) ){
+			GspEnterpriseInfo gspEnterpriseInfo = gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
+
+		if("Supplier".equals(flag) ){
 				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
 				basCustomerQuery.setDescrC(g.getEnterpriseName());
 				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
-				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+//				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+
+				//供应商对应 所有货主
+				if(Constant.CODE_CUS_TYP_VE.equals(basCustomerForm.getCustomerType())){
+					List<GspSupplier> supList = gspSupplierMybatisDao.queryListByEnterpriseId(basCustomerForm.getEnterpriseId());
+					String content = "";
+					for(GspSupplier sup:supList){
+						if(sup.getCustomerName()!=null){
+							content =content + sup.getCustomerName()+",";
+						}
+					}
+					basCustomerForm.setBillclassinv(content);
+				}else{
+					basCustomerForm.setBillclassinv("");
+				}
+
 
 			}else if("Client".equals(flag)){
 				basCustomerHistory = basCustomerMybatisDao.selectByIdTypeActiveFlag(basCustomerQuery);
+
 			}else if("Receving".equals(flag)){
 				GspEnterpriseInfo g =  gspEnterpriseInfoMybatisDao.queryById(basCustomerForm.getEnterpriseId());
 				basCustomerQuery.setDescrC(g.getEnterpriseName());
 				basCustomerHistory = basCustomerMybatisDao.selectSupplierByIdTypeActiveFlag(basCustomerQuery);
 //				supNum = gspSupplierMybatisDao.countByEnterpriseIdAnd40(basCustomerForm.getEnterpriseId());
+
+				//收货单位 对应 所有货主
+				if(Constant.CODE_CUS_TYP_CO.equals(basCustomerForm.getCustomerType())){
+					List<GspReceiving> clientList = gspReceivingMybatisDao.querySHTGByEnterpriseId(basCustomerForm.getEnterpriseId());
+					String content = "";
+					for(GspReceiving sup:clientList){
+						if(sup.getClientId()!=null){
+							content =content + sup.getClientId()+",";
+						}
+					}
+					basCustomerForm.setDefaultreplenishrule(content);
+				}else{
+					basCustomerForm.setDefaultreplenishrule("");
+				}
 			}
 			//int num = basCustomerMybatisDao.selectBySelective(basCustomerQuery);
 
@@ -407,6 +450,10 @@ public class BasCustomerService extends BaseService {
 				basCustomerHistoryQ.setClientTerm(basCustomerHistory.getClientTerm());
 				basCustomerHistoryQ.setContractUrl(basCustomerHistory.getContractUrl());
 
+				//供应商对应货主
+				basCustomerHistoryQ.setBillclassinv(basCustomerForm.getBillclassinv());
+				//收货单位对应货主
+				basCustomerHistoryQ.setDefaultreplenishrule(basCustomerForm.getDefaultreplenishrule());
 				//TODO 插入history.add(basSkuHistory);
                 //相同供应商相同货主第一次下发不删  第二次删
 //                if("Supplier".equals(flag)){
@@ -742,11 +789,15 @@ public class BasCustomerService extends BaseService {
 		basCustomerForm.setDescrC(form.getDescrC());
 		basCustomerForm.setActiveFlag(form.getActiveFlag());
 		basCustomerForm.setEnterpriseNo(form.getEnterpriseNo());
+
 		try {
 			BasCustomerQuery query = new BasCustomerQuery();
 			//权限控制
 			query.setWarehouseid(SfcUserLoginUtil.getLoginUser().getWarehouse().getId());
 			query.setCustomerSet(SfcUserLoginUtil.getLoginUser().getCustomerSet());
+			if(form.getIdList()!=null&&form.getIdList()!="" ){
+				query.setIdList(form.getIdList());
+			}
 			com.wms.utils.BeanUtils.copyProperties(basCustomerForm, query);
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(query));
@@ -755,8 +806,9 @@ public class BasCustomerService extends BaseService {
 			// excel的sheetName
 			String sheetName = "客户档案查询结果";
 			// excel要导出的数据
-			List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByList(mybatisCriteria); //要权限！james
+//			List<BasCustomer> basCustomerList = basCustomerMybatisDao.queryByList(mybatisCriteria); //要权限！james
 			EasyuiDatagridPager page = new EasyuiDatagridPager();
+			page.setRows(999999999);
 			EasyuiDatagrid<BasCustomerVO> pagedDatagrid = getPagedDatagrid(page, query);
 			List<BasCustomerVO> basCustomerVOList = pagedDatagrid.getRows();
 

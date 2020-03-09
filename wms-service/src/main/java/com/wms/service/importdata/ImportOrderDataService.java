@@ -494,6 +494,9 @@ public class ImportOrderDataService {
                         if (StringUtils.isEmpty(orderDetails.getLotatt10())) {
                             orderDetails.setLotatt10("HG");
                         }
+                        if (StringUtils.isEmpty(orderDetails.getLotatt09())) {
+                            orderDetails.setLotatt09("ZC");
+                        }
                         //保存订单明细信息
                         orderDetailsForNormalMybatisDao.add(orderDetails);
                     }

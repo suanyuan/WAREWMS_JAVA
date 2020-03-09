@@ -24,6 +24,9 @@ public class BasCustomerQuery implements IQuery {
 	private String enterpriseId;
 	private String contractNo;
 
+
+	private String hEdi01;
+	private String hEdi02;
 	private String contractUrl;
 
 	private String clientContent;
@@ -48,6 +51,99 @@ public class BasCustomerQuery implements IQuery {
 	private String costomerid;
 
 	private String idList;
+
+
+
+
+	private java.lang.String address1;
+	private java.lang.String address2;
+	private java.lang.String address3;
+	private java.lang.String address4;
+	private java.util.Date addtime;
+	private java.lang.String addwho;
+	private java.lang.String city;
+	private java.lang.String contact1;
+	private java.lang.String contact1Email;
+	private java.lang.String contact1Fax;
+	private java.lang.String contact1Tel1;
+	private java.lang.String contact1Tel2;
+	private java.lang.String contact1Title;
+	private java.lang.String contact2;
+	private java.lang.String contact2Email;
+	private java.lang.String contact2Fax;
+	private java.lang.String contact2Tel1;
+	private java.lang.String contact2Tel2;
+	private java.lang.String contact2Title;
+	private java.lang.String contact3;
+	private java.lang.String contact3Email;
+	private java.lang.String contact3Fax;
+	private java.lang.String contact3Tel1;
+	private java.lang.String contact3Tel2;
+	private java.lang.String contact3Title;
+	private java.lang.String country;
+	private java.lang.String currency;
+	private java.lang.String defaultallocationrule;
+	private java.lang.String defaultpackid;
+	private java.lang.String defaultputawayrule;
+	private java.lang.String defaultreceivinguom;
+//	private java.lang.String defaultreplenishrule;
+
+
+	private String billclassinv;          //供应商对应货主
+	private String defaultreplenishrule;  //收货单位对应货主
+
+
+	private java.lang.String defaultreportuom;
+	private java.lang.String defaultshipmentuom;
+	private java.lang.String defaultskulotid;
+	private java.lang.String defaultsoftallocationrule;
+
+	private java.lang.String descrE;
+	private java.lang.String easycode;
+	private java.util.Date edittime;
+	private java.lang.String editwho;
+	private java.math.BigDecimal overrcvpercentage;
+	private java.lang.String overreceiving;
+	private java.lang.String province;
+	private java.lang.String qcrule;
+	private java.lang.String rOwner;
+	private java.lang.String reservecode;
+	private java.lang.String rotationid;
+	private java.lang.String routecode;
+	private java.lang.String udf1;
+	private java.lang.String udf2;
+	private java.lang.String udf3;
+	private java.lang.String udf4;
+	private java.lang.String udf5;
+	private java.lang.String zip;
+	private java.lang.String customerTypeName;
+	private java.lang.String warehouseid;
+	private Set<SfcCustomer> customerSet;
+
+
+	public String getBillclassinv() {
+		return billclassinv;
+	}
+
+	public void setBillclassinv(String billclassinv) {
+		this.billclassinv = billclassinv;
+	}
+
+	public String gethEdi01() {
+		return hEdi01;
+	}
+
+	public void sethEdi01(String hEdi01) {
+		this.hEdi01 = hEdi01;
+	}
+
+	public String gethEdi02() {
+		return hEdi02;
+	}
+
+	public void sethEdi02(String hEdi02) {
+		this.hEdi02 = hEdi02;
+	}
 
 	public String getIdList() {
 		return idList;
@@ -216,66 +312,6 @@ public class BasCustomerQuery implements IQuery {
 	public void setrOwner(String rOwner) {
 		this.rOwner = rOwner;
 	}
-
-
-	private java.lang.String address1;
-	private java.lang.String address2;
-	private java.lang.String address3;
-	private java.lang.String address4;
-	private java.util.Date addtime;
-	private java.lang.String addwho;
-	private java.lang.String city;
-	private java.lang.String contact1;
-	private java.lang.String contact1Email;
-	private java.lang.String contact1Fax;
-	private java.lang.String contact1Tel1;
-	private java.lang.String contact1Tel2;
-	private java.lang.String contact1Title;
-	private java.lang.String contact2;
-	private java.lang.String contact2Email;
-	private java.lang.String contact2Fax;
-	private java.lang.String contact2Tel1;
-	private java.lang.String contact2Tel2;
-	private java.lang.String contact2Title;
-	private java.lang.String contact3;
-	private java.lang.String contact3Email;
-	private java.lang.String contact3Fax;
-	private java.lang.String contact3Tel1;
-	private java.lang.String contact3Tel2;
-	private java.lang.String contact3Title;
-	private java.lang.String country;
-	private java.lang.String currency;
-	private java.lang.String defaultallocationrule;
-	private java.lang.String defaultpackid;
-	private java.lang.String defaultputawayrule;
-	private java.lang.String defaultreceivinguom;
-	private java.lang.String defaultreplenishrule;
-	private java.lang.String defaultreportuom;
-	private java.lang.String defaultshipmentuom;
-	private java.lang.String defaultskulotid;
-	private java.lang.String defaultsoftallocationrule;
-
-	private java.lang.String descrE;
-	private java.lang.String easycode;
-	private java.util.Date edittime;
-	private java.lang.String editwho;
-	private java.math.BigDecimal overrcvpercentage;
-	private java.lang.String overreceiving;
-	private java.lang.String province;
-	private java.lang.String qcrule;
-	private java.lang.String rOwner;
-	private java.lang.String reservecode;
-	private java.lang.String rotationid;
-	private java.lang.String routecode;
-	private java.lang.String udf1;
-	private java.lang.String udf2;
-	private java.lang.String udf3;
-	private java.lang.String udf4;
-	private java.lang.String udf5;
-	private java.lang.String zip;
-	private java.lang.String customerTypeName;
-	private java.lang.String warehouseid;
-	private Set<SfcCustomer> customerSet;
 
 	public java.lang.String getCustomerid() {
 		return customerid;

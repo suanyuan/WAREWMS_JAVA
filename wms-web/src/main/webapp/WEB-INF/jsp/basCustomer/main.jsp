@@ -97,7 +97,6 @@ $(function() {
                 return rowData.overreceiving == 'Y' ? '是' : '否';
             }},*/
             {field: 'isChineseLabel',		title: '是否贴中文标签 ',	width: 110,formatter:yesOrNoFormatter},
-
             {field: 'notes',		title: '备注 ',	width: 200 },
 
 		]],
@@ -567,14 +566,8 @@ var commit = function(){
 var doSearch = function(){
 	ezuiDatagrid.datagrid('load', {
 		customerid : $('#customeridQ').val(),
-        // enterpriseNo : $('#enterpriseNo').val(),
-        // shorthandName : $('#shorthandName').val(),
-        // enterpriseName : $('#enterpriseName').val(),
-        // clientStartDate : $('#clientStartDate').val(),
-        // clientEndDate : $('#clientEndDate').val(),
-        // supContractNo : $('#supContractNo').val(),
+
 		customerType : $('#customerTypeQ').combobox('getValue'),
-        /*operateType : $('#operateType').combobox('getValue'),*/
 		activeFlag : $('#activeFlagQ').combobox('getValue'),
 
         descrC : $('#descrCQ').combobox('getValue'),

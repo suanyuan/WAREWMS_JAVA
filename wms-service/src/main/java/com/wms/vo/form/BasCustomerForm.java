@@ -24,6 +24,8 @@ public class BasCustomerForm {
 	private String newreceivingId;
 
 	private String receivingAddressId;
+	private String billclassinv;          //供应商对应货主
+	private String defaultreplenishrule;  //收货单位对应货主
 
 	private java.lang.String customerid;
 	private java.lang.String customerType;
@@ -55,11 +57,12 @@ public class BasCustomerForm {
 	private java.lang.String contact3Title;
 	private java.lang.String country;
 	private java.lang.String currency;
+
+
 	private java.lang.String defaultallocationrule;
 	private java.lang.String defaultpackid;
 	private java.lang.String defaultputawayrule;
 	private java.lang.String defaultreceivinguom;
-	private java.lang.String defaultreplenishrule;
 	private java.lang.String defaultreportuom;
 	private java.lang.String defaultshipmentuom;
 	private java.lang.String defaultskulotid;
@@ -118,6 +121,23 @@ public class BasCustomerForm {
 
 	private String notes;
 
+	private String idList;
+
+	public String getIdList() {
+		return idList;
+	}
+
+	public void setIdList(String idList) {
+		this.idList = idList;
+	}
+
+	public String getBillclassinv() {
+		return billclassinv;
+	}
+
+	public void setBillclassinv(String billclassinv) {
+		this.billclassinv = billclassinv;
+	}
 
 	public String getNotes() {
 		return notes;
