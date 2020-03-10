@@ -171,6 +171,10 @@ public class GspEnterpriseInfoService extends BaseService {
 		try {
 			MybatisCriteria mybatisCriteria = new MybatisCriteria();
 			mybatisCriteria.setCondition(BeanConvertUtil.bean2Map(form));
+			if(form.getIdList()!=null&&form.getIdList()!="" ){
+				List<String> enterpriseIdList = jsonToList(form.getIdList(),String.class);
+				mybatisCriteria.setIdList(enterpriseIdList);
+			}
 			// excel表格的表头，map
 			LinkedHashMap<String, String> fieldMap = getGspEnterpriseToFiledPublicQuestionBank();
 			// excel的sheetName

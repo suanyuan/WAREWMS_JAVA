@@ -114,7 +114,7 @@
                     // activeFlag : '1',
                     // customerType:'OW'
                 },
-                fit:true,
+                fit:false,
                 collapsible:false,
                 pagination:true,
                 rownumbers:true,
@@ -140,7 +140,7 @@
                 },
                 onLoadSuccess:function(data){
                     $(this).datagrid('unselectAll');
-                    $(this).datagrid("resize",{height:540});
+                    $(this).datagrid("resize",{height:450});
                 }
             });
 
@@ -164,6 +164,20 @@
             $('#descrCQ').combobox({
                 // panelHeight: 'auto',
                 url:sy.bp()+'/basCustomerController.do?getCustomerNameCombobox',
+                valueField:'id',
+                textField:'value'
+            });
+
+            $("#enterpriseTypeQuery").combobox({
+                panelHeight: 'auto',
+                url:sy.bp()+'/commonController.do?getEntType',
+                valueField:'id',
+                textField:'value'
+            });
+            //是否有效
+            $("#isUse").combobox({
+                panelHeight: 'auto',
+                url:sy.bp()+'/commonController.do?getIsUseCombobox',
                 valueField:'id',
                 textField:'value'
             });
@@ -906,6 +920,30 @@
 
 
 
+        //查询企业信息
+        function doEnterpriseSearch() {
+            var row = ezuiDatagrid.datagrid('getSelected');
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            enterpriseDatagrid.datagrid('load', {
+                idList:idlist1,
+                enterpriseNo : $('#enterpriseNo').textbox("getValue"),
+                shorthandName : $('#shorthandName').textbox("getValue"),
+                enterpriseName : $('#enterpriseName').textbox("getValue"),
+                enterpriseType : $('#enterpriseTypeQuery').combobox("getValue"),
+                createDateBegin : $('#createDateBegin').datebox("getValue"),
+                createDateEnd : $('#createDateEnd').datebox("getValue"),
+                isUse : $('#isUse').combobox("getValue")
+            });
+        }
+
+
+
+
+
         //查询库内货品信息
         function doSearchClient() {
             var row = ezuiDatagrid.datagrid('getSelected');
@@ -968,6 +1006,51 @@
 
             });
         }
+
+
+
+        /* 导出企业信息  营业 经营 生产 医疗start */
+        var doEnterpriseExport = function(){
+            var row = ezuiDatagrid.datagrid('getSelected');
+            if(row!=null){
+                idlist1 = row.udf1;
+            }else{
+                idlist1='';
+            }
+            if(navigator.cookieEnabled){
+                $('#ezuiBtn_export').linkbutton('disable');
+                var token = new Date().getTime();
+                var param = new HashMap();
+                param.put("token", token);
+                param.put("idList", idlist1);
+
+                param.put("enterpriseNo", $('#enterpriseNo').val());
+                param.put("shorthandName",$('#shorthandName').val());
+                param.put("enterpriseName",$('#enterpriseName').val());
+                param.put("enterpriseType",$('#enterpriseTypeQuery').combobox("getValue"));
+                param.put("createDateBegin",$('#createDateBegin').datebox("getValue"));
+                param.put("createDateEnd",$('#createDateEnd').datebox("getValue"));
+                param.put("isUse",$('#isUse').combobox("getValue"));
+
+
+                //--导出Excel
+                var formId = ajaxDownloadFile(sy.bp()+"/gspEnterpriseInfoController.do?exportDataToExcel", param);
+                downloadCheckTimer = window.setInterval(function () {
+                    window.clearInterval(downloadCheckTimer);
+                    $('#'+formId).remove();
+                    $('#ezuiBtn_export').linkbutton('enable');
+                    $.messager.progress('close');
+                    $.messager.show({
+                        msg : "<spring:message code='common.message.export.success'/>", title : "<spring:message code='common.message.prompt'/>"
+                    });
+                }, 1000);
+            }else{
+                $.messager.show({
+                    msg : "<spring:message code='common.navigator.cookieEnabled.false'/>", title : "<spring:message code='common.message.prompt'/>"
+                });
+            }
+        };
+        /* 导出end */
 
         /* 导出库内货品start */
         var doExport = function(){
@@ -1201,19 +1284,31 @@
 
 <div id='ezuiDialogEnterprise' style='padding: 10px;display: none'>
     <div id='clientTB' class='datagrid-toolbar' style=''>
-        <%--<fieldset >--%>
-            <%--<legend>企业信息</legend>--%>
-            <%--<table>--%>
-                <%--<tr>--%>
-                    <%--<th>客户代码：</th><td><input type='text' id='kehudaimaD'  class='easyui-textbox'    data-options='width:200'/></td>--%>
-                    <%--<th>客户名称：</th><td><input type='text' id='kehumingcehngD' class='easyui-textbox'    data-options='width:200'/></td>--%>
-                    <%--<td>--%>
-                        <%--<a onclick='doSearchClient()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>查询</a>--%>
-                        <%--<a onclick='choseClientSelect()' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-add"' href='javascript:void(0);'>选择</a>--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
-            <%--</table>--%>
-        <%--</fieldset>--%>
+        <fieldset>
+            <legend><spring:message code='common.button.query'/></legend>
+            <table>
+                <tr>
+                    <th>企业代码</th><td><input type='text' id='enterpriseNo' class='easyui-textbox' style="width:145px;" data-options=''/></td>
+                    <th>简称</th><td><input type='text' id='shorthandName' class='easyui-textbox' style="width:145px;" data-options=''/></td>
+                    <th>企业名称</th><td><input type='text' id='enterpriseName' class='easyui-textbox' style="width:145px;" data-options=''/></td>
+                    <th>企业类型</th><td><input type='text' id='enterpriseTypeQuery' class='easyui-combobox' style="width:145px;" data-options=''/></td>
+                </tr>
+                <tr>
+                    <th>创建时间</th><td><input type='text' id='createDateBegin' class='easyui-datebox' style="width:145px;" data-options=''/></td>
+                    <th>至</th><td><input type='text' id='createDateEnd' class='easyui-datebox' style="width:145px;" data-options=''/></td>
+                    <th>是否有效</th>
+                    <td>
+                        <select id="isUse" style="width:145px;" class="easyui-combobox">
+                        </select>
+                    </td>
+                    <td colspan="2">
+                        <a onclick='doEnterpriseSearch();' id='ezuiBtn_select' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>查詢</a>
+                        <a onclick='ezuiToolbarClear("#clientTB");' id='ezuiBtn_clear' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-remove"' href='javascript:void(0);'><spring:message code='common.button.clear'/></a>
+                        <a onclick='doEnterpriseExport();' id='ezuiBtn_export' class='easyui-linkbutton' data-options='plain:true,iconCls:"icon-search"' href='javascript:void(0);'>导出</a>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
     </div>
     <table id="dataGridEnterprise">
 
